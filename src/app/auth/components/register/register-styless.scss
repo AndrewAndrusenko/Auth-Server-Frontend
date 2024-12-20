@@ -1,0 +1,81 @@
+
+.registerForm {
+  margin-top: 10vh;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2vw;
+  gap: 3vh;
+  width: 100%;
+  &-title {
+    text-align: center;
+    font-size: large;
+  }
+  
+  &__submitButton {
+    transition: var(0.2);
+    background-size: 200% auto;
+    color: white !important;          
+    box-shadow: 0 0 20px var(white);
+    border-radius: 3%/15%;
+    background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%);
+    font-size: large;
+    min-height: 6vh;
+    margin-left: 2%;
+
+    &[disabled=true] {
+      opacity: 50%;
+    }
+  }
+}
+.registerResultMessage {
+  margin-top: 2vh;
+  margin-left: 8vw;
+  justify-content: center; 
+  display: flex; 
+  align-items: center; 
+  gap:1vw;
+  &__text {
+    font-weight: 700;
+    font-size: medium;
+    text-align: right;
+    vertical-align: middle;
+    color: var(--color-text-error);
+  }
+  &__button {
+    color: var(--color-text-error);
+    width: 10vw;
+    justify-content: center;
+  }
+}
+.resendEmail {
+  &__button {
+    transition: var(0.2);
+    background-size: 200% auto;
+    color: white !important;          
+    box-shadow: 0 0 20px var(white);
+    border-radius: 3%/15%;
+    margin-left: 1vw;
+    background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%);
+    font-size: large;
+    &[disabled=true] {
+      opacity: 50%;
+    }
+  }
+}
+.mat-mdc-snack-bar-container {
+  &.custom-snackBar {
+    --mdc-snackbar-container-color: #2196f3;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }}
+.mat-mdc-form-field {
+  border-width: 1px;
+  border-radius: 5%/15%;
+  width: 30vw;
+  padding: 2%;
+  background-color: #dde1e4!important
+
+}
+
+

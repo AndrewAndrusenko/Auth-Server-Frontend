@@ -1,0 +1,8 @@
+<label
+  class="registerResultMessage__text" 
+  *ngIf="result!=='null'" ngClass="{{result}}"
+  >
+  {{result==='success'? 'Success: Your email address has been confirmed!':'Error: Email has not been confirmed!'}}
+</label>
+<br><br>
+<button mat-flat-button  class="backButton" (click)="backToRegister()">Back  to Log In page</button>

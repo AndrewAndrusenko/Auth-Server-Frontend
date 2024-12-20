@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --contentWidth :44vw;
+
+  --color-text-dark: #191a23;
+  --color-text-light:#FFFFFF;
+  --color-text-header:#53565b;
+  --color-text-error: #e75a5a;
+  --color-text-success:  #435dc3;
+  --background-color:rgb(193, 201, 213);
+
+  --mobile-font-size:12px;
+  
+  --border: 1px solid var(--color-dark);
+  --border-radius: 14px;
+  --border-radius-large: 45px;
+
+  --shadow:0 5px 0 0 var(--color-dark-alt);
+
+  --transition-duration: 0.5s;
+
+}
+* {
+  font-family: "Poppins", cursive;
+  font-weight: 400;
+  font-style: normal;
+
+}
+body{
+  background-color: var(--background-color);
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+html, body { height: 100%; }
+.mat-mdc-snack-bar-container {
+  &.custom-snackBar {
+    --mdc-snackbar-container-color: #2196f3;
+    --mdc-snackbar-supporting-text-color: #030303;
+
+    --mdc-snackbar-supporting-text-font:"Poppins", cursive;
+  }
+  .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
+    --mat-snack-bar-button-color:#fff;
+}
+
+}

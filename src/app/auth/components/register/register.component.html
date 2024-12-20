@@ -1,0 +1,98 @@
+
+<form  class="registerForm" [formGroup]="registerForm" #myForm="ngForm">
+  <mat-label class="registerForm-title">Sign Up Form</mat-label>
+  <mat-form-field  class="custom-background">
+    <mat-label>UserName</mat-label>
+    <input   matInput formControlName="userId" >
+    <button mat-icon-button matPrefix color="primary" aria-label="Example icon button with a home icon">
+      <mat-icon fontIcon="close">close</mat-icon>
+    </button> 
+    <button *ngIf="userId?.value" matSuffix mat-icon-button aria-label="Clear" (click)="userId?.setValue(null)">
+      <mat-icon fontIcon="close">close</mat-icon>
+    </button>
+    <mat-error  *ngIf="userId?.errors?.['userIdTaken']">
+      UserName isn't unique   
+    </mat-error>
+    <mat-error  *ngIf="userId?.errors?.['minlength']">
+      Minimum length is 4 characters  
+    </mat-error>
+    <mat-error  *ngIf="userId?.errors?.['required']">
+      The field is required    
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field >
+    <mat-label>Password</mat-label>
+    <button mat-icon-button color="primary" matPrefix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
+    <button *ngIf="passwordCreate?.value" matSuffix mat-icon-button aria-label="Clear" (click)="passwordCreate?.patchValue(null)">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-error  *ngIf="passwordCreate?.errors?.['required']">
+      The field is required   
+    </mat-error>
+    <mat-error  *ngIf="passwordCreate?.errors?.['minlength']">
+      Minimum length is 4 characters  
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field *ngIf="formProcess==='signUp'">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" [type]="'email'">
+    <button *ngIf="email?.value" matSuffix mat-icon-button aria-label="Clear" (click)="email?.patchValue(null)">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-error  *ngIf="email?.errors?.['required']">
+      The field is required   
+    </mat-error>
+    <mat-error  *ngIf="email?.errors?.['email']">
+      Incorrect email 
+    </mat-error>
+    <mat-error  *ngIf="email?.errors?.['emailTaken']">
+     This email is being used 
+    </mat-error>
+  </mat-form-field>
+  <button class="registerForm__submitButton"
+    mat-flat-button type="submit" 
+    [disabled]="registerForm.invalid"
+    (click)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)">
+    {{formProcess==='logIn'? 'Log In':'Sign Up'}}
+  </button>
+  <button class="registerForm__submitButton"
+    mat-flat-button 
+    (click)="formProcess==='logIn'? setSignUpFormProcess() : setLogInProcess() ">
+    {{formProcess==='logIn'? 'Sign Up as a New User':'Back to Log In'}}
+  </button>
+</form>
+<section class="registerResultMessage" *ngIf="signUpResult.type!=='null'">
+  <label class="registerResultMessage__text" *ngIf="signUpResult.type==='error'">
+    <p *ngIf="signUpResult.userSigned!==undefined">
+      {{signUpResult.userSigned===false? 'User has not been signed up':'Error - Email confimation letter has not been sent.\n User has been signed up'}} <br>
+    </p>
+    Details: {{signUpResult.msg}} 
+  </label>
+  <button class="registerResultMessage__button" *ngIf="signUpResult.type==='error'" mat-raised-button butto (click)="signUpResult.type='null'" >Ok</button>
+</section>
+<section class="resendEmail" *ngIf="emailErrUserData">
+  <form  class="registerForm" [formGroup]="registerForm" #myForm="ngForm">
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+      <mat-error  *ngIf="email?.errors?.['required']">
+        The field is required   
+      </mat-error>
+      <mat-error  *ngIf="email?.errors?.['email']">
+        Incorrect email 
+      </mat-error>
+      <mat-error  *ngIf="email?.errors?.['emailTaken']">
+       This email is being used 
+      </mat-error>
+    </mat-form-field>
+    <button mat-flat-button 
+      class="resendEmail__button" 
+      [disabled]="email?.invalid"
+      (click)="resendEmail()"
+      >Resend confirmation
+    </button>
+  </form>
+</section>

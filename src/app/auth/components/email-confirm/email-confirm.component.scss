@@ -1,0 +1,26 @@
+.backButton {
+  transition: var(0.2);
+  background-size: 200% auto;
+  color: white !important;          
+  box-shadow: 0 0 20px var(white);
+  border-radius: 3%/15%;
+  background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%);
+  font-size: large;
+  min-height: 4vh;
+  margin-left: 2vw;
+}
+.registerResultMessage {
+  margin-top: 2vh;
+    display: flex; 
+    gap:1vw;
+    &__text {
+      margin-left: 2vw;
+      font-weight: 700;
+      font-size: medium;
+      color: var(--color-text-success);
+    }
+    &__text.error {
+      margin-left: 2vw;
+      color: var(--color-text-error);
+    }
+}
