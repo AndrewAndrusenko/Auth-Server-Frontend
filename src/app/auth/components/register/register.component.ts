@@ -11,7 +11,7 @@ import { MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { UserMongoServiceService } from "../../services/user-mongo-service.service";
 import { SUCCESS_TIME_OUT } from "../../../environment/environment";
 import { Router } from "@angular/router";
-import { ISignUpResult, IUser } from "../../types/auth.model";
+import { ICustomLoginError, ISignUpResult, IUser } from "../../types/auth.model";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { AuthValidatorService } from "../../services/auth-validator.service";
@@ -52,9 +52,10 @@ export class RegisterComponent {
     private authValidatorService:AuthValidatorService
   ) {   
     this.registerForm = this.fb.group ({
-      userId: ['andrey', {validators: [Validators.required]}],
-      password: ['andrey80', {validators: [Validators.required]}],
-      email:['aandrusenko@yandex.ru']
+      userId: ['User', {validators: [Validators.required]}],
+      password: ['Password', {validators: [Validators.required]}],
+      email:[''],
+      role:'user'
     });
     this.userIdValidator = this.authValidatorService.validateUserId();
     this.emailValidator = this.authValidatorService.validateEmail();
@@ -100,6 +101,7 @@ export class RegisterComponent {
   logInUser() {
     this.subscriptions.add(
       this.userMongoServiceService.loginUser(this.registerForm.value).subscribe(res=>{
+        res = res as ICustomLoginError 
         if (res?.errorResponse) {
           this.signUpResult = {type:'error', msg: res.errorResponse.message,userSigned:undefined} 
           if (res.errorResponse.name==='email') {
@@ -110,11 +112,11 @@ export class RegisterComponent {
             this.email?.addAsyncValidators(this.authValidatorService.validateEmail(this.email.value));
             this.email?.markAsTouched()
             this.email?.updateValueAndValidity();
-
+          } else {
+            this.emailErrUserData = null;
           }
           console.log('error',res);
         } else {
-          console.log('ok',res);
           this.signUpResult = {type:'success', msg: 'Ok'} 
           this.router.navigate(['quotes'])
         }
@@ -122,16 +124,18 @@ export class RegisterComponent {
     )
   }
   resendEmail(){
-    this.authService.reSendEmailConfirmation({...this.emailErrUserData as IUser,email:this.email?.value}).subscribe(res=>{
-      if (res.type !=='error') {
-        this.snackBar.open('Email has been sent to confirm your email address.\nPlease active your account by using a link in the message sent to you','Okay',{
-          panelClass:['custom-snackBar'],
-          horizontalPosition:'center',
-          verticalPosition:'top',
-        })
-        this.signUpResult={type:'success',msg:'ok',userSigned:undefined}
-      }
-    })
+    this.subscriptions.add(
+      this.authService.reSendEmailConfirmation({...this.emailErrUserData as IUser,email:this.email?.value}).subscribe(res=>{
+        if (res.type !=='error') {
+          this.snackBar.open('Email has been sent to confirm your email address.\n Please active your account by using a link in the message sent to you','Okay',{
+            panelClass:['custom-snackBar'],
+            horizontalPosition:'center',
+            verticalPosition:'top',
+          })
+          this.signUpResult={type:'success',msg:'ok',userSigned:undefined}
+        }
+      })
+    )
   }
   get  userId ()   {return this.registerForm.get('userId') } 
   get  passwordCreate ()   {return this.registerForm.get('password') } 

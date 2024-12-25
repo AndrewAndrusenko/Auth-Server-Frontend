@@ -4,8 +4,8 @@
   <mat-form-field  class="custom-background">
     <mat-label>UserName</mat-label>
     <input   matInput formControlName="userId" >
-    <button mat-icon-button matPrefix color="primary" aria-label="Example icon button with a home icon">
-      <mat-icon fontIcon="close">close</mat-icon>
+    <button mat-icon-button matPrefix color="primary">
+      <mat-icon fontIcon="perm_identity">close</mat-icon>
     </button> 
     <button *ngIf="userId?.value" matSuffix mat-icon-button aria-label="Clear" (click)="userId?.setValue(null)">
       <mat-icon fontIcon="close">close</mat-icon>
@@ -74,7 +74,7 @@
   <button class="registerResultMessage__button" *ngIf="signUpResult.type==='error'" mat-raised-button butto (click)="signUpResult.type='null'" >Ok</button>
 </section>
 <section class="resendEmail" *ngIf="emailErrUserData">
-  <form  class="registerForm" [formGroup]="registerForm" #myForm="ngForm">
+  <form  class="resendEmail registerForm" [formGroup]="registerForm" #myForm="ngForm">
     <mat-form-field>
       <mat-label>Email</mat-label>
       <input matInput formControlName="email">

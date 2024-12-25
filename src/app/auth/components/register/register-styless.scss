@@ -1,4 +1,4 @@
-
+@import '../../../styles/mixins_media.scss';
 .registerForm {
   margin-top: 10vh;
   display: grid;
@@ -10,6 +10,10 @@
   &-title {
     text-align: center;
     font-size: large;
+  }
+  @include mobile {
+    margin-left: 0;
+    margin-top: 2vh;
   }
   
   &__submitButton {
@@ -35,20 +39,30 @@
   display: flex; 
   align-items: center; 
   gap:1vw;
+
+  @include mobile {
+    flex-direction:column;
+  }
   &__text {
     font-weight: 700;
     font-size: medium;
     text-align: right;
     vertical-align: middle;
     color: var(--color-text-error);
+    @include mobile {
+      text-align: center;
+    }
   }
   &__button {
     color: var(--color-text-error);
-    width: 10vw;
+    width: 5vw;
     justify-content: center;
   }
 }
 .resendEmail {
+  .resendEmail.registerForm {
+    margin-top: 1vh;
+  }
   &__button {
     transition: var(0.2);
     background-size: 200% auto;
@@ -61,6 +75,7 @@
     &[disabled=true] {
       opacity: 50%;
     }
+
   }
 }
 .mat-mdc-snack-bar-container {
@@ -71,11 +86,14 @@
   }}
 .mat-mdc-form-field {
   border-width: 1px;
-  border-radius: 5%/15%;
+  border-radius: 2%/15%;
   width: 30vw;
   padding: 2%;
-  background-color: #dde1e4!important
-
+  background-color: #dde1e4!important;
+  
+  @include mobile {
+    width: 86vw;
+  }
 }
 
 
