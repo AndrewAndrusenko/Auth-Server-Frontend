@@ -72,18 +72,12 @@
     margin-left: 1vw;
     background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%);
     font-size: large;
+    
     &[disabled=true] {
       opacity: 50%;
     }
-
   }
 }
-.mat-mdc-snack-bar-container {
-  &.custom-snackBar {
-    --mdc-snackbar-container-color: #2196f3;
-    --mat-mdc-snack-bar-button-color: #fff;
-    --mdc-snackbar-supporting-text-color: #fff;
-  }}
 .mat-mdc-form-field {
   border-width: 1px;
   border-radius: 2%/15%;

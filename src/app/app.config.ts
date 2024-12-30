@@ -6,8 +6,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
 import { IndexDBConfig } from './shared/types/index-db-conffig';
-import { AuthInterceptor } from './shared/iterceptors/http-interceptor.interceptor';
-import { HttpErrorsHandlerInterceptor } from './shared/iterceptors/http-errors-handler.interceptor';
+import { HttpErrorsHandlerInterceptor } from './shared/iterceptors/errors-http.interceptor';
+import { withCredentialsInterceptor } from './shared/iterceptors/with-credentials-http.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [ 
@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
       withInterceptorsFromDi()
     ),
     {provide:HTTP_INTERCEPTORS,
-      useClass:AuthInterceptor,
+      useClass:withCredentialsInterceptor,
       multi:true
     },
     {provide:HTTP_INTERCEPTORS,

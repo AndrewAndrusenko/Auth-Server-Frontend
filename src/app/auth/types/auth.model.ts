@@ -12,9 +12,8 @@ export interface IUser {
   role:TAcRole
 }
 export interface IJWT {
-  jwt:string
-  userId:string,
-  saved:boolean
+  jwt:string,
+  refreshToken:string,
 }
 export interface IErrorMongoIndexDup{
   "errorResponse": {
@@ -29,6 +28,10 @@ export interface ICustomLoginError {
     message:string,
     stack?:string
   }
+}
+export interface ILogOut {
+  userId:string,
+  logout:boolean
 }
 export interface ISignUpResult {
   type:TResultType,

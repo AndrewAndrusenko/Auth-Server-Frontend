@@ -7,9 +7,8 @@ import { REST_ENDPOINT } from '../../environment/environment';
   providedIn: 'root'
 })
 export class QuotesService {
-
   constructor(private http:HttpClient) { }
-  getQuotes ():Observable<string> {
-    return this.http.get<string>(REST_ENDPOINT + 'quote')
+  getQuotes ():Observable<{data:string}> {
+    return this.http.get<{data:string}>(REST_ENDPOINT + 'quote')
   }
 }

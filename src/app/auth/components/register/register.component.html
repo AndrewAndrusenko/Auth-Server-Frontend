@@ -1,6 +1,9 @@
-
 <form  class="registerForm" [formGroup]="registerForm" #myForm="ngForm">
   <mat-label class="registerForm-title">Sign Up Form</mat-label>
+  <div class="registerForm__process-state" *ngIf="processState">
+    <label >{{processState}}</label>
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </div>
   <mat-form-field  class="custom-background">
     <mat-label>UserName</mat-label>
     <input   matInput formControlName="userId" >
@@ -54,12 +57,13 @@
   </mat-form-field>
   <button class="registerForm__submitButton"
     mat-flat-button type="submit" 
-    [disabled]="registerForm.invalid"
+    [disabled]="registerForm.invalid||registerForm.disabled"
     (click)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)">
     {{formProcess==='logIn'? 'Log In':'Sign Up'}}
   </button>
   <button class="registerForm__submitButton"
     mat-flat-button 
+    [disabled]="registerForm.disabled"
     (click)="formProcess==='logIn'? setSignUpFormProcess() : setLogInProcess() ">
     {{formProcess==='logIn'? 'Sign Up as a New User':'Back to Log In'}}
   </button>
@@ -90,7 +94,7 @@
     </mat-form-field>
     <button mat-flat-button 
       class="resendEmail__button" 
-      [disabled]="email?.invalid"
+      [disabled]="email?.invalid||registerForm.disabled"
       (click)="resendEmail()"
       >Resend confirmation
     </button>

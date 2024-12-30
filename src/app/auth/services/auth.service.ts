@@ -19,29 +19,25 @@ export class AuthService {
     )
   }
   singUpUser(userData:IUser):Observable<ISignUpResult> {
-        let result:ISignUpResult
-        let token=crypto.randomUUID()
-        return this.userMongoServiceService.setUser ({...userData,token:token}).pipe(
-          switchMap(res=> {
-            return  (Object.hasOwn(res,'errorResponse'))? throwError(()=>{return new Error ((res as MongoServerError).errorResponse.errmsg||'',{cause:'setUser'})}): of(res)
-          }),
-          switchMap(res=>this.prepareAndSendEmail((res as InsertOneResult).insertedId,token,userData.email)),
-          switchMap(()=>of(result = {
-            type:'success', 
-            msg:'User has been signed up.\n Email confimation letter has been sent.', 
-            userSigned:true
-          })),
-          catchError(e=>{
-            console.log('e',e);
-            return of(result ={type:'error', msg:e, userSigned:e.cause!=='setUser'})
-          })
-        )
+    let result:ISignUpResult
+    let token=crypto.randomUUID()
+    return this.userMongoServiceService.setUser ({...userData,token:token}).pipe(
+      switchMap(res=> {
+        return  (Object.hasOwn(res,'errorResponse'))? throwError(()=>{return new Error ((res as MongoServerError).errorResponse.errmsg||'',{cause:'setUser'})}): of(res)
+      }),
+      switchMap(res=>this.prepareAndSendEmail((res as InsertOneResult).insertedId,token,userData.email)),
+      switchMap(()=>of(result = {
+        type:'success', 
+        msg:'User has been signed up.\n Email confimation letter has been sent.', 
+        userSigned:true
+      })),
+      catchError(e=>{
+        console.log('error',e);
+        return of(result ={type:'error', msg:e, userSigned:e.cause!=='setUser'})
+      })
+    )
   }
   reSendEmailConfirmation(data:IUser):Observable<SentMessageInfo|ICustomLoginError> {
-    return this.userMongoServiceService.updateUser(data).pipe(
-      tap(r=>console.log('uopdate',r)),
-      switchMap(()=>this.prepareAndSendEmail(data._id,data.token as string,data.email))
-    )
-    
+    return this.userMongoServiceService.updateUser(data).pipe(switchMap(()=>this.prepareAndSendEmail(data._id,data.token as string,data.email)))
   }
 }

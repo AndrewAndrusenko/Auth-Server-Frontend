@@ -3,7 +3,7 @@ import { InsertOneResult, MongoServerError, UpdateResult} from 'mongodb'
 import { Injectable } from '@angular/core';
 import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { REST_ENDPOINT } from '../../environment/environment';
-import { IConfirmMail, ICustomLoginError, IJWT, IUser, SentMessageInfo } from '../types/auth.model';
+import { IConfirmMail, ICustomLoginError, IJWT, ILogOut, IUser, SentMessageInfo } from '../types/auth.model';
 import { AppStorage, StorageService,StorageType } from '../../shared/services/storage.service';
 
 @Injectable({
@@ -23,12 +23,12 @@ export class UserMongoServiceService {
   updateUser (user:IUser):Observable<UpdateResult|MongoServerError> {
     return this.http.post<UpdateResult>(REST_ENDPOINT+'users/update',user)
   }
+  logOutUser (user:IUser):Observable<ILogOut> {
+    return this.http.post<ILogOut>(REST_ENDPOINT+'users/logout',user)
+  }
   loginUser (user:IUser):Observable<ICustomLoginError|IJWT|Error> {
-    console.log('log',);
     return this.http.post<ICustomLoginError|IJWT>(REST_ENDPOINT+'users/login',user).pipe(
-      switchMap(data => (data as IJWT)?.jwt? this.appStorage.setStorageData('jwt', (data as IJWT)?.jwt).pipe(
-        map(res=> {return {...data as IJWT,saved:res as boolean}})
-      ):of({...data as IJWT,saved:false}))
+      switchMap(data => (data as IJWT)?.refreshToken? this.appStorage.setStorageData('refreshToken', (data as IJWT)?.refreshToken).pipe(map(()=> {return data as IJWT})):of(data as IJWT))
     )
   }
   checkUser (userId:string):Observable<boolean> {

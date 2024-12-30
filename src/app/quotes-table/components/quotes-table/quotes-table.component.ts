@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-quotes-table',
   standalone: true,
@@ -10,17 +10,16 @@ import { QuotesService } from '../../services/quotes.service';
   styleUrl: './quotes-table.component.scss'
 })
 export class QuotesTableComponent {
-  public result:any
-  constructor(private quotesService:QuotesService) {}
-  ngOnInit(): void {
-    
+  public result:{data:string}|null;
+  private subscripitons = new Subscription;
+  
+  constructor(private quotesService:QuotesService) {
+    this.result  = null;
   }
-  ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    this.quotesService.getQuotes().subscribe(r=>{
-      console.log('r',r);
-      this.result=r})
-    
+  ngOnInit(): void {
+    this.subscripitons.add(this.quotesService.getQuotes().subscribe(res=>this.result=res));
+  }
+  ngOnDestroy(): void {
+    this.subscripitons.unsubscribe();
   }
 }

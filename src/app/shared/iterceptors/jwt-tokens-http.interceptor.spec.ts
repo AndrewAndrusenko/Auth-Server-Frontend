@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { AuthInterceptor } from './http-interceptor.interceptor';
+import { AuthInterceptor } from './jwt-tokens-http.interceptor';
 
 describe('httpInterceptorInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({

@@ -8,6 +8,10 @@ export const registerRoutes:Route[] = [
     component:RegisterComponent
   },
   {
+    path:':logout',
+    component:RegisterComponent
+  },
+  {
     path:'confirm-email/:id/:token',
     component:EmailConfirmComponent
   }
