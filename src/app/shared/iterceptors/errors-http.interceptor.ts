@@ -14,9 +14,9 @@ export class HttpErrorsHandlerInterceptor implements HttpInterceptor {
     private location:Location
   ) 
   { }
-  showError (code:number) {
+  showError (code:number, msg:string|null='') {
     let errorOptions = errorsCode.get(code) as IErrorCode
-    this.snacksService.openSnackObserve(errorOptions?.message,errorOptions?.buttonName,'error-snackBar').pipe(
+    this.snacksService.openSnackObserve(errorOptions?.message+'\n '+msg,errorOptions?.buttonName,'error-snackBar').pipe(
       tap(()=>errorOptions?.redirect? this.router.navigate([errorOptions?.route]):null),
       tap(d=>console.log('err',errorOptions)),
       tap(()=>errorOptions?.redirect===false&&errorOptions.route==='back'? this.location.back():null)
@@ -34,10 +34,13 @@ export class HttpErrorsHandlerInterceptor implements HttpInterceptor {
           console.log('This is server side error');
           switch (error.status) {
             case 401:
-              this.showError(401)
-              break;
-              case 403:
+              this.showError(401,error?.error?.message)
+            break;
+            case 403:
               this.showError(403)
+            break;
+            case 0:
+              this.showError(0)
             break;
             default:
               error.error.detail? this.snacksService.openSnack('Error:' + error.error.detail.split('\n')[0],'Okay','error-snackBar'): null;

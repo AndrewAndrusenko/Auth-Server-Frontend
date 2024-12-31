@@ -19,6 +19,12 @@ export const errorsCode = new Map<number,IErrorCode> (
     route:'register',
     redirect:true,
     buttonName:'Go to login'
+  }],
+  [0,{
+    message:'Server error',
+    route:'',
+    redirect:false,
+    buttonName:'Okay'
   }]
 ]
 )

@@ -11,7 +11,7 @@ import { UserMongoServiceService } from "../../services/user-mongo-service.servi
 import { SUCCESS_TIME_OUT } from "../../../environment/environment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ICustomLoginError, ISignUpResult, IUser } from "../../types/auth.model";
-import { catchError, EMPTY, Subscription } from "rxjs";
+import { catchError, EMPTY, of, Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { AuthValidatorService } from "../../services/auth-validator.service";
 import {MatProgressBarModule} from '@angular/material/progress-bar';
@@ -109,7 +109,13 @@ export class RegisterComponent {
   logInUser() {
     this.startProcess('Logging');
     this.subscriptions.add(
-      this.userMongoServiceService.loginUser(this.registerForm.value).pipe(catchError(e=>{return EMPTY})).subscribe(res=>{
+      this.userMongoServiceService.loginUser(this.registerForm.value).pipe(catchError(e=>{
+        this.stopProcess();
+        console.log('loging err',e )
+        this.signUpResult = {type:'error', msg:'Unable to login',userSigned:undefined} 
+        return EMPTY
+      }
+      )).subscribe(res=>{
         this.stopProcess();
         res = res as ICustomLoginError 
         if (res?.errorResponse) {
