@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef, MatSnackBarVerticalPosition, TextOnlySnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { TButtonName, TPanelClass } from '../types/shared-models';
+import { SUCCESS_TIME_OUT } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class SnacksService {
       panelClass:[panelClass],
       horizontalPosition:'center',
       verticalPosition:verticalPosition,
+      duration:SUCCESS_TIME_OUT
     })
   }
   openSnackObserve (message:string, buttonName:TButtonName, panelClass:TPanelClass,verticalPosition:MatSnackBarVerticalPosition='top'):Observable<void> {

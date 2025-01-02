@@ -15,6 +15,14 @@ export interface IJWT {
   jwt:string,
   refreshToken:string,
 }
+export interface IJWTInfo {
+  role:string,
+  userId:string,
+  _id:string
+}
+export interface IJWTInfoToken extends IJWT {
+  jwtInfo:IJWTInfo
+}
 export interface IErrorMongoIndexDup{
   "errorResponse": {
       "index": number,

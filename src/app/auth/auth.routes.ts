@@ -1,6 +1,7 @@
 import { Route } from "@angular/router";
 import { RegisterComponent } from "./components/register/register.component";
 import { EmailConfirmComponent } from "./components/email-confirm/email-confirm.component";
+import { PasswordRestoreComponent } from "./components/password-restore/password-restore.component";
 
 export const registerRoutes:Route[] = [
   {
@@ -8,8 +9,12 @@ export const registerRoutes:Route[] = [
     component:RegisterComponent
   },
   {
-    path:':logout',
+    path:'logout/:logout',
     component:RegisterComponent
+  },
+  {
+    path:'restore',
+    component:PasswordRestoreComponent
   },
   {
     path:'confirm-email/:id/:token',

@@ -9,9 +9,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatSelectModule} from '@angular/material/select'
 import { UserMongoServiceService } from "../../services/user-mongo-service.service";
 import { SUCCESS_TIME_OUT } from "../../../environment/environment";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ICustomLoginError, ISignUpResult, IUser } from "../../types/auth.model";
-import { catchError, EMPTY, of, Subscription } from "rxjs";
+import { catchError, EMPTY, Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { AuthValidatorService } from "../../services/auth-validator.service";
 import {MatProgressBarModule} from '@angular/material/progress-bar';
@@ -22,23 +22,12 @@ type processType ='Logging'|'Signing up'|'Resending email'|null
   templateUrl:'./register.component.html',
   styleUrl: './register-styless.scss',
   standalone:true,
-  imports:[
-    MatInputModule,
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatProgressBarModule
-  ],
+  imports:[MatInputModule,CommonModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatIconModule, MatButtonModule, MatSelectModule, 
+     MatProgressBarModule, RouterLink ],
   providers:[FormGroupDirective]
-
 })
 export class RegisterComponent {
   private subscriptions = new Subscription;
- 
   public registerForm:FormGroup;
   public formProcess:'logIn'|'signUp' = 'logIn'
   public processState:processType = null;
@@ -55,7 +44,7 @@ export class RegisterComponent {
     private userMongoServiceService:UserMongoServiceService,
     private authService:AuthService,
     private authValidatorService:AuthValidatorService,
-    private snacksService:SnacksService
+    private snacksService:SnacksService,
   ) {   
     this.registerForm = this.fb.group ({
       userId: ['User', {validators: [Validators.required]}],
@@ -67,10 +56,12 @@ export class RegisterComponent {
     this.emailValidator = this.authValidatorService.validateEmail();
   }
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    console.log('this.route.params',this.route.snapshot.params )
-    this.route.snapshot.params?.['logout']? this.userMongoServiceService.logOutUser(this.registerForm.value).subscribe(res=>alert(JSON.stringify(res))):null
+    this.route.snapshot.params?.['logout']? 
+    this.subscriptions.add(
+      this.userMongoServiceService.logOutUser(this.registerForm.value).subscribe(()=>{
+        this.snacksService.openSnack('You have been logged out','Okay','success-snackBar');
+        this.router.navigate(['register'])
+      })) : null;
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -96,7 +87,8 @@ export class RegisterComponent {
   signUpNewUser(formGroupDirective:FormGroupDirective){
     this.startProcess('Signing up');
     this.subscriptions.add(
-      this.authService.singUpUser(this.registerForm.value).subscribe(res=>{
+      this.authService.singUpUser(this.registerForm.value)
+      .subscribe(res=>{
         this.stopProcess();
         this.signUpResult = res;
         res.type !=='error'? this.snacksService.openSnack(this.msgSentSmail,'Okay','success-snackBar') : null;
@@ -109,13 +101,14 @@ export class RegisterComponent {
   logInUser() {
     this.startProcess('Logging');
     this.subscriptions.add(
-      this.userMongoServiceService.loginUser(this.registerForm.value).pipe(catchError(e=>{
+      this.userMongoServiceService.loginUser(this.registerForm.value)
+      .pipe(catchError(e=>{
         this.stopProcess();
         console.log('loging err',e )
         this.signUpResult = {type:'error', msg:'Unable to login',userSigned:undefined} 
         return EMPTY
-      }
-      )).subscribe(res=>{
+      }))
+      .subscribe(res=>{
         this.stopProcess();
         res = res as ICustomLoginError 
         if (res?.errorResponse) {
@@ -123,6 +116,7 @@ export class RegisterComponent {
           res.errorResponse.name==='email'? this.prepareResendEmailForm(res.errorResponse.stack as string): this.emailErrUserData = null;
         } else {
           this.signUpResult = {type:'success', msg: 'Ok'} 
+          this.snacksService.openSnack('You have been logged in','Okay','success-snackBar');
           this.router.navigate(['quotes'])
         }
       })
@@ -144,8 +138,7 @@ export class RegisterComponent {
         this.stopProcess();
         res.type !=='error'? this.snacksService.openSnack(this.msgSentSmail,'Okay','success-snackBar') : null;
         this.signUpResult={type:'success',msg:'ok',userSigned:undefined}
-      })
-    )
+      }));
   }
   startProcess (process:processType) {
     this.registerForm.disable();

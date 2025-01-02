@@ -1,6 +1,27 @@
-<header style="display: grid; justify-content: end; padding-right: 1%;">
-  <p style="margin: 0; color: aliceblue;">real-time quotes dashboard angular ver {{myVer}}</p>
-  <a routerLink="/register" style="text-align: end;">LogIn/SignUp</a>
-  <a routerLink="/register/:logout" style="text-align: end;">LogOut</a>
+<header class="header">
+  <p class="header__app_name">real-time quotes dashboard angular ver {{myVer}}</p>
+  <div class="header__logging_links">
+    <a routerLink="/register" *ngIf="(user$ | async)?.userId===null" >LogIn/SignUp</a>
+    <button class="header__logging_links__logged-button"
+      [matMenuTriggerFor]="menu"  
+      *ngIf="(user$ | async)?.userId" 
+      mat-raised-button >
+      <mat-icon  fontIcon="perm_identity">close</mat-icon>
+      {{(user$ | async)?.userId|titlecase}}
+      <mat-icon iconPositionEnd  fontIcon="more_vert" prefi >more_vert</mat-icon>
+    </button>
+  </div>
 </header>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item routerLink="/register/logout/:logout">
+    <mat-icon>logout</mat-icon>
+    <span>Log Out</span>
+  </button>
+  <button mat-menu-item routerLink="/register/logout/:logout">
+    <mat-icon>login</mat-icon>
+    <span>LogIn/SignUp</span>
+  </button>
+</mat-menu>
+
 <router-outlet></router-outlet>

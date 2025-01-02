@@ -17,13 +17,16 @@ class Strategy {
 class StrategyCookie extends Strategy {
   constructor(private cookiesService:CookieService) {super()}
   override getData<T>(key:string): Observable<T|Error> {
-    let result:T|Error
+    let result:T|Error|string
     try {
-      result = JSON.parse(this.cookiesService.get(key))
+      result = this.cookiesService.get(key)
     } catch (error) {
       console.log('err',error);
       result = error as Error
     }
+    try {
+      result = JSON.parse(result as string)
+    } catch (error) {  }
     return of <T|Error>(result as T|Error).pipe(filter(data=>!(data instanceof Error )));
   }
   override setData<T>(key:string, data: T): Observable<T|Error> {
@@ -58,8 +61,14 @@ class StrategySession extends Strategy {
       return of(false)
     }
   }
-  override clearStorage ():Observable<boolean> {
-    return of(false)
+  override clearStorage (key?:string):Observable<boolean> {
+    try {
+      key? sessionStorage.removeItem(key):null
+      return of(true)
+    } catch (error) {
+      return of(false)
+    }
+
   }
 }
 class StrategyIndexDB extends Strategy {

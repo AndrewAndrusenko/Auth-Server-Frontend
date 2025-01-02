@@ -1,5 +1,8 @@
 <form  class="registerForm" [formGroup]="registerForm" #myForm="ngForm">
-  <mat-label class="registerForm-title">Sign Up Form</mat-label>
+  <div class="registerForm__header">
+    <mat-label class="registerFormregisterForm__header-title">{{formProcess==='logIn'? 'Log In':'Sign Up'}} Form</mat-label>
+    <a (click)="formProcess==='logIn'? setSignUpFormProcess() : setLogInProcess()" [routerLink]="[]" >{{formProcess==='logIn'? 'Sign Up': 'Log In'}} </a>
+  </div>
   <div class="registerForm__process-state" *ngIf="processState">
     <label >{{processState}}</label>
     <mat-progress-bar mode="query"></mat-progress-bar>
@@ -39,6 +42,10 @@
       Minimum length is 4 characters  
     </mat-error>
   </mat-form-field>
+  <a routerLink="/register/restore/" 
+    class="registerForm__link-restore"
+    *ngIf="formProcess==='logIn'"
+  >Restore password</a>
   <mat-form-field *ngIf="formProcess==='signUp'">
     <mat-label>Email</mat-label>
     <input matInput formControlName="email" [type]="'email'">
@@ -60,12 +67,6 @@
     [disabled]="registerForm.invalid||registerForm.disabled"
     (click)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)">
     {{formProcess==='logIn'? 'Log In':'Sign Up'}}
-  </button>
-  <button class="registerForm__submitButton"
-    mat-flat-button 
-    [disabled]="registerForm.disabled"
-    (click)="formProcess==='logIn'? setSignUpFormProcess() : setLogInProcess() ">
-    {{formProcess==='logIn'? 'Sign Up as a New User':'Back to Log In'}}
   </button>
 </form>
 <section class="registerResultMessage" *ngIf="signUpResult.type!=='null'">
