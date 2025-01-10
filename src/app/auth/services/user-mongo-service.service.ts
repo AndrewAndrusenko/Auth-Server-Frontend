@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { InsertOneResult, MongoServerError, UpdateResult} from 'mongodb'
+import { InsertOneResult, MongoServerError, ObjectId, UpdateResult} from 'mongodb'
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, of, switchMap, tap } from 'rxjs';
 import { REST_ENDPOINT } from '../../environment/environment';
@@ -11,7 +11,7 @@ import { AppStorage, StorageService,StorageType } from '../../shared/services/st
 })
 export class UserMongoServiceService {
   private appStorage:AppStorage;
-  public userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'',role:'',_id:''})
+  public userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'logout',role:'',_id:''})
   constructor(
     private http:HttpClient,
     private storageService:StorageService
@@ -24,9 +24,16 @@ export class UserMongoServiceService {
   updateUser (user:IUser):Observable<UpdateResult|MongoServerError> {
     return this.http.post<UpdateResult>(REST_ENDPOINT+'users/update',user)
   }
+  setResetPasswordToken (email:string,passwordToken:string):Observable<IUser|MongoServerError> {
+    return this.http.post<IUser>(REST_ENDPOINT+'users/set_password_token',{email:email,passwordToken:passwordToken})
+  };
+  setResetPasswordExecute (id:string,passwordToken:string,password:string):Observable<IUser|MongoServerError> {
+    console.log(id,passwordToken,password)
+    return this.http.post<IUser>(REST_ENDPOINT+'users/set_new_password',{id:id,token:passwordToken,password:password})
+  }
   logOutUser (user:IUser):Observable<ILogOut> {
     return this.http.post<ILogOut>(REST_ENDPOINT+'users/logout',user).pipe(
-      tap(logOut=>logOut.logout? this.userDataSubject.next({userId:'',role:'',_id:''}):null),
+      tap(logOut=>logOut.logout? this.userDataSubject.next({userId:'logout',role:'',_id:''}):null),
       switchMap(logOut => logOut.logout? this.appStorage.clearStorageData('jwtInfo').pipe(map(()=> {return logOut})) : of(logOut))
     )
   }

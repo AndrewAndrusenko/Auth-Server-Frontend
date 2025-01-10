@@ -17,6 +17,10 @@ export const registerRoutes:Route[] = [
     component:PasswordRestoreComponent
   },
   {
+    path:'restore/:id/:token',
+    component:PasswordRestoreComponent
+  },
+  {
     path:'confirm-email/:id/:token',
     component:EmailConfirmComponent
   }

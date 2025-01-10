@@ -2,16 +2,8 @@
   margin-left: 1vw;
   margin-right: 1vw;
 }
-.backButton {
-  transition: var(0.2);
-  background-size: 200% auto;
-  color: white !important;          
-  box-shadow: 0 0 20px var(white);
-  border-radius: 3%/15%;
-  background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%);
-  font-size: large;
-  min-height: 4vh;
-  margin-left: 2vw;
+.common-action-button {
+  min-height: 4vh !important;
 }
 .registerResultMessage {
   margin-top: 2vh;

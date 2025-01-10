@@ -11,12 +11,12 @@ export class SnacksService {
  private snackBar = inject(MatSnackBar)
   constructor() { }
 
-  openSnack (message:string, buttonName:TButtonName, panelClass:TPanelClass,verticalPosition:MatSnackBarVerticalPosition='top'):MatSnackBarRef<TextOnlySnackBar> {
+  openSnack (message:string, buttonName:TButtonName, panelClass:TPanelClass,verticalPosition:MatSnackBarVerticalPosition='top',duration=SUCCESS_TIME_OUT):MatSnackBarRef<TextOnlySnackBar> {
     return this.snackBar.open(message,buttonName,{
       panelClass:[panelClass],
       horizontalPosition:'center',
       verticalPosition:verticalPosition,
-      duration:SUCCESS_TIME_OUT
+      duration:panelClass==='success-snackBar'? duration : 60000
     })
   }
   openSnackObserve (message:string, buttonName:TButtonName, panelClass:TPanelClass,verticalPosition:MatSnackBarVerticalPosition='top'):Observable<void> {

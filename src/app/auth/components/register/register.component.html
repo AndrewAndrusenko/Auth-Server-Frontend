@@ -32,14 +32,15 @@
       <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
     <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
-    <button *ngIf="passwordCreate?.value" matSuffix mat-icon-button aria-label="Clear" (click)="passwordCreate?.patchValue(null)">
+    <button *ngIf="passwordCreate?.value" matSuffix mat-icon-button aria-label="Clear" (click)="passwordCreate.patchValue(null)">
       <mat-icon>close</mat-icon>
     </button>
     <mat-error  *ngIf="passwordCreate?.errors?.['required']">
       The field is required   
     </mat-error>
-    <mat-error  *ngIf="passwordCreate?.errors?.['minlength']">
-      Minimum length is 4 characters  
+    <mat-error  class="resetPassword-error-strong"  *ngIf="passwordCreate?.errors?.['strong']">
+      Not safe. Check requirements 
+      <mat-icon class="icon-error-details"(click)="showPasswordTip()" matTooltip="Password requirements" >more</mat-icon>
     </mat-error>
   </mat-form-field>
   <a routerLink="/register/restore/" 
@@ -62,7 +63,7 @@
      This email is being used 
     </mat-error>
   </mat-form-field>
-  <button class="registerForm__submitButton"
+  <button class="common-action-button"
     mat-flat-button type="submit" 
     [disabled]="registerForm.invalid||registerForm.disabled"
     (click)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)">
@@ -94,7 +95,7 @@
       </mat-error>
     </mat-form-field>
     <button mat-flat-button 
-      class="resendEmail__button" 
+      class="common-action-button"
       [disabled]="email?.invalid||registerForm.disabled"
       (click)="resendEmail()"
       >Resend confirmation

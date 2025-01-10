@@ -35,9 +35,8 @@ export class AppComponent {
   ngOnInit(): void {
     this.subscriptions.add(
       this.appStorage.getStorageData('jwtInfo').pipe(
-        filter(jwtInfo=>(jwtInfo as string)!==''),
+        filter(jwtInfo=>jwtInfo==true),
         tap(res=>console.log('res',res )),
-        
         tap(jwtInfo=>this.userMongoServiceService.userDataSubject.next(JSON.parse(jwtInfo as string)))
       ).subscribe())
   }

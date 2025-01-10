@@ -5,11 +5,10 @@ export const IndexDBConfig: DBConfig  = {
   version: 1,
   objectStoresMeta: [{
     store: 'auth',
-    storeConfig: { keyPath: 'userID', autoIncrement: false },
+    storeConfig: { keyPath: 'code', autoIncrement: false },
     storeSchema: [
-      { name: 'userID', keypath: 'userID', options: { unique: true } },
-      { name: 'jwt', keypath: 'jwt', options: { unique: true } },
-      { name: 'active', keypath: 'active', options: { unique: true } },
+      { name: 'code', keypath: 'code', options: { unique: true } },
+      { name: 'data', keypath: 'data', options: { unique: true } },
     ]
   }]
 };

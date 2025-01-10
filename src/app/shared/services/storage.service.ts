@@ -21,7 +21,7 @@ class StrategyCookie extends Strategy {
     try {
       result = this.cookiesService.get(key)
     } catch (error) {
-      console.log('err',error);
+      console.log('error cookiesService.get',error);
       result = error as Error
     }
     try {
@@ -68,7 +68,6 @@ class StrategySession extends Strategy {
     } catch (error) {
       return of(false)
     }
-
   }
 }
 class StrategyIndexDB extends Strategy {
@@ -80,7 +79,7 @@ class StrategyIndexDB extends Strategy {
       key).pipe(
         // filter(data=>data!==undefined),
         catchError(err=>{
-          console.log('er',err);
+          console.log('error indexDBservice.getByIndex',err);
           return of(err)
         })); ;
   }
@@ -89,7 +88,7 @@ class StrategyIndexDB extends Strategy {
         IndexDBConfig.objectStoresMeta[0].store,
         data
       ).pipe(catchError(err=>{
-          console.log('er',err);
+          console.log('error indexDBservice.update',err);
           return of(err)
         }));
   }

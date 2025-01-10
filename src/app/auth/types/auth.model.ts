@@ -8,6 +8,7 @@ export interface IUser {
   password:string
   email:string,
   token?:string,
+  passwordToken?:string,
   regDate:string,
   role:TAcRole
 }
