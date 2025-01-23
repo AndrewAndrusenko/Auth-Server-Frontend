@@ -21,10 +21,15 @@ export const errorsCode = new Map<number,IErrorCode> (
     buttonName:'Go to login'
   }],
   [0,{
-    message:'Server error',
+    message:'Unknown error',
     route:'',
     redirect:false,
     buttonName:'Okay'
   }]
+]
+)
+export const errorsInfo = new Map<string,string> (
+ [
+  ['ECONNREFUSED', 'Connection has been refused']
 ]
 )

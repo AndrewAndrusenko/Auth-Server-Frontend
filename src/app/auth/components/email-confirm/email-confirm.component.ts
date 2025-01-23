@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UserMongoServiceService } from '../../services/user-mongo-service.service';
-import { IConfirmMail } from '../../types/auth.model';
+import { IConfirmMail } from '../../models/auth.model';
 import { CommonModule } from '@angular/common';
 import { Subscription} from 'rxjs';
 import { TResultType } from '../../../shared/types/shared-models';

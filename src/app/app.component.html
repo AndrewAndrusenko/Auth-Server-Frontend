@@ -1,11 +1,12 @@
 <header class="header">
   <div class="header-admin">
     <p class="header__app_name">real-time quotes dashboard angular ver {{myVer}}</p>
+    <p class="header__app_name-mobile">real-time quotes<br/></p>
     <a routerLink="/admin" *ngIf="(user$ | async)?.userId!=='logout'||''" >admin</a>
   </div>
   <div class="header__logging_links">
     <a routerLink="/register" *ngIf="(user$ | async)?.userId==='logout'||''" >LogIn/SignUp</a>
-    <button class="header__logging_links__logged-button"
+    <button class="common-action-button"
       [matMenuTriggerFor]="menu"  
       *ngIf="(user$ | async)?.userId!=='logout'||''" 
       mat-raised-button >

@@ -39,7 +39,7 @@ export class AuthValidatorService {
       let result = true
       validators.forEach(key=>{
         result = result && passwordValidators[key].reg.test(control.value);
-        hintMsg = hintMsg +'\n'+passwordValidators[key].hint + (passwordValidators[key].reg.test(control.value) ?' - 👍':' - ⛔');;
+        hintMsg = hintMsg +'\n'+passwordValidators[key].hint + (passwordValidators[key].reg.test(control.value) ?' - ✅':' - ⛔');;
       })
       Object.assign(control,{hint_strongPasswordValidation:hintMsg})
       if (!result) {

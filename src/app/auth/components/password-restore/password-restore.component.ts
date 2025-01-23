@@ -99,7 +99,6 @@ export class PasswordRestoreComponent {
     .pipe(catchError(err=>{
       this.processState=null;
       this.emailForRestore.enable();
-      this.snacksService.openSnack(err.message,'Ok','error-snackBar')
       return EMPTY
     }))
     .subscribe(res=>{

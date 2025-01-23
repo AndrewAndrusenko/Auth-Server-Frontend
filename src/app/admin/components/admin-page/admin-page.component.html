@@ -1,2 +1,8 @@
-<br><br><br>
-<h1 style="text-align: center;">{{ adminData | async}}</h1>
+<br>
+<app-a-table class="custom-table"
+[tableName]="'tokenData'"
+[data]=" adminData | async"
+[actionsForTable]="actionsForTable"
+[columnsWithHeaders]="tableHeaders"
+[reloadServiceToken]="'adminDataService'"
+></app-a-table>

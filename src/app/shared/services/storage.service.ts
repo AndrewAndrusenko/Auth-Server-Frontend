@@ -73,6 +73,7 @@ class StrategySession extends Strategy {
 class StrategyIndexDB extends Strategy {
   constructor(private indexDBservice:NgxIndexedDBService) {super()}
   override getData<T>(key:string): Observable<T> {
+    console.log('key',key )
     return this.indexDBservice.getByIndex <T>(
       IndexDBConfig.objectStoresMeta[0].store,
       IndexDBConfig.objectStoresMeta[0].storeConfig.keyPath as string,

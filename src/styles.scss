@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 // @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 // @import url('https://fonts.googleapis.com/css2?family=Delius&display=swap');
-
+@import '../src/app//styles/mixins_media.scss';
 :root {
   --contentWidth :44vw;
 
@@ -40,11 +40,12 @@ body{
 html, body { height: 100%; }
 .mat-mdc-snack-bar-container {
   white-space: pre-wrap;
+
   &.success-snackBar {
     --mdc-snackbar-container-color: #2196f3;
     --mdc-snackbar-supporting-text-color: #030303;
+    max-width: 96vw !important;
 
-    // --mdc-snackbar-supporting-text-font:"Poppins", cursive;
   }
   .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
     --mat-snack-bar-button-color:#fff;
@@ -52,6 +53,7 @@ html, body { height: 100%; }
   &.error-snackBar {
     --mdc-snackbar-container-color: var(--color-text-error);
     --mdc-snackbar-supporting-text-color: #030303;
+    max-width: 96vw !important;
   }
   .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
     --mat-snack-bar-button-color:#fff;
@@ -70,10 +72,10 @@ html, body { height: 100%; }
   &[disabled=true] {
     opacity: 50%;
   }
+  
 }
 
 .mat-mdc-form-field {
-  
   border-width: 1px;
   border-radius: 2%/15%;
   width: 30vw;

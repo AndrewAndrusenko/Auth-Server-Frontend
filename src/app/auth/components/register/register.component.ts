@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, FormGroupDirective, ValidatorFn, Validators } from "@angular/forms";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -7,10 +7,9 @@ import { MatIconModule} from '@angular/material/icon';
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSelectModule} from '@angular/material/select'
-import { UserMongoServiceService } from "../../services/user-mongo-service.service";
 import { ENVIRONMENT, SUCCESS_TIME_OUT } from "../../../environment/environment";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ICustomLoginError, ISignUpResult, IUser } from "../../types/auth.model";
+import { ICustomLoginError, ISignUpResult, IUser } from "../../models/auth.model";
 import { catchError, EMPTY, Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { AuthValidatorService } from "../../services/auth-validator.service";
@@ -27,6 +26,9 @@ type processType ='Logging'|'Signing up'|'Resending email'|null
   providers:[FormGroupDirective]
 })
 export class RegisterComponent {
+  @ViewChild('passwordHTML',{read: ElementRef, static: true}) passwordHTML: ElementRef 
+  @ViewChild('emailHTML' ,{read: ElementRef, static: false }) emailHTML: ElementRef 
+  @ViewChild('buttomSubmit' ,{read: ElementRef, static: true}) buttomSubmitHTML: ElementRef 
   private subscriptions = new Subscription;
   public registerForm:FormGroup;
   public formProcess:'logIn'|'signUp' = 'logIn'
@@ -42,14 +44,14 @@ export class RegisterComponent {
     private fb:FormBuilder, 
     private router:Router,
     private route:ActivatedRoute,
-    private userMongoServiceService:UserMongoServiceService,
     private authService:AuthService,
     private authValidatorService:AuthValidatorService,
     private snacksService:SnacksService,
+    private changeDetector : ChangeDetectorRef
   ) {   
     this.registerForm = this.fb.group ({
-      userId: ['User', {validators: [Validators.required]}],
-      password: ['Password', {validators: [Validators.required], updateOn:'blur'}],
+      userId: ['', {validators: [Validators.required]}],
+      password: ['', {validators: [Validators.required], updateOn:'blur'}],
       email:[''],
       role:'user'
     });
@@ -63,7 +65,7 @@ export class RegisterComponent {
   ngOnInit(): void {
     this.route.snapshot.params?.['logout']? 
     this.subscriptions.add(
-      this.userMongoServiceService.logOutUser(this.registerForm.value).subscribe(()=>{
+      this.authService.logOutUser(this.registerForm.value).subscribe(()=>{
         this.snacksService.openSnack('You have been logged out','Okay','success-snackBar');
         this.router.navigate(['register'])
       })) : null;
@@ -82,6 +84,7 @@ export class RegisterComponent {
     this.passwordCreate.updateValueAndValidity();
     this.emailErrUserData = null;
     this.signUpResult = {type:'null',msg:''};
+    this.changeDetector.detectChanges();
   }
   setLogInProcess () {
     this.formProcess='logIn';
@@ -100,17 +103,19 @@ export class RegisterComponent {
       .subscribe(res=>{
         this.stopProcess();
         this.signUpResult = res;
-        res.type !=='error'? this.snacksService.openSnack(this.msgSentEmail,'Okay','success-snackBar') : null;
         formGroupDirective.resetForm()
         this.registerForm.reset()
+        if (res.type !=='error') {
+        this.snacksService.openSnack(this.msgSentEmail,'Okay','success-snackBar');
         setTimeout(() => this.signUpResult.type='null', SUCCESS_TIME_OUT);
+        }
       })
     )
   }
   logInUser() {
     this.startProcess('Logging');
     this.subscriptions.add(
-      this.userMongoServiceService.loginUser(this.registerForm.value)
+      this.authService.loginUser(this.registerForm.value)
       .pipe(catchError(e=>{
         this.stopProcess();
         console.log('loging err',e )
@@ -143,7 +148,13 @@ export class RegisterComponent {
   resendEmail(){
     this.startProcess('Resending email')
     this.subscriptions.add(
-      this.authService.reSendEmailConfirmation({...this.emailErrUserData as IUser,email:this.email?.value}).subscribe(res=>{
+      this.authService.reSendEmailConfirmation({...this.emailErrUserData as IUser,email:this.email?.value})
+      .pipe(catchError(e=>{
+        this.stopProcess();
+        this.signUpResult = {type:'error', msg:'Unable to send email',userSigned:undefined} 
+        return EMPTY
+      }))
+      .subscribe(res=>{
         this.stopProcess();
         res.type !=='error'? this.snacksService.openSnack(this.msgSentEmail,'Okay','success-snackBar') : null;
         this.signUpResult={type:'success',msg:'ok',userSigned:undefined}
@@ -161,6 +172,12 @@ export class RegisterComponent {
   }
   showPasswordTip() {
     this.snacksService.openSnack((this.passwordCreate.errors as {hint_strong:string, strong:boolean}).hint_strong,'Okay','success-snackBar','top',20000)
+  }
+  goNext (event:any) {
+    this.passwordCreate.patchValue(event.target.value)
+    setTimeout(() => {
+      this.emailHTML? this.emailHTML.nativeElement.focus(): this.buttomSubmitHTML.nativeElement.focus()
+    }, 100);
   }
   get userId() {return this.registerForm.get('userId') } 
   get passwordCreate() {return this.registerForm.get('password') as AbstractControl } 

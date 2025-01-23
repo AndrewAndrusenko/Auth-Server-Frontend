@@ -1,0 +1,22 @@
+
+23/01/25
+Admin(tokens revoke) & BaseClass Table & Errors
+1. Created AdminPageComponent in order to manage refresh tokens and delete them if it is requested. 
+  -Created AdminDataService to hadnle api calls
+  -New universal table component has been used for UI purposes
+  -Respoinsive design form mobile is implemented
+2. RegisterComponent:
+  -Added Form UI feature - User is able to go to the next field by pressing enter key or forward arrow button on mobile keyboard. Mostly it was 
+  introduced to simplify input process via mobile device. (form keyup.enter preventdefault + viewchild (template elements) + focus method)
+  - refactored reSendEmailConfirmation in order to correctly handle mail sending errors reSendEmailConfirmation (incl service unavailbility)
+3. ATableComponent - create universal table component with flexbile settings
+  - component accepts Inputs: readOnly, tableName, data, columnsWithHeaders, actionsForTable, reloadServiceToken.
+  - Thus it could be customize to display any table with list of available actions (such as edit, create, delete and etc)
+  - component accepts token for service which will be used for reloading data purposes and etc
+  - component extended by custom filtering option, actions, reloading, saving data to excel, context menu and action icon buttons
+  - component exposes events on actions (edit, delete,create etc) and reload so the parent could executed status messaging
+4. HttpErrorsHandlerInterceptor has been refactored: default error has been fixed and for 401 error code has been added execution of logout function 
+5. introduced ConfirmBsComponent (bottom sheet component) to handle confirmation dialogs (like before deleting item)
+6. Functions logOutUser and loginUser have been refactored to correctly handle errors and moved to the AuthService
+7. Changed storage type for authenticated user data from session storage to IndexDB and userDataSubject has been moved to AuthService
+8. Styles refactored: EmailConfirmComponent,PasswordRestoreComponent

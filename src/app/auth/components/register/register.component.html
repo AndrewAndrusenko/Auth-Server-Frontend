@@ -1,4 +1,6 @@
-<form  class="registerForm" [formGroup]="registerForm" #myForm="ngForm">
+<form  class="registerForm" [formGroup]="registerForm"
+  #myForm="ngForm" 
+  (keydown.enter)="$event.preventDefault()">
   <div class="registerForm__header">
     <mat-label class="registerFormregisterForm__header-title">{{formProcess==='logIn'? 'Log In':'Sign Up'}} Form</mat-label>
     <a (click)="formProcess==='logIn'? setSignUpFormProcess() : setLogInProcess()" [routerLink]="[]" >{{formProcess==='logIn'? 'Sign Up': 'Log In'}} </a>
@@ -9,7 +11,9 @@
   </div>
   <mat-form-field  class="custom-background">
     <mat-label>UserName</mat-label>
-    <input   matInput formControlName="userId" >
+    <input  matInput  type="text" 
+      formControlName="userId"
+      (keyup.enter)="passwordHTML.focus()">
     <button mat-icon-button matPrefix color="primary">
       <mat-icon fontIcon="perm_identity">close</mat-icon>
     </button> 
@@ -28,10 +32,12 @@
   </mat-form-field>
   <mat-form-field >
     <mat-label>Password</mat-label>
-    <button mat-icon-button color="primary" matPrefix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+    <button  mat-icon-button color="primary" matPrefix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
       <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
-    <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
+    <input #passwordHTML matInput [type]="hide ? 'password' : 'text'" 
+      formControlName="password" 
+      (keyup.enter)="goNext($event)">
     <button *ngIf="passwordCreate?.value" matSuffix mat-icon-button aria-label="Clear" (click)="passwordCreate.patchValue(null)">
       <mat-icon>close</mat-icon>
     </button>
@@ -49,7 +55,9 @@
   >Restore password</a>
   <mat-form-field *ngIf="formProcess==='signUp'">
     <mat-label>Email</mat-label>
-    <input matInput formControlName="email" [type]="'email'">
+    <input  #emailHTML matInput  [type]="'email'"
+      formControlName="email" 
+      (keyup.enter)="buttomSubmitHTML.nativeElement.focus()">
     <button *ngIf="email?.value" matSuffix mat-icon-button aria-label="Clear" (click)="email?.patchValue(null)">
       <mat-icon>close</mat-icon>
     </button>
@@ -63,9 +71,11 @@
      This email is being used 
     </mat-error>
   </mat-form-field>
-  <button class="common-action-button"
+  <button class="common-action-button" 
+    #buttomSubmit
     mat-flat-button type="submit" 
     [disabled]="registerForm.invalid||registerForm.disabled"
+    (keyup.enter)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)"
     (click)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)">
     {{formProcess==='logIn'? 'Log In':'Sign Up'}}
   </button>

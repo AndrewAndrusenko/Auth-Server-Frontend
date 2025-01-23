@@ -19,7 +19,7 @@ export class SnacksService {
       duration:panelClass==='success-snackBar'? duration : 60000
     })
   }
-  openSnackObserve (message:string, buttonName:TButtonName, panelClass:TPanelClass,verticalPosition:MatSnackBarVerticalPosition='top'):Observable<void> {
-    return this.openSnack(message,buttonName,panelClass).onAction()
+  openSnackObserve (message:string, buttonName:TButtonName, panelClass:TPanelClass,verticalPosition:MatSnackBarVerticalPosition='top',duration=SUCCESS_TIME_OUT):Observable<void> {
+    return this.openSnack(message,buttonName,panelClass,verticalPosition,duration).onAction()
   }
 }

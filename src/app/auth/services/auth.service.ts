@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { catchError, EMPTY, Observable, of, scan, switchMap, takeWhile, tap, throwError, timer } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, filter, map, Observable, of, scan, switchMap, takeWhile, tap, throwError, timer } from 'rxjs';
 import { UserMongoServiceService } from './user-mongo-service.service';
-import { ICustomLoginError, ISignUpResult, IUser, SentMessageInfo } from '../types/auth.model';
+import { ICustomLoginError, IJWTInfo, IJWTInfoToken, ILogOut, ISignUpResult, IUser, SentMessageInfo } from '../models/auth.model';
 import { MongoServerError,InsertOneResult, ObjectId } from 'mongodb';
 import { AppStorage, StorageService, StorageType } from '../../shared/services/storage.service';
 import { RESET_PASSWORD_TIMEOUT } from '../../environment/environment';
@@ -11,6 +11,7 @@ import { RESET_PASSWORD_TIMEOUT } from '../../environment/environment';
 export class AuthService {
   private appStorage:AppStorage;
   public timer$: Observable<number>;
+  public userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'logout',role:'',_id:''})
 
   constructor(
     private userMongoServiceService:UserMongoServiceService,
@@ -19,12 +20,21 @@ export class AuthService {
     this.appStorage = this.storageService.initStorageObj(StorageType.IndexDB);
     this.timer$ = of(0)
   }
-  prepareAndSendEmail(id:ObjectId, token:string,email:string, route:string):Observable<SentMessageInfo|ICustomLoginError>{
-    let confirmLink =`${window.location.href}/${route}${id}/${token}`
-    return this.userMongoServiceService.sendEmailConfirmation(email,confirmLink).pipe(
-      catchError(e =>throwError(()=>{
-        console.log('error',e.error?.errorResponse?.message);
-        return new Error(e.error?.errorResponse?.message,{cause:'sendEmail'})}))
+  loginUser (user:IUser):Observable<ICustomLoginError|IJWTInfoToken|Error> {
+    return this.userMongoServiceService.loginUser (user).pipe(
+      tap(jwtInfoToken=>(jwtInfoToken as IJWTInfoToken)?.jwtInfo? this.userDataSubject.next((jwtInfoToken as IJWTInfoToken)?.jwtInfo):null),
+      switchMap(data => (data as IJWTInfoToken)?.jwtInfo? 
+      this.appStorage.setStorageData('jwtInfo',{code:'jwtInfo', data:((data as IJWTInfoToken)?.jwtInfo)}).pipe(map(()=> {return data as IJWTInfoToken}))
+      :of(data as IJWTInfoToken))
+    )
+  }
+  logOutUser (user?:IUser):Observable<ILogOut> {
+    return of(user).pipe(
+      switchMap(user=>user? of(user):this.appStorage.getStorageData('jwtInfo').pipe(map(res=>(res as {data:IUser})?.data||null))),
+      filter(user=>user!=null),
+      switchMap(user=>this.userMongoServiceService.logOutUser(user)),
+      tap(()=>this.userDataSubject.next({userId:'logout',role:'',_id:''})),
+      switchMap(logOut => this.appStorage.clearStorageData('jwtInfo').pipe(map(()=> {return logOut}))),
     )
   }
   singUpUser(userData:IUser):Observable<ISignUpResult> {
@@ -40,11 +50,20 @@ export class AuthService {
         msg:'User has been signed up.\n Email confimation letter has been sent.', 
         userSigned:true
       })),
-      catchError(e=>{
-        console.log('error',e);
-        return of(result ={type:'error', msg:e, userSigned:e.cause!=='setUser'})
+      catchError(err=>{
+        console.log('s ee',err )
+        return of(result ={type:'error', msg:`${err.error.ml} : ${err.error.msg}`, userSigned:err.cause!=='setUser'})
       })
     )
+  }
+  prepareAndSendEmail(id:ObjectId, token:string,email:string, route:string):Observable<SentMessageInfo|ICustomLoginError>{
+    let confirmLink =`${window.location.href}/${route}${id}/${token}`
+    return this.userMongoServiceService.sendEmailConfirmation(email,confirmLink).pipe(
+      catchError(err =>{
+        console.log('error',err);
+        err.cause = 'sendEmail'
+        return throwError(()=>err);
+      }))
   }
   reSendEmailConfirmation(data:IUser):Observable<SentMessageInfo|ICustomLoginError> {
     return this.userMongoServiceService.updateUser(data)
@@ -77,4 +96,7 @@ export class AuthService {
       timerRest>0? this.setTimerForResend(timerRest) : null;
     })
   }
+    reloadTable():Observable<{}[]> { //just for test could be deleted
+      return of([''])
+    }
 }

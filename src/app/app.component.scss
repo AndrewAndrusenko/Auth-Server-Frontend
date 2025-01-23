@@ -1,3 +1,4 @@
+@import '../app/styles/mixins_media.scss';
 .header {
   display: flex;
   justify-content: space-between;
@@ -7,6 +8,17 @@
   &__app_name {
     margin: 0; 
     color: aliceblue;
+    @include mobile {
+      display: none;
+    }
+
+    &-mobile {
+      color: aliceblue;
+      display: none;
+      @include mobile {
+        display: unset;
+      }
+    }
   }
 
   &__logging_links{
@@ -16,18 +28,19 @@
     a {
       margin-top: 1.5%;
     }
-    &__logged-button {
-      margin-top: 0.3vh;
-      transition: var(0.2);
-      background-size: 200% auto;
-      color: white !important;          
-      box-shadow: 0 0 20px var(white);
-      border-radius: 3%/15%;
-      margin-left: 1vw;
-      font-family:cursive;
-      background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%);
-      font-size: medium;
-      font-family: unset;
-    }
 }
-}
+.common-action-button {
+  margin-top: 0.5vh;
+  min-height: 4vh;
+  font-size: medium !important;
+  @include mobile {
+    min-height: unset;
+    font-size: smaller !important;
+    margin-left: 1%;
+    margin-bottom: 0.5vh;
+    padding-left: 10%;
+    padding-right: 10%;
+    min-width: 30vw;
+  }
+ }
+ }

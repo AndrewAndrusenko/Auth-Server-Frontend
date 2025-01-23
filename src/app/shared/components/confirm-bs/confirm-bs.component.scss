@@ -1,0 +1,16 @@
+.confirm-text {
+  text-align: center;
+  white-space: pre-wrap;
+}
+.control-buttons {
+  display: flex;
+  justify-content: space-around; 
+  .common-action-button {
+    font-size: small !important;
+    min-height:3vh !important;
+  }
+  .confirm {
+    color: rgb(177, 58, 58) !important;
+    font-weight: 600 !important;
+  }
+}

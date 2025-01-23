@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { InsertOneResult, MongoServerError, ObjectId, UpdateResult} from 'mongodb'
+import { InsertOneResult, MongoServerError, UpdateResult} from 'mongodb'
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, of, switchMap, tap } from 'rxjs';
+import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { REST_ENDPOINT } from '../../environment/environment';
-import { IConfirmMail, ICustomLoginError,  IJWTInfo, IJWTInfoToken, ILogOut, IUser, SentMessageInfo } from '../types/auth.model';
+import { IConfirmMail, ICustomLoginError,  IJWTInfoToken, ILogOut, IUser, SentMessageInfo } from '../models/auth.model';
 import { AppStorage, StorageService,StorageType } from '../../shared/services/storage.service';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { AppStorage, StorageService,StorageType } from '../../shared/services/st
 })
 export class UserMongoServiceService {
   private appStorage:AppStorage;
-  public userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'logout',role:'',_id:''})
+  
   constructor(
     private http:HttpClient,
     private storageService:StorageService
@@ -32,18 +32,10 @@ export class UserMongoServiceService {
     return this.http.post<IUser>(REST_ENDPOINT+'users/set_new_password',{id:id,token:passwordToken,password:password})
   }
   logOutUser (user:IUser):Observable<ILogOut> {
-    return this.http.post<ILogOut>(REST_ENDPOINT+'users/logout',user).pipe(
-      tap(logOut=>logOut.logout? this.userDataSubject.next({userId:'logout',role:'',_id:''}):null),
-      switchMap(logOut => logOut.logout? this.appStorage.clearStorageData('jwtInfo').pipe(map(()=> {return logOut})) : of(logOut))
-    )
+    return this.http.post<ILogOut>(REST_ENDPOINT+'users/logout',user)
   }
   loginUser (user:IUser):Observable<ICustomLoginError|IJWTInfoToken|Error> {
-    return this.http.post<ICustomLoginError|IJWTInfoToken>(REST_ENDPOINT+'users/login',user).pipe(
-      tap(jwtInfoToken=>(jwtInfoToken as IJWTInfoToken)?.jwtInfo? this.userDataSubject.next((jwtInfoToken as IJWTInfoToken)?.jwtInfo):null),
-      switchMap(data => (data as IJWTInfoToken)?.jwtInfo? 
-      this.appStorage.setStorageData('jwtInfo', ((data as IJWTInfoToken)?.jwtInfo)).pipe(map(()=> {return data as IJWTInfoToken}))
-      :of(data as IJWTInfoToken))
-    )
+    return this.http.post<ICustomLoginError|IJWTInfoToken>(REST_ENDPOINT+'users/login',user)
   }
   checkUser (userId:string):Observable<boolean> {
     return this.http.get<boolean>(REST_ENDPOINT+'users/checkId',{params:{userId:userId}})
