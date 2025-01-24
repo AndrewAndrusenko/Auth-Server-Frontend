@@ -50,9 +50,9 @@ export class RegisterComponent {
     private changeDetector : ChangeDetectorRef
   ) {   
     this.registerForm = this.fb.group ({
-      userId: ['', {validators: [Validators.required]}],
+      userId: ['', {validators: [Validators.required],  updateOn:'blur'}],
       password: ['', {validators: [Validators.required], updateOn:'blur'}],
-      email:[''],
+      emailAd:['',{updateOn:'blur'}],
       role:'user'
     });
     this.userIdValidator = this.authValidatorService.validateUserId();
@@ -69,6 +69,11 @@ export class RegisterComponent {
         this.snacksService.openSnack('You have been logged out','Okay','success-snackBar');
         this.router.navigate(['register'])
       })) : null;
+    this.subscriptions.add(
+      this.registerForm.statusChanges.subscribe(data=>{
+        //enter pressing on email field workaround. we need to focus on submit button but it's not possible until async email validation is complited
+        data==='VALID'? this.goToSubmitButton():null 
+      }));
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -76,12 +81,12 @@ export class RegisterComponent {
   setSignUpFormProcess () {
     this.formProcess='signUp';
     this.passwordCreate.addValidators(this.passwordStrongValidator)
-    this.email?.clearAsyncValidators()
-    this.userId?.addAsyncValidators(this.userIdValidator);
+    this.userId?.addAsyncValidators([this.userIdValidator]);
     this.email?.addValidators([Validators.required,Validators.email]);
-    this.email?.addAsyncValidators(this.emailValidator);
+    this.email?.addAsyncValidators([this.emailValidator]);
     this.userId?.updateValueAndValidity();
     this.passwordCreate.updateValueAndValidity();
+    this.email.updateValueAndValidity();
     this.emailErrUserData = null;
     this.signUpResult = {type:'null',msg:''};
     this.changeDetector.detectChanges();
@@ -94,7 +99,8 @@ export class RegisterComponent {
     this.email?.clearAsyncValidators()
     this.email?.updateValueAndValidity();
     this.userId?.updateValueAndValidity()
-    this.passwordCreate.updateValueAndValidity()
+    this.passwordCreate.updateValueAndValidity();
+    this.changeDetector.detectChanges();
   }
   signUpNewUser(formGroupDirective:FormGroupDirective){
     this.startProcess('Signing up');
@@ -173,13 +179,11 @@ export class RegisterComponent {
   showPasswordTip() {
     this.snacksService.openSnack((this.passwordCreate.errors as {hint_strong:string, strong:boolean}).hint_strong,'Okay','success-snackBar','top',20000)
   }
-  goNext (event:any) {
-    this.passwordCreate.patchValue(event.target.value)
-    setTimeout(() => {
-      this.emailHTML? this.emailHTML.nativeElement.focus(): this.buttomSubmitHTML.nativeElement.focus()
-    }, 100);
+  goToSubmitButton () {
+    this.formProcess==='signUp'&&this.email.invalid? this.emailHTML.nativeElement.blur():null
+    setTimeout(() => {this.registerForm.valid? this.buttomSubmitHTML.nativeElement.focus():null;}, 100);
   }
   get userId() {return this.registerForm.get('userId') } 
   get passwordCreate() {return this.registerForm.get('password') as AbstractControl } 
-  get email() {return this.registerForm.get('email') } 
+  get email() {return this.registerForm.get('emailAd') as AbstractControl  } 
 }

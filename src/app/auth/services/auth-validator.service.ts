@@ -22,7 +22,7 @@ export class AuthValidatorService {
   }
   validateEmail (exceptCurrent:string=''):AsyncValidatorFn {
     return (control:AbstractControl):Observable<ValidationErrors|null> => {
-      if (exceptCurrent===control.getRawValue()) {return of(null)}
+      if (exceptCurrent===control.getRawValue()||control.getRawValue()=='') {return of(null)}
       return this.userMongoServiceService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(taken=>taken? {emailTaken:taken}:null))
     }
   }

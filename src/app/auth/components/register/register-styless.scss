@@ -36,9 +36,10 @@
 }
 .registerResultMessage {
   margin-top: 2vh;
-  margin-left: 8vw;
-  justify-content: center; 
-  display: flex; 
+  margin-left: 2vw;
+  width: 95vw;
+  justify-items: center; 
+  display: grid; 
   align-items: center; 
   gap:1vw;
 
@@ -48,17 +49,19 @@
   &__text {
     font-weight: 700;
     font-size: medium;
-    text-align: right;
+    text-align: center;
     vertical-align: middle;
     color: var(--color-text-error);
     @include mobile {
       text-align: center;
+      font-weight: 500;
     }
   }
   &__button {
-    color: var(--color-text-error);
-    width: 5vw;
-    justify-content: center;
+    width: 15vw;
+    @include mobile {
+      width: 40vw;
+    }
   }
 }
 .resendEmail {

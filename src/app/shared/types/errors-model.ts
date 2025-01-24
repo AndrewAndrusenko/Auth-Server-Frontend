@@ -21,7 +21,7 @@ export const errorsCode = new Map<number,IErrorCode> (
     buttonName:'Go to login'
   }],
   [0,{
-    message:'Unknown error',
+    message:'Service is unavailable',
     route:'',
     redirect:false,
     buttonName:'Okay'

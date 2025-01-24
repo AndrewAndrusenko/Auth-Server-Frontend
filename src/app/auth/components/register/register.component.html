@@ -35,9 +35,13 @@
     <button  mat-icon-button color="primary" matPrefix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
       <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
-    <input #passwordHTML matInput [type]="hide ? 'password' : 'text'" 
+    <input #passwordHTML matInput 
       formControlName="password" 
-      (keyup.enter)="goNext($event)">
+      (keyup.enter)="
+        passwordHTML.blur();
+        formProcess==='logIn'? goToSubmitButton():emailHTML.nativeElement.focus()"
+      [type]="hide ? 'password' : 'text'"
+    />
     <button *ngIf="passwordCreate?.value" matSuffix mat-icon-button aria-label="Clear" (click)="passwordCreate.patchValue(null)">
       <mat-icon>close</mat-icon>
     </button>
@@ -55,10 +59,10 @@
   >Restore password</a>
   <mat-form-field *ngIf="formProcess==='signUp'">
     <mat-label>Email</mat-label>
-    <input  #emailHTML matInput  [type]="'email'"
-      formControlName="email" 
-      (keyup.enter)="buttomSubmitHTML.nativeElement.focus()">
-    <button *ngIf="email?.value" matSuffix mat-icon-button aria-label="Clear" (click)="email?.patchValue(null)">
+    <input  #emailHTML matInput 
+      formControlName="emailAd" 
+      (keyup.enter)="goToSubmitButton()">
+    <button *ngIf="email.value" matSuffix mat-icon-button aria-label="Clear" (click)="email.patchValue(null)">
       <mat-icon>close</mat-icon>
     </button>
     <mat-error  *ngIf="email?.errors?.['required']">
@@ -87,7 +91,7 @@
     </p>
     Details: {{signUpResult.msg}} 
   </label>
-  <button class="registerResultMessage__button" *ngIf="signUpResult.type==='error'" mat-raised-button butto (click)="signUpResult.type='null'" >Ok</button>
+  <button class="registerResultMessage__button" *ngIf="signUpResult.type==='error'" mat-raised-button (click)="signUpResult.type='null'" >Okay</button>
 </section>
 <section class="resendEmail" *ngIf="emailErrUserData">
   <form  class="resendEmail registerForm" [formGroup]="registerForm" #myForm="ngForm">
@@ -106,7 +110,7 @@
     </mat-form-field>
     <button mat-flat-button 
       class="common-action-button"
-      [disabled]="email?.invalid||registerForm.disabled"
+      [disabled]="email.invalid||registerForm.disabled"
       (click)="resendEmail()"
       >Resend confirmation
     </button>
