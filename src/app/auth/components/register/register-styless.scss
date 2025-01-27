@@ -30,6 +30,7 @@
     } 
   }
   &__link-restore {
+    width: fit-content;
     padding-left: 2%;
   }
   
@@ -74,7 +75,6 @@
   border-radius: 2%/15%;
   width: 30vw;
   padding: 2%;
-  background-color: #dde1e4!important;
   
   @include mobile {
     width: 86vw;

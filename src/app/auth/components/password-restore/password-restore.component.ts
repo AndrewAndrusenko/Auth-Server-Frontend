@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,6 +22,9 @@ import { ObjectId } from 'mongodb';
   styleUrl: './password-restore.component.scss'
 })
 export class PasswordRestoreComponent {
+  @ViewChild ('submitButtonHTML',{read:ElementRef,static:false}) submitButtonHTML: ElementRef
+  @ViewChild ('submitButtonSaveNewPasswordHTML',{read:ElementRef,static:false}) submitNewPasswordHTML: ElementRef
+  @ViewChild ('passwordConfirmHTML',{read:ElementRef,static:false}) passwordConfirmHTML: ElementRef
   public emailForRestore: FormGroup;
   public processState:'Sending reseting email'|'Saving new password'|null = null;
   private msgSentEmail ='Email has been sent to reset your password.\n Please create a new password by using a link in the message sent to you'
@@ -56,11 +59,14 @@ export class PasswordRestoreComponent {
     this.subscriptions.unsubscribe()
   }
   ngOnInit(): void {
-    // Validatotion that password matches confirmation of it. 
-    // Triggers update validation for confirm password when the main password has been changed
-    this.subscriptions.add(this.passwordCreate?.valueChanges
-    .pipe(tap(()=>this.passwordConfirm?.updateValueAndValidity()))
-    .subscribe());
+    this.subscriptions.add(
+      this.passwordCreate?.valueChanges
+      .pipe(tap(()=>this.passwordConfirm?.updateValueAndValidity()))
+      .subscribe());
+    this.subscriptions.add(
+      this.emailForRestore.statusChanges
+      .pipe(filter(status=>status==='VALID'))
+      .subscribe(()=> setTimeout(() => {this.formProcess==='SendEmail'? this.submitButtonHTML.nativeElement.focus():this.submitNewPasswordHTML.nativeElement.focus()}, 100)));
     this.formInit() // Form initialization
   }
   // Form initialization based on route and parameters triggered this form

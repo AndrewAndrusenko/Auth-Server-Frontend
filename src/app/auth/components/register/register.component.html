@@ -77,7 +77,7 @@
   </mat-form-field>
   <button class="common-action-button" 
     #buttomSubmit
-    mat-flat-button type="submit" 
+    mat-raised-button type="submit" 
     [disabled]="registerForm.invalid||registerForm.disabled"
     (keyup.enter)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)"
     (click)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)">
@@ -97,7 +97,10 @@
   <form  class="resendEmail registerForm" [formGroup]="registerForm" #myForm="ngForm">
     <mat-form-field>
       <mat-label>Email</mat-label>
-      <input matInput formControlName="email">
+      <input 
+        #emailHTMLResend
+        (keyup.enter)="goToResendButton()"
+        matInput formControlName="emailAd">
       <mat-error  *ngIf="email?.errors?.['required']">
         The field is required   
       </mat-error>
@@ -108,7 +111,7 @@
        This email is being used 
       </mat-error>
     </mat-form-field>
-    <button mat-flat-button 
+    <button mat-raised-button #buttonResend
       class="common-action-button"
       [disabled]="email.invalid||registerForm.disabled"
       (click)="resendEmail()"

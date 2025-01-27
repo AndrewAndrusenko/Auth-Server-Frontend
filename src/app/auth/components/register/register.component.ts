@@ -10,7 +10,7 @@ import { MatSelectModule} from '@angular/material/select'
 import { ENVIRONMENT, SUCCESS_TIME_OUT } from "../../../environment/environment";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ICustomLoginError, ISignUpResult, IUser } from "../../models/auth.model";
-import { catchError, EMPTY, Subscription } from "rxjs";
+import { catchError, EMPTY, filter, Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { AuthValidatorService } from "../../services/auth-validator.service";
 import {MatProgressBarModule} from '@angular/material/progress-bar';
@@ -27,8 +27,10 @@ type processType ='Logging'|'Signing up'|'Resending email'|null
 })
 export class RegisterComponent {
   @ViewChild('passwordHTML',{read: ElementRef, static: true}) passwordHTML: ElementRef 
-  @ViewChild('emailHTML' ,{read: ElementRef, static: false }) emailHTML: ElementRef 
-  @ViewChild('buttomSubmit' ,{read: ElementRef, static: true}) buttomSubmitHTML: ElementRef 
+  @ViewChild('emailHTML',{read: ElementRef, static: false }) emailHTML: ElementRef 
+  @ViewChild('emailHTMLResend',{read: ElementRef, static: false }) emailHTMLResend: ElementRef 
+  @ViewChild('buttomSubmit',{read: ElementRef, static: true}) buttomSubmitHTML: ElementRef 
+  @ViewChild('buttonResend',{read: ElementRef, static: false}) buttomResendHTML: ElementRef 
   private subscriptions = new Subscription;
   public registerForm:FormGroup;
   public formProcess:'logIn'|'signUp' = 'logIn'
@@ -70,9 +72,9 @@ export class RegisterComponent {
         this.router.navigate(['register'])
       })) : null;
     this.subscriptions.add(
-      this.registerForm.statusChanges.subscribe(data=>{
+      this.registerForm.statusChanges.pipe(filter(data=>data==='VALID')).subscribe(data=>{
         //enter pressing on email field workaround. we need to focus on submit button but it's not possible until async email validation is complited
-        data==='VALID'? this.goToSubmitButton():null 
+        this.emailErrUserData? this.goToResendButton(): this.goToSubmitButton() 
       }));
   }
   ngOnDestroy(): void {
@@ -150,6 +152,8 @@ export class RegisterComponent {
     this.email?.addAsyncValidators(this.authValidatorService.validateEmail(this.email.value));
     this.email?.markAsTouched()
     this.email?.updateValueAndValidity();
+    this.changeDetector.detectChanges();
+    console.log('this.buttomResendHTML',this.buttomResendHTML )
   }
   resendEmail(){
     this.startProcess('Resending email')
@@ -183,6 +187,11 @@ export class RegisterComponent {
     this.formProcess==='signUp'&&this.email.invalid? this.emailHTML.nativeElement.blur():null
     setTimeout(() => {this.registerForm.valid? this.buttomSubmitHTML.nativeElement.focus():null;}, 100);
   }
+  goToResendButton () {
+    this.email.invalid? this.emailHTMLResend.nativeElement.blur():null
+    setTimeout(() => {this.registerForm.valid? this.buttomResendHTML.nativeElement.focus():null;}, 100);
+  }
+  
   get userId() {return this.registerForm.get('userId') } 
   get passwordCreate() {return this.registerForm.get('password') as AbstractControl } 
   get email() {return this.registerForm.get('emailAd') as AbstractControl  } 

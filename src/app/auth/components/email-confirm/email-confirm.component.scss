@@ -1,19 +1,28 @@
+@import '../../../styles/mixins_media.scss';
 .process-state {
   margin-left: 1vw;
   margin-right: 1vw;
+  @include mobile {
+    margin-top: 70vh;
+  }
 }
 .common-action-button {
   min-height: 4vh !important;
 }
 .registerResultMessage {
-  margin-top: 2vh;
-    display: flex; 
-    gap:1vw;
-    &__text {
-      margin-left: 2vw;
-      font-weight: 700;
-      font-size: medium;
-      color: var(--color-text-success);
+  margin-left: 2vw;
+  @include mobile {
+    margin-top: 70vh !important;
+
+  }
+  &__text {
+    margin-top: 2vh;
+    font-weight: 700;
+    font-size: medium;
+    color: var(--color-text-success);
+    @include mobile {
+      font-weight: 500;
+      }
     }
     &__text.error {
       margin-left: 2vw;
