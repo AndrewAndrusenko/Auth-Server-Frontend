@@ -53,3 +53,4 @@ export interface IConfirmMail {
   token:string
 }
 export type SentMessageInfo = any;
+export type TMailTypes ='PasswordRestMail'|'emailConfirmationMail'

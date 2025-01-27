@@ -24,3 +24,7 @@ Admin(tokens revoke) & BaseClass Table & Errors
 1 Fixed and refactored enter navigation in RegisterComponent
 26/01/25
 1. Extending enter navigation to the next field scheme to the rest of UI
+27/01/25
+1. Refactored mail service functions in order to send message draft code to the auth server. Thus the server will use appropriate draft to generate required message 
+and send it 
+As of now there are two drafts. One is for email confirmation and the other is for password reset

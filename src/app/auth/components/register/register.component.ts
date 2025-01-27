@@ -153,7 +153,6 @@ export class RegisterComponent {
     this.email?.markAsTouched()
     this.email?.updateValueAndValidity();
     this.changeDetector.detectChanges();
-    console.log('this.buttomResendHTML',this.buttomResendHTML )
   }
   resendEmail(){
     this.startProcess('Resending email')

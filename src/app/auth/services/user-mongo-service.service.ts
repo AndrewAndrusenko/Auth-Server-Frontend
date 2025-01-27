@@ -3,7 +3,7 @@ import { InsertOneResult, MongoServerError, UpdateResult} from 'mongodb'
 import { Injectable } from '@angular/core';
 import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { REST_ENDPOINT } from '../../environment/environment';
-import { IConfirmMail, ICustomLoginError,  IJWTInfoToken, ILogOut, IUser, SentMessageInfo } from '../models/auth.model';
+import { IConfirmMail, ICustomLoginError,  IJWTInfoToken, ILogOut, IUser, SentMessageInfo, TMailTypes } from '../models/auth.model';
 import { AppStorage, StorageService,StorageType } from '../../shared/services/storage.service';
 
 @Injectable({
@@ -44,8 +44,8 @@ export class UserMongoServiceService {
     return this.http.get<boolean>(REST_ENDPOINT+'users/checkEmail',{params:{email:email,except:exceptCurrent}})
   }
 
-  sendEmailConfirmation(emailUser:string,confirmLink:string):Observable<SentMessageInfo> {
-    return this.http.post<SentMessageInfo>(REST_ENDPOINT+'mail/send',{emailUser:emailUser,confirmLink:confirmLink})
+  sendEmailConfirmation(emailUser:string,confirmLink:string, typeMsg:TMailTypes):Observable<SentMessageInfo> {
+    return this.http.post<SentMessageInfo>(REST_ENDPOINT+'mail/send',{emailUser:emailUser,confirmLink:confirmLink,type:typeMsg})
   }
   confirmEmail(params:IConfirmMail):Observable<boolean> {
     return this.http.post<boolean>(REST_ENDPOINT+'users/email/confirm',params)

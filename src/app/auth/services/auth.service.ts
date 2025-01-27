@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, EMPTY, filter, map, Observable, of, scan, switchMap, takeWhile, tap, throwError, timer } from 'rxjs';
 import { UserMongoServiceService } from './user-mongo-service.service';
-import { ICustomLoginError, IJWTInfo, IJWTInfoToken, ILogOut, ISignUpResult, IUser, SentMessageInfo } from '../models/auth.model';
+import { ICustomLoginError, IJWTInfo, IJWTInfoToken, ILogOut, ISignUpResult, IUser, SentMessageInfo, TMailTypes } from '../models/auth.model';
 import { MongoServerError,InsertOneResult, ObjectId } from 'mongodb';
 import { AppStorage, StorageService, StorageType } from '../../shared/services/storage.service';
 import { RESET_PASSWORD_TIMEOUT } from '../../environment/environment';
@@ -44,7 +44,7 @@ export class AuthService {
       switchMap(res=> {
         return  (Object.hasOwn(res,'errorResponse'))? throwError(()=>{return new Error ((res as MongoServerError).errorResponse.errmsg||'',{cause:'setUser'})}): of(res)
       }),
-      switchMap(res=>this.prepareAndSendEmail((res as InsertOneResult).insertedId,token,userData.email,'confirm-email/')),
+      switchMap(res=>this.prepareAndSendEmail((res as InsertOneResult).insertedId,token,userData.email,'confirm-email/','emailConfirmationMail')),
       switchMap(()=>of(result = {
         type:'success', 
         msg:'User has been signed up.\n Email confimation letter has been sent.', 
@@ -56,9 +56,9 @@ export class AuthService {
       })
     )
   }
-  prepareAndSendEmail(id:ObjectId, token:string,email:string, route:string):Observable<SentMessageInfo|ICustomLoginError>{
+  prepareAndSendEmail(id:ObjectId, token:string,email:string, route:string, typeMsg:TMailTypes):Observable<SentMessageInfo|ICustomLoginError>{
     let confirmLink =`${window.location.href}/${route}${id}/${token}`
-    return this.userMongoServiceService.sendEmailConfirmation(email,confirmLink).pipe(
+    return this.userMongoServiceService.sendEmailConfirmation(email,confirmLink,typeMsg).pipe(
       catchError(err =>{
         console.log('error',err);
         err.cause = 'sendEmail'
@@ -67,11 +67,11 @@ export class AuthService {
   }
   reSendEmailConfirmation(data:IUser):Observable<SentMessageInfo|ICustomLoginError> {
     return this.userMongoServiceService.updateUser(data)
-      .pipe(switchMap(()=>this.prepareAndSendEmail(data._id,data.token as string,data.email,'confirm-email/')))
+      .pipe(switchMap(()=>this.prepareAndSendEmail(data._id,data.token as string,data.email,'confirm-email/','emailConfirmationMail')))
   }
   resetPasswordEmail(email:string):Observable<SentMessageInfo|ICustomLoginError> {
     return this.userMongoServiceService.setResetPasswordToken(email,crypto.randomUUID()).pipe(
-      switchMap((user)=>this.prepareAndSendEmail(user._id, user.passwordToken, user.email,'').pipe(switchMap(()=>of(user)))),
+      switchMap((user)=>this.prepareAndSendEmail(user._id, user.passwordToken, user.email,'','PasswordRestMail').pipe(switchMap(()=>of(user)))),
       switchMap(()=> this.appStorage.setStorageData('',{code:'emailSent', data: Number(new Date())})),
     )
   }
