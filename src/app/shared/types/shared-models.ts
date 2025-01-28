@@ -1,6 +1,6 @@
 import { AdminDataService } from "../../admin/services/admin-data.service"
 import { AuthService } from "../../auth/services/auth.service"
-
+export type TAPIServices = 'MongoService'|'MailService'|'PasswordService'
 export type TResultType = 'success'|'error'|'null'
 export type TRequestStatus = TResultType & 'loading'
 export type TPanelClass = 'success-snackBar'|'error-snackBar'

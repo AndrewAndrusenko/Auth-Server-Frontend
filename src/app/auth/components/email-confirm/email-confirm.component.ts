@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UserMongoServiceService } from '../../services/user-mongo-service.service';
 import { IConfirmMail } from '../../models/auth.model';
 import { CommonModule } from '@angular/common';
-import { Subscription} from 'rxjs';
+import { catchError, EMPTY, Subscription} from 'rxjs';
 import { TResultType } from '../../../shared/types/shared-models';
 import { MatProgressBarModule} from '@angular/material/progress-bar';
 @Component({
@@ -28,6 +28,12 @@ export class EmailConfirmComponent {
     this.processState='Email confirmation..'
     this.subscripitons.add(
       this.userMongoServiceService.confirmEmail(this.route.snapshot.params as IConfirmMail)
+      .pipe (
+        catchError(err=>{
+          this.processState = null;
+          return EMPTY;
+        })
+      )
       .subscribe(res=> {
         this.processState = null;
         this.result=res? 'success':'error'

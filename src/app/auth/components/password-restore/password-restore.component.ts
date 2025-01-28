@@ -92,6 +92,13 @@ export class PasswordRestoreComponent {
     this.processState='Saving new password';
     this.emailForRestore.disable();
     this.authService.resetPasswordExecute(this.userDataPasswordReset?.id,this.userDataPasswordReset?.token, this.passwordCreate?.value)
+    .pipe(
+      catchError(()=>{
+        this.emailForRestore.enable();
+        this.processState=null;
+        return EMPTY;
+      })
+    )
     .subscribe(res=>{
       this.snacksService.openSnack(res? 'Password has been changed':'Error. User or token has not been found','Okay',res?'success-snackBar':'error-snackBar')
       this.processState = null;

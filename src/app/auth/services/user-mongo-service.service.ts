@@ -28,7 +28,6 @@ export class UserMongoServiceService {
     return this.http.post<IUser>(REST_ENDPOINT+'users/set_password_token',{email:email,passwordToken:passwordToken})
   };
   setResetPasswordExecute (id:string,passwordToken:string,password:string):Observable<IUser|MongoServerError> {
-    console.log(id,passwordToken,password)
     return this.http.post<IUser>(REST_ENDPOINT+'users/set_new_password',{id:id,token:passwordToken,password:password})
   }
   logOutUser (user:IUser):Observable<ILogOut> {

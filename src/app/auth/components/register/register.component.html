@@ -60,7 +60,7 @@
   <mat-form-field *ngIf="formProcess==='signUp'">
     <mat-label>Email</mat-label>
     <input  #emailHTML matInput 
-      formControlName="emailAd" 
+      formControlName="email" 
       (keyup.enter)="goToSubmitButton()">
     <button *ngIf="email.value" matSuffix mat-icon-button aria-label="Clear" (click)="email.patchValue(null)">
       <mat-icon>close</mat-icon>
@@ -100,7 +100,7 @@
       <input 
         #emailHTMLResend
         (keyup.enter)="goToResendButton()"
-        matInput formControlName="emailAd">
+        matInput formControlName="email">
       <mat-error  *ngIf="email?.errors?.['required']">
         The field is required   
       </mat-error>

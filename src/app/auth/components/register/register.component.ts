@@ -54,7 +54,7 @@ export class RegisterComponent {
     this.registerForm = this.fb.group ({
       userId: ['', {validators: [Validators.required],  updateOn:'blur'}],
       password: ['', {validators: [Validators.required], updateOn:'blur'}],
-      emailAd:['',{updateOn:'blur'}],
+      email:['',{updateOn:'blur'}],
       role:'user'
     });
     this.userIdValidator = this.authValidatorService.validateUserId();
@@ -111,6 +111,7 @@ export class RegisterComponent {
       .subscribe(res=>{
         this.stopProcess();
         this.signUpResult = res;
+        console.log('res',res )
         formGroupDirective.resetForm()
         this.registerForm.reset()
         if (res.type !=='error') {
@@ -193,5 +194,5 @@ export class RegisterComponent {
   
   get userId() {return this.registerForm.get('userId') } 
   get passwordCreate() {return this.registerForm.get('password') as AbstractControl } 
-  get email() {return this.registerForm.get('emailAd') as AbstractControl  } 
+  get email() {return this.registerForm.get('email') as AbstractControl  } 
 }

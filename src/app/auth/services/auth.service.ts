@@ -5,6 +5,7 @@ import { ICustomLoginError, IJWTInfo, IJWTInfoToken, ILogOut, ISignUpResult, IUs
 import { MongoServerError,InsertOneResult, ObjectId } from 'mongodb';
 import { AppStorage, StorageService, StorageType } from '../../shared/services/storage.service';
 import { RESET_PASSWORD_TIMEOUT } from '../../environment/environment';
+import { IErrorUI } from '../../shared/types/errors-model';
 @Injectable({
   providedIn: 'root'
 })
@@ -41,9 +42,6 @@ export class AuthService {
     let result:ISignUpResult
     let token=crypto.randomUUID()
     return this.userMongoServiceService.setUser ({...userData,token:token}).pipe(
-      switchMap(res=> {
-        return  (Object.hasOwn(res,'errorResponse'))? throwError(()=>{return new Error ((res as MongoServerError).errorResponse.errmsg||'',{cause:'setUser'})}): of(res)
-      }),
       switchMap(res=>this.prepareAndSendEmail((res as InsertOneResult).insertedId,token,userData.email,'confirm-email/','emailConfirmationMail')),
       switchMap(()=>of(result = {
         type:'success', 
@@ -51,8 +49,8 @@ export class AuthService {
         userSigned:true
       })),
       catchError(err=>{
-        console.log('s ee',err )
-        return of(result ={type:'error', msg:`${err.error.ml} : ${err.error.msg}`, userSigned:err.cause!=='setUser'})
+        let errUI = err.error as IErrorUI
+        return of(result ={type:'error', msg:`${err.error.ml} : ${err.error.msg}`, userSigned:errUI.ml==='MailService'})
       })
     )
   }
@@ -78,9 +76,9 @@ export class AuthService {
   resetPasswordExecute(id:string,token:string,password:string):Observable<any> {
     return this.userMongoServiceService.setResetPasswordExecute(id,token,password)
     .pipe(
-      catchError(e=>{
-        console.log('error',e )
-        return EMPTY
+      catchError(err=>{
+        console.log('error',err )
+        return throwError(()=>err)
       }))
   }
   setTimerForResend (time:number) {

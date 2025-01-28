@@ -1,5 +1,8 @@
-import { TButtonName } from "./shared-models";
-
+import { TAPIServices, TButtonName } from "./shared-models";
+export interface IErrorUI extends Error {
+  msg:string
+  ml:TAPIServices
+}
 export interface IErrorCode {
     message:string,
     redirect:boolean,
