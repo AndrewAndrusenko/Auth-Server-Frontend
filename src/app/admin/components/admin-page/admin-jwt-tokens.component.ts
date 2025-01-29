@@ -2,18 +2,19 @@ import { Component, ViewChild } from '@angular/core';
 import { AdminDataService } from '../../services/admin-data.service';
 import { CommonModule } from '@angular/common';
 import { MatListModule} from '@angular/material/list';
-import { filter, Observable, Subscription, switchMap, tap } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { TRefreshTokenTable } from '../../models/admin-models';
 import { ATableComponent } from '../../../shared/components/a-table/a-table.component';
 import { ITableHeaders, TTableActions } from '../../../shared/types/shared-models';
 import { SnacksService } from '../../../shared/services/snacks.service';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { AdminUsersListComponent } from '../admin-users-list/admin-users-list.component';
 @Component({
   selector: 'app-admin-page',
   standalone: true,
-  imports: [CommonModule,MatListModule,ATableComponent,MatBottomSheetModule],
-  templateUrl: './admin-page.component.html',
-  styleUrl: './admin-page.component.scss'
+  imports: [CommonModule,MatListModule,ATableComponent,AdminUsersListComponent,MatBottomSheetModule],
+  templateUrl: './admin-jwt-tokens.component.html',
+  styleUrl: './admin-jwt-tokens.component.scss'
 })
 export class AdminPageComponent  {
   @ViewChild (ATableComponent) tokensTableRef : ATableComponent
@@ -45,8 +46,9 @@ export class AdminPageComponent  {
       case 'Delete':
         this.subscriptions.add(
           this.adminDataService.deleteRefreshToken(data).subscribe(deleted=>{
-            this.snacksService.openSnack(`Token for user ${data.userId} has been deleted `,'Ok','success-snackBar');
-            this.tokensTableRef.removeRow('userId',data.userId)
+            console.log('deleted',deleted )
+            this.snacksService.openSnack(`Token for user ${data.userId} has ${deleted.deleted? '':'not ' }been deleted `,'Ok',deleted.deleted? 'success-snackBar':'error-snackBar');
+            deleted.deleted? this.tokensTableRef.removeRow('userId',data.userId):null
           }))
       break;
     }

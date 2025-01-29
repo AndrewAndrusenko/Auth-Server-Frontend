@@ -2,7 +2,6 @@
   <div class="header-admin">
     <p class="header__app_name">real-time quotes dashboard angular ver {{myVer}}</p>
     <p class="header__app_name-mobile">real-time quotes<br/></p>
-    <a routerLink="/admin" *ngIf="(user$ | async)?.userId!=='logout'||''" >admin</a>
   </div>
   <div class="header__logging_links">
     <a routerLink="/register" *ngIf="(user$ | async)?.userId==='logout'||''" >LogIn/SignUp</a>
@@ -18,6 +17,10 @@
 </header>
 
 <mat-menu #menu="matMenu">
+  <button *ngIf="(user$ | async)?.role==='admin'" mat-menu-item routerLink="/admin">
+    <mat-icon>security</mat-icon>
+    <span>Admin Panel</span>
+  </button>
   <button mat-menu-item routerLink="/register/logout/:logout">
     <mat-icon>logout</mat-icon>
     <span>Log Out</span>

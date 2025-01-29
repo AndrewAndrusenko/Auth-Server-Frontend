@@ -67,7 +67,7 @@ export class RegisterComponent {
   ngOnInit(): void {
     this.route.snapshot.params?.['logout']? 
     this.subscriptions.add(
-      this.authService.logOutUser(this.registerForm.value).subscribe(()=>{
+      this.authService.logOutUser().subscribe(()=>{
         this.snacksService.openSnack('You have been logged out','Okay','success-snackBar');
         this.router.navigate(['register'])
       })) : null;
@@ -111,7 +111,6 @@ export class RegisterComponent {
       .subscribe(res=>{
         this.stopProcess();
         this.signUpResult = res;
-        console.log('res',res )
         formGroupDirective.resetForm()
         this.registerForm.reset()
         if (res.type !=='error') {

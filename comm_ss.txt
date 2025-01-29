@@ -34,3 +34,11 @@ As of now there are two drafts. One is for email confirmation and the other is f
 28/01/25
 Error handlers refactored
 1. Added error handlers and user proper notification for cases of MongoDB and MailService failures
+
+29/01/25
+Admin features: user list, delete
+1. Added new AdminUsersListComponent to allow admin role to manage users and delete an user
+2. Refactored universal ATableComponent and AdminDataService in order to correctly execute reload function for different components 
+which use different functions from one service
+3. AdminDataService has been extendedad by functions to get full users list and delete specified user. Reload function has been refactored
+4. ATableComponent refactored notification of delete action result. If nothing has been deleted an user will be properly notified

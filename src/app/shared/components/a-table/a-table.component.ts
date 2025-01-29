@@ -28,11 +28,12 @@ import * as XLSX from 'xlsx'
 })
 export class ATableComponent {
   @Input() readOnly:boolean = false;
-  @Input() tableName:string = '';
+  @Input() tableName:any = '';
   @Input() data:any = [];
   @Input() columnsWithHeaders: ITableHeaders[] = [];
   @Input() actionsForTable:TTableActions[] = [];
   @Input() reloadServiceToken:TserviceToken
+  @Input() deleteConfirmMsg:string
   @Output() public actionInitiated = new EventEmitter<{action:TTableActions, data:any}>
   @Output() public tableReloaded = new EventEmitter<{rowCount:number}>
   private service: AdminDataService|AuthService
@@ -66,13 +67,13 @@ export class ATableComponent {
   }
   initAction (action:TTableActions,data:any) {
     action==='Delete'?
-    this.confirm_BS.open(ConfirmBsComponent,{data:{actionToConfirm:`Please confirm:\nDelete token for user ${data.userId}`}}).afterDismissed()
+    this.confirm_BS.open(ConfirmBsComponent,{data:{actionToConfirm:`Please confirm:\n${this.deleteConfirmMsg} ${data.userId}`}}).afterDismissed()
       .pipe( filter(confimed=>confimed.confirm===true))
       .subscribe(()=>this.actionInitiated.emit({action:action,data:data}))
     : this.actionInitiated.emit({action:action,data:data});
   }
   reloadTable (emit = true) {
-    this.service.reloadTable().subscribe(data=>{
+    this.service.reloadTable(this.tableName).subscribe(data=>{
       this.updateDataTable(data)
       emit? this.tableReloaded.emit({rowCount:data.length}):null;
     })

@@ -2,15 +2,26 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { REST_ENDPOINT } from '../../environment/environment';
-import { IJWTInfoToken } from '../../auth/models/auth.model';
+import { IJWTInfoToken, IUser } from '../../auth/models/auth.model';
 import { ITokenDeleted, TRefreshTokenTable } from '../models/admin-models';
+import { DeleteResult } from 'mongodb';
+export type TTablesNames = 'tokenData'|'userData'
 @Injectable({
   providedIn: 'root'
 })
 export class AdminDataService {
   constructor(private http:HttpClient) { }
-  reloadTable():Observable<TRefreshTokenTable[]> {
-    return this.getAdminPage()
+  reloadTable(table:TTablesNames):Observable<TRefreshTokenTable[]|IUser[]> {
+    switch (table) {
+      case 'tokenData': return this.getAdminPage()
+      case 'userData': return this.getAllUsersData()
+    }
+  }
+  getAllUsersData():Observable<IUser[]> {
+    return this.http.get<IUser[]>(REST_ENDPOINT+'admin/all')
+  }
+  deleteUser(userId:string):Observable<DeleteResult> {
+    return this.http.post<DeleteResult>(REST_ENDPOINT+'admin/user-del',{userId:userId})
   }
   getAdminPage():Observable<TRefreshTokenTable[]> {
     return this.http.get<{userId:string,data:IJWTInfoToken}[]>(REST_ENDPOINT+'admin/getAllTokens').pipe(
