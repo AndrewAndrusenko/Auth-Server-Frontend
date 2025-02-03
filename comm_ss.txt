@@ -42,3 +42,8 @@ Admin features: user list, delete
 which use different functions from one service
 3. AdminDataService has been extendedad by functions to get full users list and delete specified user. Reload function has been refactored
 4. ATableComponent refactored notification of delete action result. If nothing has been deleted an user will be properly notified
+
+03/02/25
+Resource  app added
+QuotesTableComponent is changed to execute redirection to the external app,
+which architecture to use the current service as Authorization Server

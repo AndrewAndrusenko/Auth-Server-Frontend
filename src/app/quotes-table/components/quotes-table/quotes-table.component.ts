@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { Subscription } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-quotes-table',
   standalone: true,
-  imports:[RouterModule],
+  imports:[RouterModule,MatButtonModule],
   templateUrl: './quotes-table.component.html',
   styleUrl: './quotes-table.component.scss'
 })
@@ -22,4 +23,7 @@ export class QuotesTableComponent {
   ngOnDestroy(): void {
     this.subscripitons.unsubscribe();
   }
+  redirectTo(code?:string) {
+    window.location.href = 'https://p2zpsq4w-4203.euw.devtunnels.ms/'
+  } 
 }

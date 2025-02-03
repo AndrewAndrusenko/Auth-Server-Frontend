@@ -1,0 +1,17 @@
+.Apps {
+  min-height: 95vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  &__list {
+    &__header {
+      text-align: center;
+      font-weight: 500;
+      font-size: x-large;
+      margin-bottom: 2vh;
+    }
+  }
+}
+.common-action-button {
+  min-width: 20vw !important
+}
