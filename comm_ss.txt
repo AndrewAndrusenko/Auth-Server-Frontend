@@ -47,3 +47,16 @@ which use different functions from one service
 Resource  app added
 QuotesTableComponent is changed to execute redirection to the external app,
 which architecture to use the current service as Authorization Server
+
+14/02/25
+Seamless JWT refresh & table mobile layout
+1. Implemented seamless process of refreshing user JWT token using http interceptor which handles http errors
+  - Server verifies user's token and if it is expired return 511 code errors
+  - Based on that error type a message is sent in refreshing subject/pipe. Pipe is implemented using exhaustMap map pattern avoiding simultaneous requests
+  - refreshing pipe via additional subject notify waiting interceptors that refreshing is completed
+  - and then original request is sent to the interceptor once more in order to provide necessary data to UI
+  - implemented new error code map allowing to use name constants and provide more options
+2. Implemented JwtHandlerService in order to process JWT refreshing requests
+3. (ATableComponent) Created new mobile layout for admin page by modifing styling of base table component. Each row reprents as one column with more icon to additional actions
+  New layout/UI made it a lot easier to analyze and manipulate data
+4. Refactored error codes map by implementing map with named constant keys and making code base easier to read

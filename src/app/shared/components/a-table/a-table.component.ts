@@ -8,7 +8,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource,  MatTableModule} from '@angular/material/table';
 import { CdkContextMenuTrigger, CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu';
-import { filter, Subscription } from 'rxjs';
+import { catchError, filter, Subscription, throwError } from 'rxjs';
 import { ITableHeaders, SERVICES_TO_USE, TserviceToken, TTableActions } from '../../types/shared-models';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -73,7 +73,12 @@ export class ATableComponent {
     : this.actionInitiated.emit({action:action,data:data});
   }
   reloadTable (emit = true) {
-    this.service.reloadTable(this.tableName).subscribe(data=>{
+    this.service.reloadTable(this.tableName)
+    .pipe(catchError(err=>{
+      console.log('reloadTable err',err ) 
+      return throwError(()=>err)
+    }))
+    .subscribe(data=>{
       this.updateDataTable(data)
       emit? this.tableReloaded.emit({rowCount:data.length}):null;
     })
