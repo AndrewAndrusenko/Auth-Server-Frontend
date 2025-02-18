@@ -1,0 +1,93 @@
+@import '../../../styles/mixins_media.scss';
+.drap_block {
+  height: 4vh;
+  width: 100%;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  background-color: var(--background-color);
+  cursor:grab;
+  @include mobile {
+    display: none;
+  }
+}
+.form__container {
+  @include mobile {
+    height: 98vh;
+  }
+
+  &__fields_block {
+    @include mobile {
+      flex-direction: column;
+      min-width: 96vw;
+      height: 86vh;
+    }
+    @at-root {
+      .mat-mdc-form-field {
+        margin: 1% ;
+        background-color:var(--background-color) !important;
+        padding: 1%;
+        width: 45%;
+        @include mobile {
+          display: flex ;
+          width: 92vw;
+          font-size: 13px;
+        }
+      }
+      :host::ng-deep .mat-mdc-form-field-infix {
+        padding: 0 !important;
+        @include mobile {
+          display: inline-flex !important;
+          width: 100% !important;
+          justify-content: space-between !important;
+        }
+      }
+    }
+    &__field_label {
+      color: rgb(44, 90, 177) ;
+      @include mobile {
+        display: flex;
+        align-items: center;
+        min-width: 20vw 
+      }
+    }
+    &__select {
+      @include mobile {
+        font-size: 12px !important;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+  &__footer {
+    @include mobile {
+      height: 10vh;
+    }
+  }
+  &__buttons_block {
+    margin-bottom: 1vh;
+    @include mobile {
+      height: 10vh;
+      width: 98vw !important;
+      display: grid;
+      justify-content: center;
+      z-index: 1;
+      position: fixed;
+    }
+    @at-root {
+      .common-action-button { 
+        max-height: 5vh !important;
+        &.cdk-focused {
+          transform: none !important;
+          transition:none !important;
+        } 
+        @include mobile {
+          margin-left: 0 !important;
+          margin-top: 1vh !important;
+          width: 80vw !important;
+        }
+      }
+    }
+  }
+
+}

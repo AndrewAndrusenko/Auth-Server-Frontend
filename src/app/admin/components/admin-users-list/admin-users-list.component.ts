@@ -4,10 +4,12 @@ import { CommonModule } from '@angular/common';
 import { MatListModule} from '@angular/material/list';
 import { Observable, Subscription } from 'rxjs';
 import { ATableComponent } from '../../../shared/components/a-table/a-table.component';
-import { ITableHeaders, TTableActions } from '../../../shared/types/shared-models';
+import { ITableHeaders, TFormAction, TTableActions } from '../../../shared/types/shared-models';
 import { SnacksService } from '../../../shared/services/snacks.service';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { IUser } from '../../../auth/models/auth.model';
+import { FormAdminUserComponent } from '../form-admin-user/form-admin-user.component';
+import { MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-admin-users-list',
@@ -30,19 +32,33 @@ export class AdminUsersListComponent {
     {fieldName:'passwordToken', displayName:'passwordToken' },
   ];
   public actionsForTable:TTableActions[]=['Delete','Edit'];
-  private subscriptions = new Subscription ()
+  private subscriptions = new Subscription ();
+  private userFormRef:MatDialogRef <FormAdminUserComponent>;
   constructor (
     public adminDataService:AdminDataService,
     private snacksService:SnacksService,
+    private dialog:MatDialog
   ) { }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
   ngAfterViewInit(): void {
     this.subscriptions.add(
-     this.usersTableRef.actionInitiated.subscribe(data=>this.actionExecute(data.action,data.data)));
+      this.usersTableRef.actionInitiated.subscribe(data=>this.actionExecute(data.action,data.data)));
     this.subscriptions.add(
-     this.usersTableRef.tableReloaded.subscribe(data=>this.snacksService.openSnack(`Reloaded with ${data.rowCount} rows`,'Ok','success-snackBar','top',2000)));
+      this.usersTableRef.tableReloaded.subscribe(data=>this.snacksService.openSnack(`Reloaded with ${data.rowCount} rows`,'Ok','success-snackBar','top',2000)));
+  }
+  formActionHandle(data:{action:TFormAction, data?:IUser}) {
+    console.log('', data)
+    switch (data.action) {
+      case 'Canceled':
+        this.userFormRef.close()
+      break;
+      case 'Edited':
+        this.usersTableRef.reloadTable()
+        this.userFormRef.close()
+      break;
+    }
   }
   actionExecute(action:TTableActions, data:IUser) {
     switch (action) {
@@ -52,6 +68,15 @@ export class AdminUsersListComponent {
             this.snacksService.openSnack(`User ${data.userId} has ${deleted.deletedCount===0? 'not ':''}been deleted `,'Ok',deleted.deletedCount? 'success-snackBar':'error-snackBar');
             deleted.deletedCount? this.usersTableRef.removeRow('userId',data.userId) :null
           }))
+      break;
+      case 'Edit':
+        this.userFormRef = this.dialog.open(FormAdminUserComponent,{panelClass: 'form-dialog'})    
+        this.subscriptions.add(
+          this.userFormRef.afterOpened().subscribe(()=>
+            this.subscriptions.add(this.userFormRef.componentInstance.formAction.subscribe(data=>this.formActionHandle(data)))
+          )
+        )  
+        this.userFormRef.componentInstance.userData = data
       break;
     }
   }

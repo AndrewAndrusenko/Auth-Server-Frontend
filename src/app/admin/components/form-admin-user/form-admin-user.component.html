@@ -1,0 +1,69 @@
+<p mat-dialog-title class="drap_block" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle> User Profile Data </p>
+<div class="form__container">
+  <div class="form__container__fields_block">
+    <form [formGroup]="formUser">
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label">Record ID</label>
+        <input matInput placeholder="label"  formControlName="_id" readonly="true" matTooltip="ReadOnly">
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label">User ID</label>
+        <input matInput placeholder="userId"  formControlName="userId">
+        <mat-error *ngIf="userId?.errors?.['required']">
+          The field is required!
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label">Role</label>
+        <mat-select placeholder="role" class="form__container__fields_block__select" formControlName="role">
+          <mat-option *ngFor="let role of roles" [value]="role">
+            {{role}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label">Email</label>
+        <input matInput placeholder="email"  formControlName="email">
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label">Email Confirmed</label>
+        <mat-select placeholder="Confirmed" class="form__container__fields_block__select" formControlName="emailConfirmed">
+          <mat-option [value]="true">true</mat-option>
+          <mat-option [value]="false">false</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label" >Email Token</label>
+        <input matInput placeholder="token" formControlName="token">
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label">Password Token</label>
+        <input matInput placeholder="passwordToken"  formControlName="passwordToken">
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label">Password Token</label>
+        <input matInput placeholder="passwordToken"  formControlName="passwordToken">
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label" >Password Token</label>
+        <input matInput placeholder="passwordToken"  formControlName="passwordToken">
+      </mat-form-field>
+      <mat-form-field>
+        <label class="form__container__fields_block__field_label" >Password Token</label>
+        <input matInput placeholder="passwordToken"  formControlName="passwordToken">
+      </mat-form-field>
+    </form>
+    <div class="form__container__footer"></div>
+  </div>
+  <div class="form__container__buttons_block">
+    <button mat-button mat-raised-button matTooltip="Save"  
+    class="common-action-button"
+    (click)="sumbitForm()"
+    >Submit</button>
+    <button mat-button mat-raised-button matTooltip="Cancel"  
+    cdkFocusInitial
+    class="common-action-button cancel"
+    (click)="cancelAction()"
+    >Cancel</button>
+  </div>
+</div>

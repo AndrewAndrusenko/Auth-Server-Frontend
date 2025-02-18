@@ -60,3 +60,6 @@ Seamless JWT refresh & table mobile layout
 3. (ATableComponent) Created new mobile layout for admin page by modifing styling of base table component. Each row reprents as one column with more icon to additional actions
   New layout/UI made it a lot easier to analyze and manipulate data
 4. Refactored error codes map by implementing map with named constant keys and making code base easier to read
+
+18/02/2025
+

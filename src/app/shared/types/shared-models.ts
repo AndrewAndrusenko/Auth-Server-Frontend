@@ -16,3 +16,4 @@ export const SERVICES_TO_USE = {
 } as const
 export type TserviceToken = keyof typeof SERVICES_TO_USE;
 export type TService =  typeof SERVICES_TO_USE [keyof typeof SERVICES_TO_USE];
+export type TFormAction = 'Canceled'|'Created'|'Deleted'|'Edited'|'Error'

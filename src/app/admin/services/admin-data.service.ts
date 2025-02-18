@@ -4,13 +4,17 @@ import { map, Observable, tap } from 'rxjs';
 import { REST_ENDPOINT } from '../../environment/environment';
 import { IJWTInfoToken, IUser } from '../../auth/models/auth.model';
 import { ITokenDeleted, TRefreshTokenTable } from '../models/admin-models';
-import { DeleteResult } from 'mongodb';
+import { DeleteResult, MongoServerError, UpdateResult } from 'mongodb';
+import { UserMongoServiceService } from '../../auth/services/user-mongo-service.service';
 export type TTablesNames = 'tokenData'|'userData'
 @Injectable({
   providedIn: 'root'
 })
 export class AdminDataService {
-  constructor(private http:HttpClient) { }
+  constructor(
+    private http:HttpClient,
+    private userMongoServiceService:UserMongoServiceService
+  ) { }
   reloadTable(table:TTablesNames):Observable<TRefreshTokenTable[]|IUser[]> {
     switch (table) {
       case 'tokenData': return this.getAdminPage()
@@ -19,6 +23,9 @@ export class AdminDataService {
   }
   getAllUsersData():Observable<IUser[]> {
     return this.http.get<IUser[]>(REST_ENDPOINT+'admin/all')
+  }
+  adminUpdateUser(data:IUser):Observable<UpdateResult | MongoServerError> {
+    return this.userMongoServiceService.updateUser(data)
   }
   deleteUser(userId:string):Observable<DeleteResult> {
     return this.http.post<DeleteResult>(REST_ENDPOINT+'admin/user-del',{userId:userId})

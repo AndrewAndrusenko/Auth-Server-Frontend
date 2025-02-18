@@ -1,9 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-// @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-// @import url('https://fonts.googleapis.com/css2?family=Delius&display=swap');
-
-// Customize the entire app. Change :root to your selector if you want to scope the styles.
 
 @import '../src/app//styles/mixins_media.scss';
 :root {
@@ -26,20 +21,18 @@
   --shadow:0 5px 0 0 var(--color-dark-alt);
 
   --transition-duration: 0.5s;
-
 }
 * {
   font-family:'Poppins';
-  // font-weight: 400;
   font-style: normal;
 
 }
 body{
   background-color: var(--background-color);
   margin: 0; 
-  // font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
 html, body { height: 100%; }
+
 .mat-mdc-snack-bar-container {
   white-space: pre-wrap;
 
@@ -63,21 +56,23 @@ html, body { height: 100%; }
 }
 
 .common-action-button {
-  background-size: 200% auto !important;
+  // background-size: 200% auto !important;
   color: white !important;          
   border-radius: 3%/15% !important;
   background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%) !important;
   font-size: large !important;
-  min-height: 6vh;
   margin-left: 2%;
-&.cdk-focused {
+  &.cdk-focused {
     transform: scale(1.05);
     transition: var(--transition-duration);
   } 
   &[disabled=true] {
     opacity: 50%;
   }
-  
+  &.cancel {
+    background-image: linear-gradient(to right, #d7d1d1 0%, #b3adad  51%, #8f8c8c  100%) !important;
+    color: #383434 !important;
+  }
 }
 
 .mat-mdc-form-field {
@@ -85,7 +80,7 @@ html, body { height: 100%; }
   border-radius: 2%/15%;
   width: 30vw;
   padding: 2%;
-  background-color:#577fb0!important;
+  background-color:#91add0!important;
 }
 .mat-mdc-text-field-wrapper{
   background-color:var(--background-color) !important;
@@ -93,3 +88,9 @@ html, body { height: 100%; }
 .mdc-text-field__input {
   background-color:var(--background-color) !important;
 }
+.form-dialog {
+  @include mobile {
+    max-width: 100vw !important;
+    min-width: 96vw !important;
+  }
+}  
