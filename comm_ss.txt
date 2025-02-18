@@ -62,4 +62,10 @@ Seamless JWT refresh & table mobile layout
 4. Refactored error codes map by implementing map with named constant keys and making code base easier to read
 
 18/02/2025
-
+UserProfile Form 
+1. Created user profile editing form for Admin role - FormAdminUserComponent. Introduced responsive design with focus on mobile version. 
+  The form component emits action which are recived by parent table in order to manage dialog and provide notifications
+  Additional validations have to been added
+2. Global styles has been expanded with cancel button and dialog styling blocks
+3. AdminUsersListComponent: Handlers for initiated and executed actions have been introduced
+4. AdminDataService: Update user profile method has been added
