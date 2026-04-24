@@ -13,23 +13,22 @@ import { TFormAction } from '../../../shared/types/shared-models';
 import { CdkDrag, CdkDragHandle} from '@angular/cdk/drag-drop'
 import { catchError, EMPTY } from 'rxjs';
 @Component({
-  selector: 'app-form-admin-user',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    CommonModule,
-    MatButtonModule,
-    MatInputModule,
-    MatTooltipModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    CdkDrag,
-    CdkDragHandle
-  ],
-  templateUrl: './form-admin-user.component.html',
-  styleUrl: './form-admin-user.component.scss'
+    selector: 'app-form-admin-user',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        CommonModule,
+        MatButtonModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatSelectModule,
+        MatSlideToggleModule,
+        CdkDrag,
+        CdkDragHandle
+    ],
+    templateUrl: './form-admin-user.component.html',
+    styleUrl: './form-admin-user.component.scss'
 })
 export class FormAdminUserComponent {
   @Input() userData:IUser;

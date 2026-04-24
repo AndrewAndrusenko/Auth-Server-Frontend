@@ -4,11 +4,10 @@ import { QuotesService } from '../../services/quotes.service';
 import { Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 @Component({
-  selector: 'app-quotes-table',
-  standalone: true,
-  imports:[RouterModule,MatButtonModule],
-  templateUrl: './quotes-table.component.html',
-  styleUrl: './quotes-table.component.scss'
+    selector: 'app-quotes-table',
+    imports: [RouterModule, MatButtonModule],
+    templateUrl: './quotes-table.component.html',
+    styleUrl: './quotes-table.component.scss'
 })
 export class QuotesTableComponent {
   public result:{data:string}|null;

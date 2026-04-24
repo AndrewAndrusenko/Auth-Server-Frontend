@@ -17,13 +17,12 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { SnacksService } from "../../../shared/services/snacks.service";
 type processType ='Logging'|'Signing up'|'Resending email'|null
 @Component ( {
-  selector: 'rt-register',
-  templateUrl:'./register.component.html',
-  styleUrl: './register-styless.scss',
-  standalone:true,
-  imports:[MatInputModule,CommonModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatIconModule, MatButtonModule, MatSelectModule, 
-     MatProgressBarModule, RouterLink ],
-  providers:[FormGroupDirective]
+    selector: 'rt-register',
+    templateUrl: './register.component.html',
+    styleUrl: './register-styless.scss',
+    imports: [MatInputModule, CommonModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatIconModule, MatButtonModule, MatSelectModule,
+        MatProgressBarModule, RouterLink],
+    providers: [FormGroupDirective]
 })
 export class RegisterComponent {
   @ViewChild('passwordHTML',{read: ElementRef, static: true}) passwordHTML: ElementRef 

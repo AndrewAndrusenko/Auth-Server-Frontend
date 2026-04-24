@@ -15,11 +15,10 @@ import { ENVIRONMENT, RESET_PASSWORD_TIMEOUT } from '../../../environment/enviro
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { ObjectId } from 'mongodb';
 @Component({
-  selector: 'app-password-restore',
-  standalone: true,
-  imports: [RouterLink,MatButtonModule,MatFormFieldModule,MatInputModule,MatIconModule,CommonModule,ReactiveFormsModule,MatProgressBarModule,MatTooltipModule],
-  templateUrl: './password-restore.component.html',
-  styleUrl: './password-restore.component.scss'
+    selector: 'app-password-restore',
+    imports: [RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, CommonModule, ReactiveFormsModule, MatProgressBarModule, MatTooltipModule],
+    templateUrl: './password-restore.component.html',
+    styleUrl: './password-restore.component.scss'
 })
 export class PasswordRestoreComponent {
   @ViewChild ('submitButtonHTML',{read:ElementRef,static:false}) submitButtonHTML: ElementRef

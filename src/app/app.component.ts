@@ -10,11 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule} from '@angular/material/menu'
 import { AuthService } from './auth/services/auth.service';
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet,RouterLink,MatIconModule,CommonModule,MatButtonModule,MatMenuModule],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [RouterOutlet, RouterLink, MatIconModule, CommonModule, MatButtonModule, MatMenuModule],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'RTQ-NgRx ss';

@@ -8,12 +8,11 @@ import { catchError, EMPTY, Subscription} from 'rxjs';
 import { TResultType } from '../../../shared/types/shared-models';
 import { MatProgressBarModule} from '@angular/material/progress-bar';
 @Component({
-  selector: 'app-email-confirm',
-  standalone: true,
-  imports: [MatButtonModule, CommonModule, MatProgressBarModule,RouterLink
-  ],
-  templateUrl: './email-confirm.component.html',
-  styleUrl: './email-confirm.component.scss'
+    selector: 'app-email-confirm',
+    imports: [MatButtonModule, CommonModule, MatProgressBarModule, RouterLink
+    ],
+    templateUrl: './email-confirm.component.html',
+    styleUrl: './email-confirm.component.scss'
 })
 export class EmailConfirmComponent {
   public result:TResultType = 'null';

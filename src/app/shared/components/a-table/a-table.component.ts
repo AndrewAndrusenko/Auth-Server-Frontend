@@ -18,13 +18,12 @@ import { AdminDataService } from '../../../admin/services/admin-data.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import * as XLSX from 'xlsx'
 @Component({
-  selector: 'app-a-table',
-  standalone: true,
-  imports: [MatTableModule, MatSortModule, CommonModule, MatIconModule, MatButtonModule, MatMenuModule, MatFormFieldModule, 
-    CdkMenu, CdkMenuItem,CdkContextMenuTrigger, CdkMenuTrigger,
-    MatPaginatorModule,ReactiveFormsModule,FormsModule,MatInputModule],
-  templateUrl: './a-table.component.html',
-  styleUrl: './a-table.component.scss'
+    selector: 'app-a-table',
+    imports: [MatTableModule, MatSortModule, CommonModule, MatIconModule, MatButtonModule, MatMenuModule, MatFormFieldModule,
+        CdkMenu, CdkMenuItem, CdkContextMenuTrigger, CdkMenuTrigger,
+        MatPaginatorModule, ReactiveFormsModule, FormsModule, MatInputModule],
+    templateUrl: './a-table.component.html',
+    styleUrl: './a-table.component.scss'
 })
 export class ATableComponent {
   @Input() readOnly:boolean = false;

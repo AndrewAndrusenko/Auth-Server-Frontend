@@ -11,11 +11,10 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { AdminUsersListComponent } from '../admin-users-list/admin-users-list.component';
 import { MatTabsModule} from '@angular/material/tabs'
 @Component({
-  selector: 'app-admin-page',
-  standalone: true,
-  imports: [CommonModule,MatListModule,ATableComponent,AdminUsersListComponent,MatBottomSheetModule,MatTabsModule],
-  templateUrl: './admin-jwt-tokens.component.html',
-  styleUrl: './admin-jwt-tokens.component.scss'
+    selector: 'app-admin-page',
+    imports: [CommonModule, MatListModule, ATableComponent, AdminUsersListComponent, MatBottomSheetModule, MatTabsModule],
+    templateUrl: './admin-jwt-tokens.component.html',
+    styleUrl: './admin-jwt-tokens.component.scss'
 })
 export class AdminPageComponent  {
   @ViewChild (ATableComponent) tokensTableRef : ATableComponent

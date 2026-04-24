@@ -12,11 +12,10 @@ import { FormAdminUserComponent } from '../form-admin-user/form-admin-user.compo
 import { MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-admin-users-list',
-  standalone: true,
-  imports: [CommonModule,MatListModule,ATableComponent,MatBottomSheetModule],
-  templateUrl: './admin-users-list.component.html',
-  styleUrl: './admin-users-list.component.scss'
+    selector: 'app-admin-users-list',
+    imports: [CommonModule, MatListModule, ATableComponent, MatBottomSheetModule],
+    templateUrl: './admin-users-list.component.html',
+    styleUrl: './admin-users-list.component.scss'
 })
 export class AdminUsersListComponent {
  @ViewChild (ATableComponent) usersTableRef : ATableComponent
