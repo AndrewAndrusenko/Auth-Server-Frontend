@@ -9,106 +9,125 @@
 <button  mat-raised-button title="Export To Excel"
   class="common-action-button desktop"
   (click)="exportToExcel()">
-  Save as XLS 
+  Save as XLS
   <mat-icon matSuffix >save_alt</mat-icon>
 </button>
 <button mat-raised-button title="Reload Table"
   class="common-action-button"
   (click)="reloadTable()">
-  Reload 
+  Reload
   <mat-icon matSuffix >refresh</mat-icon>
 </button>
-<button  mat-raised-button matTooltip="Create"
-  *ngIf="actionsForTable.includes('Create')"
-  class="common-action-button"
-  (click)="initAction('Create',null)"
-  [disabled]="disabledControlElements">
-  Create item 
-  <mat-icon matSuffix >add_circle</mat-icon>
-</button>
+@if (actionsForTable.includes('Create')) {
+  <button  mat-raised-button matTooltip="Create"
+    class="common-action-button"
+    (click)="initAction('Create',null)"
+    [disabled]="disabledControlElements">
+    Create item
+    <mat-icon matSuffix >add_circle</mat-icon>
+  </button>
+}
 
 <div class="table-container">
   <table  mat-table [dataSource]="dataSource" multiTemplateDataRows matSort     >
-    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay; let i=index" justify="right"  >
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{columnsHeaderToDisplay[i]}}</th>
-      <td mat-cell *matCellDef="let element">
-        <span [ngSwitch]="true==true">
-          <p *ngSwitchDefault>
-            <span class="table-container__mobile-column-name">{{column}}: </span>
-            {{element[column]!=='null'? element[column]:''}}
-          </p>
-          <p *ngSwitchCase="i==1" class="table-container__row_with_actions">
-            <span class="table-container__mobile-column-name">{{column}}: </span>
-            {{element[column]!=='null'? element[column] :''}} 
-            <button  mat-icon-button class="mobile-buttons"
-              matTooltip="Actions"    
-              [cdkMenuTriggerFor]="instrumentcontextmenu"       > 
-              <mat-icon >more_vert</mat-icon>
-            </button> 
-          </p>
-          <p  *ngSwitchCase="['action'].includes(column)">
-            <span class="table-container__mobile-column-name">actions :</span> 
-            <button  *ngIf="disabledControlElements&&actionsForTable.includes('View')" mat-icon-button class="desktop-buttons"
-              matTooltip="View"    (click)="initAction('View', element)"          >
-              <mat-icon >pageview</mat-icon>
-            </button>
-            <ng-container  *ngIf="!disabledControlElements" >
-              <button mat-icon-button matTooltip="Edit"
-                *ngIf="actionsForTable.includes('Edit')" 
-                class="desktop-buttons"
-                (click)="initAction('Edit',element)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button matTooltip="Copy"
-                *ngIf="actionsForTable.includes('Create_Example')" 
-                class="desktop-buttons"
-                (click)="initAction('Create_Example',element)">
-                <mat-icon>file_copy</mat-icon>
-              </button>
-              <button  mat-icon-button matTooltip="Delete"
-                *ngIf="actionsForTable.includes('Delete')" 
-                class="desktop-buttons" 
-                (click)="initAction('Delete',element)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </ng-container>
-          </p>
-        </span>
-        <ng-template #instrumentcontextmenu>
-          <div class="menu-context mat-elevation-z4" cdkMenu  >
-            <button cdkMenuItem
-              class="menu-context-item" 
-              (click)="updateFilter(element[column])">
-              <mat-icon class="menu-context-item-icon" matPrefix>filter_list</mat-icon> 
-              Add to filter
-            </button> 
-            <ng-container *ngIf="!disabledControlElements">
+    @for (column of columnsToDisplay; track column; let i = $index) {
+      <ng-container matColumnDef="{{column}}" justify="right"  >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{columnsHeaderToDisplay[i]}}</th>
+        <td mat-cell *matCellDef="let element">
+          <span>
+            @switch (true==true) {
+              @default {
+                <p>
+                  <span class="table-container__mobile-column-name">{{column}}: </span>
+                  {{element[column]!=='null'? element[column]:''}}
+                </p>
+              }
+              @case (i==1) {
+                <p class="table-container__row_with_actions">
+                  <span class="table-container__mobile-column-name">{{column}}: </span>
+                  {{element[column]!=='null'? element[column] :''}}
+                  <button  mat-icon-button class="mobile-buttons"
+                    matTooltip="Actions"
+                    [cdkMenuTriggerFor]="instrumentcontextmenu"       >
+                    <mat-icon >more_vert</mat-icon>
+                  </button>
+                </p>
+              }
+              @case (['action'].includes(column)) {
+                <p >
+                  <span class="table-container__mobile-column-name">actions :</span>
+                  @if (disabledControlElements&&actionsForTable.includes('View')) {
+                    <button  mat-icon-button class="desktop-buttons"
+                      matTooltip="View"    (click)="initAction('View', element)"          >
+                      <mat-icon >pageview</mat-icon>
+                    </button>
+                  }
+                  @if (!disabledControlElements) {
+                    @if (actionsForTable.includes('Edit')) {
+                      <button mat-icon-button matTooltip="Edit"
+                        class="desktop-buttons"
+                        (click)="initAction('Edit',element)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    }
+                    @if (actionsForTable.includes('Create_Example')) {
+                      <button mat-icon-button matTooltip="Copy"
+                        class="desktop-buttons"
+                        (click)="initAction('Create_Example',element)">
+                        <mat-icon>file_copy</mat-icon>
+                      </button>
+                    }
+                    @if (actionsForTable.includes('Delete')) {
+                      <button  mat-icon-button matTooltip="Delete"
+                        class="desktop-buttons"
+                        (click)="initAction('Delete',element)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    }
+                  }
+                </p>
+              }
+            }
+          </span>
+          <ng-template #instrumentcontextmenu>
+            <div class="menu-context mat-elevation-z4" cdkMenu  >
               <button cdkMenuItem
-                *ngIf="actionsForTable.includes('Edit')"
-                class="menu-context-item" 
-                (click)="initAction('Edit',element)">
-                <mat-icon class="menu-context-item-icon" matPrefix>edit</mat-icon>
-                Edit 
+                class="menu-context-item"
+                (click)="updateFilter(element[column])">
+                <mat-icon class="menu-context-item-icon" matPrefix>filter_list</mat-icon>
+                Add to filter
               </button>
-              <button cdkMenuItem
-                *ngIf="actionsForTable.includes('Create_Example')"
-                class="menu-context-item" 
-                (click)="initAction('Create_Example',element)">
-                <mat-icon class="menu-context-item-icon" matPrefix>file_copy</mat-icon>
-                Copy 
-              </button>
-              <button cdkMenuItem
-                *ngIf="actionsForTable.includes('Delete')"
-                class="menu-context-item" 
-                (click)="initAction('Delete',element)">
-                <mat-icon class="menu-context-item-icon" matPrefix>delete</mat-icon>
-                Delete 
-              </button>
-            </ng-container>
-          </div>
-        </ng-template>  
-      </td>
-    </ng-container>
+              @if (!disabledControlElements) {
+                @if (actionsForTable.includes('Edit')) {
+                  <button cdkMenuItem
+                    class="menu-context-item"
+                    (click)="initAction('Edit',element)">
+                    <mat-icon class="menu-context-item-icon" matPrefix>edit</mat-icon>
+                    Edit
+                  </button>
+                }
+                @if (actionsForTable.includes('Create_Example')) {
+                  <button cdkMenuItem
+                    class="menu-context-item"
+                    (click)="initAction('Create_Example',element)">
+                    <mat-icon class="menu-context-item-icon" matPrefix>file_copy</mat-icon>
+                    Copy
+                  </button>
+                }
+                @if (actionsForTable.includes('Delete')) {
+                  <button cdkMenuItem
+                    class="menu-context-item"
+                    (click)="initAction('Delete',element)">
+                    <mat-icon class="menu-context-item-icon" matPrefix>delete</mat-icon>
+                    Delete
+                  </button>
+                }
+              }
+            </div>
+          </ng-template>
+        </td>
+      </ng-container>
+    }
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
     <tr mat-row  *matRowDef="let element; columns: columnsToDisplay; let dataindex=dataIndex;"  tabindex=0></tr>
   </table>

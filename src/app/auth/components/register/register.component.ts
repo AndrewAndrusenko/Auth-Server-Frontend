@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, ViewChild } from "@angular/core";
-import { CommonModule } from '@angular/common';
+
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, FormGroupDirective, ValidatorFn, Validators } from "@angular/forms";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule} from '@angular/material/form-field'
@@ -20,8 +20,7 @@ type processType ='Logging'|'Signing up'|'Resending email'|null
     selector: 'rt-register',
     templateUrl: './register.component.html',
     styleUrl: './register-styless.scss',
-    imports: [MatInputModule, CommonModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatIconModule, MatButtonModule, MatSelectModule,
-        MatProgressBarModule, RouterLink],
+    imports: [MatInputModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatIconModule, MatButtonModule, MatSelectModule, MatProgressBarModule, RouterLink],
     providers: [FormGroupDirective]
 })
 export class RegisterComponent {

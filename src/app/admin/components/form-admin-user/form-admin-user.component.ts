@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IUser } from '../../../auth/models/auth.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -15,18 +15,17 @@ import { catchError, EMPTY } from 'rxjs';
 @Component({
     selector: 'app-form-admin-user',
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        CommonModule,
-        MatButtonModule,
-        MatInputModule,
-        MatTooltipModule,
-        MatSelectModule,
-        MatSlideToggleModule,
-        CdkDrag,
-        CdkDragHandle
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    CdkDrag,
+    CdkDragHandle
+],
     templateUrl: './form-admin-user.component.html',
     styleUrl: './form-admin-user.component.scss'
 })

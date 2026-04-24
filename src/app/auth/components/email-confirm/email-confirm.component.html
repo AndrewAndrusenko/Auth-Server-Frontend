@@ -1,13 +1,17 @@
-<div class="process-state" *ngIf="processState">
-  <label >{{processState}}</label>
-  <mat-progress-bar mode="query"></mat-progress-bar>
-</div>
+@if (processState) {
+  <div class="process-state">
+    <label >{{processState}}</label>
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </div>
+}
 <div class="registerResultMessage">
-<label
-  class="registerResultMessage__text" 
-  *ngIf="result!=='null'" ngClass="{{result}}" >
-  {{result==='success'? 'Success: Your email address has been confirmed!':'Error: Email has not been confirmed!'}}
-</label>
-<br><br>
-<button mat-raised-button class="common-action-button" routerLink="/register" >Back to Log In page</button>
+  @if (result!=='null') {
+    <label
+      class="registerResultMessage__text"
+      ngClass="{{result}}" >
+      {{result==='success'? 'Success: Your email address has been confirmed!':'Error: Email has not been confirmed!'}}
+    </label>
+  }
+  <br><br>
+  <button mat-raised-button class="common-action-button" routerLink="/register" >Back to Log In page</button>
 </div>

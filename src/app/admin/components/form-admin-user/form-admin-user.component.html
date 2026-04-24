@@ -9,16 +9,20 @@
       <mat-form-field>
         <label class="form__container__fields_block__field_label">User ID</label>
         <input matInput placeholder="userId"  formControlName="userId">
-        <mat-error *ngIf="userId?.errors?.['required']">
-          The field is required!
-        </mat-error>
+        @if (userId?.errors?.['required']) {
+          <mat-error>
+            The field is required!
+          </mat-error>
+        }
       </mat-form-field>
       <mat-form-field>
         <label class="form__container__fields_block__field_label">Role</label>
         <mat-select placeholder="role" class="form__container__fields_block__select" formControlName="role">
-          <mat-option *ngFor="let role of roles" [value]="role">
-            {{role}}
-          </mat-option>
+          @for (role of roles; track role) {
+            <mat-option [value]="role">
+              {{role}}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
       <mat-form-field>
@@ -56,14 +60,14 @@
     <div class="form__container__footer"></div>
   </div>
   <div class="form__container__buttons_block">
-    <button mat-button mat-raised-button matTooltip="Save"  
-    class="common-action-button"
-    (click)="sumbitForm()"
+    <button mat-button mat-raised-button matTooltip="Save"
+      class="common-action-button"
+      (click)="sumbitForm()"
     >Submit</button>
-    <button mat-button mat-raised-button matTooltip="Cancel"  
-    cdkFocusInitial
-    class="common-action-button cancel"
-    (click)="cancelAction()"
+    <button mat-button mat-raised-button matTooltip="Cancel"
+      cdkFocusInitial
+      class="common-action-button cancel"
+      (click)="cancelAction()"
     >Cancel</button>
   </div>
 </div>

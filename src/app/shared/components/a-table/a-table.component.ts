@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component,EventEmitter,inject,Injector,Input,Output,SimpleChange,Type,ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,9 +19,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import * as XLSX from 'xlsx'
 @Component({
     selector: 'app-a-table',
-    imports: [MatTableModule, MatSortModule, CommonModule, MatIconModule, MatButtonModule, MatMenuModule, MatFormFieldModule,
-        CdkMenu, CdkMenuItem, CdkContextMenuTrigger, CdkMenuTrigger,
-        MatPaginatorModule, ReactiveFormsModule, FormsModule, MatInputModule],
+    imports: [MatTableModule, MatSortModule, MatIconModule, MatButtonModule, MatMenuModule, MatFormFieldModule, CdkMenu, CdkMenuItem, CdkContextMenuTrigger, CdkMenuTrigger, MatPaginatorModule, ReactiveFormsModule, FormsModule, MatInputModule],
     templateUrl: './a-table.component.html',
     styleUrl: './a-table.component.scss'
 })

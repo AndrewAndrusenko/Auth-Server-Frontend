@@ -4,23 +4,28 @@
     <p class="header__app_name-mobile">real-time quotes<br/></p>
   </div>
   <div class="header__logging_links">
-    <a routerLink="/register" *ngIf="(user$ | async)?.userId==='logout'||''" >LogIn/SignUp</a>
-    <button class="common-action-button"
-      [matMenuTriggerFor]="menu"  
-      *ngIf="(user$ | async)?.userId!=='logout'||''" 
-      mat-raised-button >
-      <mat-icon  fontIcon="perm_identity">close</mat-icon>
-      {{(user$ | async)?.userId|titlecase}}
-      <mat-icon iconPositionEnd  fontIcon="more_vert" prefix >more_vert</mat-icon>
-    </button>
+    @if ((user$ | async)?.userId==='logout'||'') {
+      <a routerLink="/register" >LogIn/SignUp</a>
+    }
+    @if ((user$ | async)?.userId!=='logout'||'') {
+      <button class="common-action-button"
+        [matMenuTriggerFor]="menu"
+        mat-raised-button >
+        <mat-icon  fontIcon="perm_identity">close</mat-icon>
+        {{(user$ | async)?.userId|titlecase}}
+        <mat-icon iconPositionEnd  fontIcon="more_vert" prefix >more_vert</mat-icon>
+      </button>
+    }
   </div>
 </header>
 
 <mat-menu #menu="matMenu">
-  <button *ngIf="(user$ | async)?.role==='admin'" mat-menu-item routerLink="/admin">
-    <mat-icon>security</mat-icon>
-    <span>Admin Panel</span>
-  </button>
+  @if ((user$ | async)?.role==='admin') {
+    <button mat-menu-item routerLink="/admin">
+      <mat-icon>security</mat-icon>
+      <span>Admin Panel</span>
+    </button>
+  }
   <button mat-menu-item routerLink="/register/logout/:logout">
     <mat-icon>logout</mat-icon>
     <span>Log Out</span>
