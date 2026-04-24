@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start ver18": "npx ng serve --port 4206",
+    "start ver18": "npx ng serve --port 4209",
     "build": "ng build --base-href='/apps/ssngrx/'",
     "postbuild": "xcopy /s /y c:\\JS\\JSP\\stanalone-18\\standalone-signals\\dist\\standalone-signals\\browser c:\\JS\\JSP\\prod-server-ts-express\\dist\\public\\apps\\ssngrx",
     "watch": "ng build --watch --configuration development",
