@@ -7,7 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource,  MatTableModule} from '@angular/material/table';
-import { CdkContextMenuTrigger, CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu';
+import { CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu';
 import { catchError, filter, Subscription, throwError } from 'rxjs';
 import { ITableHeaders, SERVICES_TO_USE, TserviceToken, TTableActions } from '../../types/shared-models';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +19,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import * as XLSX from 'xlsx'
 @Component({
     selector: 'app-a-table',
-    imports: [MatTableModule, MatSortModule, MatIconModule, MatButtonModule, MatMenuModule, MatFormFieldModule, CdkMenu, CdkMenuItem, CdkContextMenuTrigger, CdkMenuTrigger, MatPaginatorModule, ReactiveFormsModule, FormsModule, MatInputModule],
+    imports: [MatTableModule, MatSortModule, MatIconModule, MatButtonModule, MatMenuModule, MatFormFieldModule, CdkMenu, CdkMenuItem,  CdkMenuTrigger, MatPaginatorModule, ReactiveFormsModule, FormsModule, MatInputModule],
     templateUrl: './a-table.component.html',
     styleUrl: './a-table.component.scss'
 })

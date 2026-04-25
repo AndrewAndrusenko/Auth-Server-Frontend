@@ -53,7 +53,7 @@
         [type]="hide ? 'password' : 'text'"
         />
         @if (passwordCreate?.value) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="passwordCreate.patchValue(null)">
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="passwordCreate?.patchValue(null)">
             <mat-icon>close</mat-icon>
           </button>
         }
@@ -80,8 +80,8 @@
           <input  #emailHTML matInput
             formControlName="email"
             (keyup.enter)="goToSubmitButton()">
-            @if (email.value) {
-              <button matSuffix mat-icon-button aria-label="Clear" (click)="email.patchValue(null)">
+            @if (email?.value) {
+              <button matSuffix mat-icon-button aria-label="Clear" (click)="email?.patchValue(null)">
                 <mat-icon>close</mat-icon>
               </button>
             }
@@ -155,7 +155,7 @@
               </mat-form-field>
               <button mat-raised-button #buttonResend
                 class="common-action-button"
-                [disabled]="email.invalid||registerForm.disabled"
+                [disabled]="email?.invalid||registerForm.disabled"
                 (click)="resendEmail()"
                 >Resend confirmation
               </button>

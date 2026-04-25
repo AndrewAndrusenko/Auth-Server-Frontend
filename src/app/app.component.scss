@@ -1,4 +1,4 @@
-@import '../app/styles/mixins_media.scss';
+@use '../app/styles/mixins_media.scss' as *;
 .header {
   display: flex;
   justify-content: space-between;

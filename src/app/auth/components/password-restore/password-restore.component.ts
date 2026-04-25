@@ -44,7 +44,7 @@ export class PasswordRestoreComponent {
       email:['',{
         validators:[Validators.required,Validators.email], 
         asyncValidators:[this.authValidatorService.validateEmailExist()],updateOn:'blur'}],
-      passwordCreate:['',{validators:[], updateOn:'blur'}],
+      passwordCreateFC:['',{validators:[], updateOn:'blur'}],
       passwordConfirm:['',{validators:[],updateOn:'blur'}]
     });
     
@@ -83,8 +83,8 @@ export class PasswordRestoreComponent {
       this.userDataPasswordReset = params as {id:string, token:string}
       this.email?.clearAsyncValidators();
       this.email?.clearValidators();
-      this.passwordCreate.addValidators(this.passwordCreateValidators)
-      this.passwordConfirm.addValidators(this.passwordConfirmValidators)
+      this.passwordCreate?.addValidators(this.passwordCreateValidators)
+      this.passwordConfirm?.addValidators(this.passwordConfirmValidators)
     }));
   }
   resetPasswordExecute() {
@@ -126,9 +126,9 @@ export class PasswordRestoreComponent {
     };
   }
   showPasswordTip() {
-    this.snacksService.openSnack((this.passwordCreate.errors as {hint_strong:string, strong:boolean}).hint_strong,'Okay','success-snackBar','top',20000)
+    this.snacksService.openSnack((this.passwordCreate?.errors as {hint_strong:string, strong:boolean}).hint_strong,'Okay','success-snackBar','top',20000)
   }
   get email () {return this.emailForRestore.get('email')}
-  get passwordCreate () {return this.emailForRestore?.get('passwordCreate') as AbstractControl}
-  get passwordConfirm () {return this.emailForRestore?.get('passwordConfirm') as AbstractControl}
+  get passwordCreate () {return this.emailForRestore?.get('passwordCreateFC')}
+  get passwordConfirm () {return this.emailForRestore?.get('passwordConfirm')}
 }

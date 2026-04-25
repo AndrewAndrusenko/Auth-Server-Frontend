@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start ver18": "npx ng serve --port 4209",
+    "start ver18": "ng serve --port 4209",
     "build": "ng build --base-href='/apps/ssngrx/'",
     "postbuild": "xcopy /s /y c:\\JS\\JSP\\stanalone-18\\standalone-signals\\dist\\standalone-signals\\browser c:\\JS\\JSP\\prod-server-ts-express\\dist\\public\\apps\\ssngrx",
     "watch": "ng build --watch --configuration development",
@@ -12,12 +12,12 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^20.3.19",
-    "@angular/cdk": "^19.2.19",
+    "@angular/cdk": "^20.2.14",
     "@angular/common": "^20.3.19",
     "@angular/compiler": "^20.3.19",
     "@angular/core": "^20.3.19",
     "@angular/forms": "^20.3.19",
-    "@angular/material": "^19.2.19",
+    "@angular/material": "^20.2.14",
     "@angular/platform-browser": "^20.3.19",
     "@angular/platform-browser-dynamic": "^20.3.19",
     "@angular/router": "^20.3.19",

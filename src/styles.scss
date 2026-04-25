@@ -1,6 +1,6 @@
+@use '../src/app//styles/mixins_media.scss' as *;
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-@import '../src/app//styles/mixins_media.scss';
 :root {
   --contentWidth :44vw;
 
@@ -37,8 +37,8 @@ html, body { height: 100%; }
   white-space: pre-wrap;
 
   &.success-snackBar {
-    --mdc-snackbar-container-color: #2196f3;
-    --mdc-snackbar-supporting-text-color: #030303;
+    --mat-snackbar-container-color: #2196f3;
+    --mat-snackbar-supporting-text-color: #030303;
     max-width: 96vw !important;
 
   }
@@ -46,8 +46,8 @@ html, body { height: 100%; }
     --mat-snack-bar-button-color:#fff;
   }
   &.error-snackBar {
-    --mdc-snackbar-container-color: var(--color-text-error);
-    --mdc-snackbar-supporting-text-color: #030303;
+    --mat-snackbar-container-color: var(--color-text-error);
+    --mat-snackbar-supporting-text-color: #030303;
     max-width: 96vw !important;
   }
   .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {

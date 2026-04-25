@@ -80,26 +80,26 @@ export class RegisterComponent {
   }
   setSignUpFormProcess () {
     this.formProcess='signUp';
-    this.passwordCreate.addValidators(this.passwordStrongValidator)
+    this.passwordCreate?.addValidators(this.passwordStrongValidator)
     this.userId?.addAsyncValidators([this.userIdValidator]);
     this.email?.addValidators([Validators.required,Validators.email]);
     this.email?.addAsyncValidators([this.emailValidator]);
     this.userId?.updateValueAndValidity();
-    this.passwordCreate.updateValueAndValidity();
-    this.email.updateValueAndValidity();
+    this.passwordCreate?.updateValueAndValidity();
+    this.email?.updateValueAndValidity();
     this.emailErrUserData = null;
     this.signUpResult = {type:'null',msg:''};
     this.changeDetector.detectChanges();
   }
   setLogInProcess () {
     this.formProcess='logIn';
-    this.passwordCreate.removeValidators(this.passwordStrongValidator)
+    this.passwordCreate?.removeValidators(this.passwordStrongValidator)
     this.userId?.removeAsyncValidators(this.userIdValidator); 
     this.email?.removeValidators([Validators.required,Validators.email]);
     this.email?.clearAsyncValidators()
     this.email?.updateValueAndValidity();
     this.userId?.updateValueAndValidity()
-    this.passwordCreate.updateValueAndValidity();
+    this.passwordCreate?.updateValueAndValidity();
     this.changeDetector.detectChanges();
   }
   signUpNewUser(formGroupDirective:FormGroupDirective){
@@ -178,18 +178,18 @@ export class RegisterComponent {
     this.processState=null;
   }
   showPasswordTip() {
-    this.snacksService.openSnack((this.passwordCreate.errors as {hint_strong:string, strong:boolean}).hint_strong,'Okay','success-snackBar','top',20000)
+    this.snacksService.openSnack((this.passwordCreate?.errors as {hint_strong:string, strong:boolean}).hint_strong,'Okay','success-snackBar','top',20000)
   }
   goToSubmitButton () {
-    this.formProcess==='signUp'&&this.email.invalid? this.emailHTML.nativeElement.blur():null
+    this.formProcess==='signUp' && this.email?.invalid ? this.emailHTML.nativeElement.blur():null
     setTimeout(() => {this.registerForm.valid? this.buttomSubmitHTML.nativeElement.focus():null;}, 100);
   }
   goToResendButton () {
-    this.email.invalid? this.emailHTMLResend.nativeElement.blur():null
+    this.email?.invalid? this.emailHTMLResend.nativeElement.blur():null
     setTimeout(() => {this.registerForm.valid? this.buttomResendHTML.nativeElement.focus():null;}, 100);
   }
   
   get userId() {return this.registerForm.get('userId') } 
-  get passwordCreate() {return this.registerForm.get('password') as AbstractControl } 
-  get email() {return this.registerForm.get('email') as AbstractControl  } 
+  get passwordCreate() {return this.registerForm.get('password')} 
+  get email() {return this.registerForm.get('email')} 
 }
