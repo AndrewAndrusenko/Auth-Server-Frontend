@@ -29,25 +29,27 @@ export class ATableComponent {
   @Input() data:any = [];
   @Input() columnsWithHeaders: ITableHeaders[] = [];
   @Input() actionsForTable:TTableActions[] = [];
-  @Input() reloadServiceToken:TserviceToken
-  @Input() deleteConfirmMsg:string
+  @Input() reloadServiceToken:TserviceToken|undefined = undefined
+  @Input() deleteConfirmMsg:string = ''
   @Output() public actionInitiated = new EventEmitter<{action:TTableActions, data:any}>
   @Output() public tableReloaded = new EventEmitter<{rowCount:number}>
-  private service: AdminDataService|AuthService
+  private service: AdminDataService|AuthService|undefined = undefined
   public dataSource = new MatTableDataSource<any>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator|undefined = undefined;
+  @ViewChild(MatSort) sort: MatSort|undefined = undefined;
   public filterControl = new FormControl ('');
   public disabledControlElements: boolean = false;
   private subscriptions = new Subscription()
-  public columnsToDisplay: string [];
-  public columnsHeaderToDisplay: string [];
+  public columnsToDisplay: string [] = [];
+  public columnsHeaderToDisplay: string [] = [];
   private confirm_BS = inject(MatBottomSheet)
 
   constructor(private injector:Injector) {}
   ngOnInit(): void {
     this.setHeaders();
-    this.service = this.injector.get(SERVICES_TO_USE[this.reloadServiceToken ] as Type<AdminDataService|AuthService>);
+    if (this.reloadServiceToken) {
+        this.service = this.injector.get(SERVICES_TO_USE[this.reloadServiceToken ] as Type<AdminDataService|AuthService>);
+    }
     this.reloadTable(false);
     this.subscriptions.add(
       this.filterControl.valueChanges.pipe(filter(data=>data!==null)).subscribe(newFilter=>{
@@ -70,6 +72,9 @@ export class ATableComponent {
     : this.actionInitiated.emit({action:action,data:data});
   }
   reloadTable (emit = true) {
+    if (!this.service) {
+        return
+    }
     this.service.reloadTable(this.tableName)
     .pipe(catchError(err=>{
       console.log('reloadTable err',err ) 

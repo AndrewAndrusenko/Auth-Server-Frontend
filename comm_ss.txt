@@ -69,3 +69,17 @@ UserProfile Form
 2. Global styles has been expanded with cancel button and dialog styling blocks
 3. AdminUsersListComponent: Handlers for initiated and executed actions have been introduced
 4. AdminDataService: Update user profile method has been added
+
+
+Update to agular 20
+06/07/26
+AuthServer - Front - SS18
+1. Backend env has been moved to json config file. So it can be updated without recompiling the app 
+2. Create service for loading json config and hooked it in app initializer
+3. Code base has been updated according with new config pattern
+
+07/07/26
+1. tsconfig optimization and strict initialization rules applied
+2. implementing strict property initialization policy
+3. UI updated. Added menu base panel to navigate to the main features. Design slightly updated
+4. refactor builing scripts + config update

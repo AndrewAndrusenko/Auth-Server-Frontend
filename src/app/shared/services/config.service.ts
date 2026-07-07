@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
-import { catchError, map, Observable, of, take, tap, throwError } from "rxjs";
+import { DOCUMENT, inject, Injectable } from "@angular/core";
+import { catchError, map, Observable, take, tap, throwError } from "rxjs";
 import { ENVIRONMENT } from "../../environment/environment";
 interface IConfing {
     "SUCCESS_TIME_OUT": number,
@@ -13,9 +13,11 @@ interface IConfing {
 })
 export class ConfigService {
     private http = inject(HttpClient)
+    private document = inject(DOCUMENT)
     private configData:IConfing|undefined = undefined
     loadConfigData():Observable<boolean> {
-        return this.http.get<IConfing>( ENVIRONMENT.prod? 'env.config.prod.json' : 'env.config.json').pipe(
+        let configURL = new URL( ENVIRONMENT.prod? 'env.config.prod.json' : 'env.config.json', this.document.baseURI).href
+        return this.http.get<IConfing>(configURL).pipe(
             take(1),
             tap(data=>this.configData = data),
             map(()=>true),

@@ -1,8 +1,22 @@
-<header class="header">
   <div class="header-admin">
-    <p class="header__app_name">real-time quotes dashboard angular ver {{myVer}}</p>
-    <p class="header__app_name-mobile">real-time quotes<br/></p>
+    <p class="header__app_name">Auth server angular ver {{myVer}}</p>
+    <p class="header__app_name-mobile">auth server<br/></p>
   </div>
+<header class="header">
+      <div class="menu-panel">
+        <button class="common-action-button cs-menu"  mat-raised-button 
+                routerLink="/quotes"
+                [disabled]="(user$ | async)?.userId===('logout')">
+            <mat-icon  fontIcon="apps">close</mat-icon>
+            App list
+        </button>
+        <button class="common-action-button cs-menu"  mat-raised-button 
+                routerLink="/admin" 
+                [disabled]="(user$ | async)?.role!=='admin'">
+            <mat-icon  fontIcon="security">close</mat-icon>
+            Admin panel
+        </button>
+    </div>
   <div class="header__logging_links">
     @if ((user$ | async)?.userId==='logout'||'') {
       <a routerLink="/register" >LogIn/SignUp</a>
@@ -35,5 +49,4 @@
     <span>LogIn/SignUp</span>
   </button>
 </mat-menu>
-
 <router-outlet></router-outlet>

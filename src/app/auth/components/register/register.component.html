@@ -49,7 +49,7 @@
         formControlName="password"
       (keyup.enter)="
         passwordHTML.blur();
-        formProcess==='logIn'? goToSubmitButton():emailHTML.nativeElement.focus()"
+        formProcess==='logIn'? goToSubmitButton():emailHTML?.nativeElement.focus()"
         [type]="hide ? 'password' : 'text'"
         />
         @if (passwordCreate?.value) {

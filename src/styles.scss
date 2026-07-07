@@ -39,7 +39,9 @@ html, body { height: 100%; }
   &.success-snackBar {
     --mat-snackbar-container-color: #2196f3;
     --mat-snackbar-supporting-text-color: #030303;
-    max-width: 96vw !important;
+        max-width: 96vw !important;
+         font-family:'Poppins' !important;
+  font-style: normal !important;
 
   }
   .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
@@ -58,8 +60,8 @@ html, body { height: 100%; }
 .common-action-button {
   // background-size: 200% auto !important;
   color: white !important;          
-  border-radius: 3%/15% !important;
-  background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%) !important;
+  border-radius: 8px !important;
+  background-image: linear-gradient(to right, #0072ff 0%, #0072ff  51%, #0072ff  100%) !important;
   font-size: large !important;
   margin-left: 2%;
   &.cdk-focused {
@@ -77,7 +79,7 @@ html, body { height: 100%; }
 
 .mat-mdc-form-field {
   border-width: 1px;
-  border-radius: 2%/15%;
+  border-radius: 8px;
   width: 30vw;
   padding: 2%;
   background-color:#91add0!important;

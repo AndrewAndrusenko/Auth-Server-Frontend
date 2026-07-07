@@ -25,11 +25,11 @@ type processType ='Logging'|'Signing up'|'Resending email'|null
     providers: [FormGroupDirective]
 })
 export class RegisterComponent {
-  @ViewChild('passwordHTML',{read: ElementRef, static: true}) passwordHTML: ElementRef 
-  @ViewChild('emailHTML',{read: ElementRef, static: false }) emailHTML: ElementRef 
-  @ViewChild('emailHTMLResend',{read: ElementRef, static: false }) emailHTMLResend: ElementRef 
-  @ViewChild('buttomSubmit',{read: ElementRef, static: true}) buttomSubmitHTML: ElementRef 
-  @ViewChild('buttonResend',{read: ElementRef, static: false}) buttomResendHTML: ElementRef 
+  @ViewChild('passwordHTML',{read: ElementRef, static: true}) passwordHTML: ElementRef | undefined = undefined
+  @ViewChild('emailHTML',{read: ElementRef, static: false }) emailHTML: ElementRef | undefined = undefined
+  @ViewChild('emailHTMLResend',{read: ElementRef, static: false }) emailHTMLResend: ElementRef | undefined = undefined
+  @ViewChild('buttomSubmit',{read: ElementRef, static: true}) buttomSubmitHTML: ElementRef | undefined = undefined
+  @ViewChild('buttonResend',{read: ElementRef, static: false}) buttomResendHTML: ElementRef | undefined = undefined
   private subscriptions = new Subscription;
   public registerForm:FormGroup;
   public formProcess:'logIn'|'signUp' = 'logIn'
@@ -183,12 +183,18 @@ export class RegisterComponent {
     this.snacksService.openSnack((this.passwordCreate?.errors as {hint_strong:string, strong:boolean}).hint_strong,'Okay','success-snackBar','top',20000)
   }
   goToSubmitButton () {
+    if (!this.emailHTML) {
+        return
+    }
     this.formProcess==='signUp' && this.email?.invalid ? this.emailHTML.nativeElement.blur():null
-    setTimeout(() => {this.registerForm.valid? this.buttomSubmitHTML.nativeElement.focus():null;}, 100);
+    setTimeout(() => {this.registerForm.valid && this.buttomSubmitHTML? this.buttomSubmitHTML.nativeElement.focus():null;}, 100);
   }
   goToResendButton () {
+    if (!this.emailHTMLResend) {
+        return
+    }
     this.email?.invalid? this.emailHTMLResend.nativeElement.blur():null
-    setTimeout(() => {this.registerForm.valid? this.buttomResendHTML.nativeElement.focus():null;}, 100);
+    setTimeout(() => {this.registerForm.valid && this.buttomResendHTML? this.buttomResendHTML.nativeElement.focus():null;}, 100);
   }
   
   get userId() {return this.registerForm.get('userId') } 

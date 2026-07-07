@@ -17,8 +17,8 @@ import { MatTabsModule} from '@angular/material/tabs'
     styleUrl: './admin-jwt-tokens.component.scss'
 })
 export class AdminPageComponent  {
-  @ViewChild (ATableComponent) tokensTableRef : ATableComponent
-  public adminData:Observable<TRefreshTokenTable[]>
+  @ViewChild (ATableComponent) tokensTableRef : ATableComponent | undefined = undefined
+  public adminData:Observable<TRefreshTokenTable[]> | undefined = undefined
   public tableHeaders:ITableHeaders[] = [
     {fieldName:'action', displayName:'action' },
     {fieldName:'userId', displayName:'userId' },
@@ -37,9 +37,9 @@ export class AdminPageComponent  {
   }
   ngAfterViewInit(): void {
     this.subscriptions.add(
-     this.tokensTableRef.actionInitiated.subscribe(data=>this.actionExecute(data.action,data.data)));
+     this.tokensTableRef?.actionInitiated.subscribe(data=>this.actionExecute(data.action,data.data)));
     this.subscriptions.add(
-     this.tokensTableRef.tableReloaded.subscribe(data=>this.snacksService.openSnack(`Reloaded with ${data.rowCount} rows`,'Ok','success-snackBar','top',2000)));
+     this.tokensTableRef?.tableReloaded.subscribe(data=>this.snacksService.openSnack(`Reloaded with ${data.rowCount} rows`,'Ok','success-snackBar','top',2000)));
   }
   actionExecute(action:TTableActions, data:TRefreshTokenTable) {
     switch (action) {
@@ -48,7 +48,7 @@ export class AdminPageComponent  {
           this.adminDataService.deleteRefreshToken(data).subscribe(deleted=>{
             console.log('deleted',deleted )
             this.snacksService.openSnack(`Token for user ${data.userId} has ${deleted.deleted? '':'not ' }been deleted `,'Ok',deleted.deleted? 'success-snackBar':'error-snackBar');
-            deleted.deleted? this.tokensTableRef.removeRow('userId',data.userId):null
+            deleted.deleted? this.tokensTableRef?.removeRow('userId',data.userId):null
           }))
       break;
     }

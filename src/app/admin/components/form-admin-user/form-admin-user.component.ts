@@ -30,7 +30,7 @@ import { catchError, EMPTY } from 'rxjs';
     styleUrl: './form-admin-user.component.scss'
 })
 export class FormAdminUserComponent {
-  @Input() userData:IUser;
+  @Input() userData:IUser | undefined = undefined;
   @Output() formAction = new EventEmitter <{action:TFormAction, data?:IUser}>
   public formUser: FormGroup
   public roles:string[] = ['user','admin']
@@ -49,7 +49,7 @@ export class FormAdminUserComponent {
     })
   }
   ngAfterViewInit(): void {
-    this.formUser.patchValue(this.userData)
+    this.userData? this.formUser.patchValue(this.userData) : null
   }
   sumbitForm() {
     this.adminDataService.adminUpdateUser(this.formUser.value)

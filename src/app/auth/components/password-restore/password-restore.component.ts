@@ -13,7 +13,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SnacksService } from '../../../shared/services/snacks.service';
 import { ENVIRONMENT } from '../../../environment/environment';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { ObjectId } from 'mongodb';
 import { ConfigService } from '../../../shared/services/config.service';
 @Component({
     selector: 'app-password-restore',
@@ -22,9 +21,9 @@ import { ConfigService } from '../../../shared/services/config.service';
     styleUrl: './password-restore.component.scss'
 })
 export class PasswordRestoreComponent {
-  @ViewChild ('submitButtonHTML',{read:ElementRef,static:false}) submitButtonHTML: ElementRef
-  @ViewChild ('submitButtonSaveNewPasswordHTML',{read:ElementRef,static:false}) submitNewPasswordHTML: ElementRef
-  @ViewChild ('passwordConfirmHTML',{read:ElementRef,static:false}) passwordConfirmHTML: ElementRef
+  @ViewChild ('submitButtonHTML',{read:ElementRef,static:false}) submitButtonHTML: ElementRef | undefined = undefined
+  @ViewChild ('submitButtonSaveNewPasswordHTML',{read:ElementRef,static:false}) submitNewPasswordHTML: ElementRef| undefined = undefined
+  @ViewChild ('passwordConfirmHTML',{read:ElementRef,static:false}) passwordConfirmHTML: ElementRef| undefined = undefined
   public emailForRestore: FormGroup;
   public processState:'Sending reseting email'|'Saving new password'|null = null;
   private msgSentEmail ='Email has been sent to reset your password.\n Please create a new password by using a link in the message sent to you'
@@ -67,7 +66,9 @@ export class PasswordRestoreComponent {
     this.subscriptions.add(
       this.emailForRestore.statusChanges
       .pipe(filter(status=>status==='VALID'))
-      .subscribe(()=> setTimeout(() => {this.formProcess==='SendEmail'? this.submitButtonHTML.nativeElement.focus():this.submitNewPasswordHTML.nativeElement.focus()}, 100)));
+      .subscribe(()=> 
+        setTimeout(() => {
+        this.formProcess==='SendEmail'? this.submitButtonHTML?.nativeElement.focus():this.submitNewPasswordHTML?.nativeElement.focus()}, 100)));
     this.formInit() // Form initialization
   }
   // Form initialization based on route and parameters triggered this form
