@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, EMPTY, filter, map, Observable, of, scan, switchMap, takeWhile, tap, throwError, timer } from 'rxjs';
 import { UserMongoServiceService } from './user-mongo-service.service';
 import { ICustomLoginError, IJWTInfo, IJWTInfoToken, ILogOut, ISignUpResult, IUser, SentMessageInfo, TMailTypes } from '../models/auth.model';
 import { MongoServerError,InsertOneResult, ObjectId } from 'mongodb';
 import { AppStorage, StorageService, StorageType } from '../../shared/services/storage.service';
-import { RESET_PASSWORD_TIMEOUT } from '../../environment/environment';
+import {  } from '../../environment/environment';
 import { IErrorUI } from '../../shared/types/errors-model';
+import { ConfigService } from '../../shared/services/config.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,7 @@ export class AuthService {
   private appStorage:AppStorage;
   public timer$: Observable<number>;
   public userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'logout',role:'',_id:''})
-
+  private RESET_PASSWORD_TIMEOUT = inject(ConfigService).config?.RESET_PASSWORD_TIMEOUT || 10
   constructor(
     private userMongoServiceService:UserMongoServiceService,
     private storageService:StorageService
@@ -90,7 +91,7 @@ export class AuthService {
   checkTimer() {
     this.appStorage.getStorageData('emailSent').subscribe(date=>{
       let lastTimeSent = date as {code:string, data: number};
-      let timerRest = RESET_PASSWORD_TIMEOUT - Math.floor((Number(new Date()) - lastTimeSent.data)/1000)  
+      let timerRest = this.RESET_PASSWORD_TIMEOUT - Math.floor((Number(new Date()) - lastTimeSent.data)/1000)  
       timerRest>0? this.setTimerForResend(timerRest) : null;
     })
   }

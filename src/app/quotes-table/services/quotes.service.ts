@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { REST_ENDPOINT } from '../../environment/environment';
+import { ConfigService } from '../../shared/services/config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuotesService {
-  constructor(private http:HttpClient) { }
+  private http = inject(HttpClient) 
+  private configService = inject(ConfigService)
   getQuotes ():Observable<{data:string}> {
-    return this.http.get<{data:string}>(REST_ENDPOINT + 'quote')
+    return this.http.get<{data:string}>(this.configService.config?.REST_ENDPOINT + 'quote')
   }
 }

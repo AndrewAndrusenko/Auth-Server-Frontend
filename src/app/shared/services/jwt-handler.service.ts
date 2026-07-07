@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { catchError, exhaustMap, map, Observable, Subject, tap, throwError } from 'rxjs';
-import { REST_ENDPOINT } from '../../environment/environment';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,7 @@ import { REST_ENDPOINT } from '../../environment/environment';
 export class JwtHandlerService {
   public refreshTokenSub:Subject<boolean> = new Subject()
   public refreshTokenReady:Subject<boolean> = new Subject();
+  private configService = inject(ConfigService)
   constructor(private http:HttpClient) { 
     this.refreshTokenSub.pipe(
       exhaustMap(()=>this.refreshToken()),
@@ -16,7 +17,7 @@ export class JwtHandlerService {
   }
 
   refreshToken():Observable<boolean|Error> {
-    return this.http.get<boolean>(REST_ENDPOINT+'users/refresh').pipe(
+    return this.http.get<boolean>(this.configService.config?.REST_ENDPOINT+'users/refresh').pipe(
       map(()=>true),
       catchError(err=>{
         console.log('catchError refreshToken',err )

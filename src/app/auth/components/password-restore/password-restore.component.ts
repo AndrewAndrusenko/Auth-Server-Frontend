@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,9 +11,10 @@ import { AuthValidatorService } from '../../services/auth-validator.service';
 import { AuthService } from '../../services/auth.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SnacksService } from '../../../shared/services/snacks.service';
-import { ENVIRONMENT, RESET_PASSWORD_TIMEOUT } from '../../../environment/environment';
+import { ENVIRONMENT } from '../../../environment/environment';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { ObjectId } from 'mongodb';
+import { ConfigService } from '../../../shared/services/config.service';
 @Component({
     selector: 'app-password-restore',
     imports: [RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, CommonModule, ReactiveFormsModule, MatProgressBarModule, MatTooltipModule],
@@ -33,6 +34,7 @@ export class PasswordRestoreComponent {
   private userDataPasswordReset: {id:string, token:string} = {id:'',token:''}
   private passwordCreateValidators:ValidatorFn[];
   private passwordConfirmValidators:ValidatorFn[];
+  private RESET_PASSWORD_TIMEOUT = inject(ConfigService).config?.RESET_PASSWORD_TIMEOUT || 10
   constructor(
     private fb:FormBuilder,
     private authValidatorService:AuthValidatorService,
@@ -117,7 +119,7 @@ export class PasswordRestoreComponent {
       this.processState = null;
       this.emailForRestore.enable();
       this.snacksService.openSnack(this.msgSentEmail,'Okay','success-snackBar');
-      this.authService.setTimerForResend(RESET_PASSWORD_TIMEOUT);
+      this.authService.setTimerForResend(this.RESET_PASSWORD_TIMEOUT);
     });
   }
   comparePasswordValidator():ValidatorFn { // Validator to compare main password and confirmation of it

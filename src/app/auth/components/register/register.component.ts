@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, inject, ViewChild } from "@angular/core";
 
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, FormGroupDirective, ValidatorFn, Validators } from "@angular/forms";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -7,7 +7,7 @@ import { MatIconModule} from '@angular/material/icon';
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSelectModule} from '@angular/material/select'
-import { ENVIRONMENT, SUCCESS_TIME_OUT } from "../../../environment/environment";
+import { ENVIRONMENT } from "../../../environment/environment";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ICustomLoginError, ISignUpResult, IUser } from "../../models/auth.model";
 import { catchError, EMPTY, filter, Subscription } from "rxjs";
@@ -15,6 +15,7 @@ import { AuthService } from "../../services/auth.service";
 import { AuthValidatorService } from "../../services/auth-validator.service";
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { SnacksService } from "../../../shared/services/snacks.service";
+import { ConfigService } from "../../../shared/services/config.service";
 type processType ='Logging'|'Signing up'|'Resending email'|null
 @Component ( {
     selector: 'rt-register',
@@ -40,6 +41,7 @@ export class RegisterComponent {
   private emailValidator:AsyncValidatorFn;
   private passwordStrongValidator: ValidatorFn
   private msgSentEmail ='Email has been sent to confirm your email address.\n Please active your account by using a link in the message sent to you'
+  SUCCESS_TIME_OUT = inject(ConfigService).config?.SUCCESS_TIME_OUT || 3000
   constructor(
     private fb:FormBuilder, 
     private router:Router,
@@ -113,7 +115,7 @@ export class RegisterComponent {
         this.registerForm.reset()
         if (res.type !=='error') {
         this.snacksService.openSnack(this.msgSentEmail,'Okay','success-snackBar');
-        setTimeout(() => this.signUpResult.type='null', SUCCESS_TIME_OUT);
+        setTimeout(() => this.signUpResult.type='null', this.SUCCESS_TIME_OUT);
         }
       })
     )
