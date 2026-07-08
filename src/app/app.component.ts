@@ -3,9 +3,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AppStorage, StorageService, StorageType } from './shared/services/storage.service';
 import { CommonModule } from '@angular/common';
-import { filter, Observable, Subscription, tap } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IJWTInfo } from './auth/models/auth.model';
-import { UserMongoServiceService } from './auth/services/user-mongo-service.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule} from '@angular/material/menu'
 import { AuthService } from './auth/services/auth.service';
@@ -20,8 +19,7 @@ export class AppComponent {
     private storageService = inject(StorageService)
     private router = inject(Router)
     public myVer = VERSION.full;
-    public user : {userId:string|null, role:string|null} = {userId:null,role:null} 
-    public user$ : Observable<IJWTInfo> = this.authService.userDataSubject.asObservable()
+    public user$ : Observable<IJWTInfo> = this.authService.userDataStream$
     private appStorage:AppStorage = this.storageService.initStorageObj(StorageType.IndexDB)
     private subscriptions = new Subscription()
   ngOnDestroy(): void {
@@ -32,7 +30,7 @@ export class AppComponent {
       this.appStorage.getStorageData('jwtInfo')
       .subscribe(jwtInfo=>{
         if (jwtInfo) {
-            this.authService.userDataSubject.next((jwtInfo as {data:IJWTInfo}).data)
+            this.authService.setUserData((jwtInfo as {data:IJWTInfo}).data)
             this.router.navigate(['quotes'])
         } else {
             this.router.navigate(['register'])

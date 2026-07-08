@@ -1,10 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, EMPTY, filter, map, Observable, of, scan, switchMap, takeWhile, tap, throwError, timer } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, scan, switchMap, takeWhile, tap, throwError, timer } from 'rxjs';
 import { UserMongoServiceService } from './user-mongo-service.service';
 import { ICustomLoginError, IJWTInfo, IJWTInfoToken, ILogOut, ISignUpResult, IUser, SentMessageInfo, TMailTypes } from '../models/auth.model';
-import { MongoServerError,InsertOneResult, ObjectId } from 'mongodb';
+import { InsertOneResult, ObjectId } from 'mongodb';
 import { AppStorage, StorageService, StorageType } from '../../shared/services/storage.service';
-import {  } from '../../environment/environment';
 import { IErrorUI } from '../../shared/types/errors-model';
 import { ConfigService } from '../../shared/services/config.service';
 @Injectable({
@@ -13,7 +12,7 @@ import { ConfigService } from '../../shared/services/config.service';
 export class AuthService {
   private appStorage:AppStorage;
   public timer$: Observable<number>;
-  public userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'logout',role:'',_id:''})
+  private userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'logout',role:'none',_id:''})
   private RESET_PASSWORD_TIMEOUT = inject(ConfigService).config?.RESET_PASSWORD_TIMEOUT || 10
   constructor(
     private userMongoServiceService:UserMongoServiceService,
@@ -22,7 +21,12 @@ export class AuthService {
     this.appStorage = this.storageService.initStorageObj(StorageType.IndexDB);
     this.timer$ = of(0)
   }
-  loginUser (user:IUser):Observable<ICustomLoginError|IJWTInfoToken|Error> {
+  public get userDataStream$():Observable<IJWTInfo> {return this.userDataSubject.asObservable()}
+  public get userData():IJWTInfo {return this.userDataSubject.value} 
+  public setUserData(newUserData:IJWTInfo) {
+    this.userDataSubject.next(newUserData)
+  } 
+  public loginUser (user:IUser):Observable<ICustomLoginError|IJWTInfoToken|Error> {
     return this.userMongoServiceService.loginUser (user).pipe(
       tap(jwtInfoToken=>(jwtInfoToken as IJWTInfoToken)?.jwtInfo? this.userDataSubject.next((jwtInfoToken as IJWTInfoToken)?.jwtInfo):null),
       switchMap(data => (data as IJWTInfoToken)?.jwtInfo? 
@@ -35,7 +39,7 @@ export class AuthService {
       switchMap(user=>user? of(user):this.appStorage.getStorageData('jwtInfo').pipe(map(res=>(res as {data:IUser})?.data||null))),
       filter(user=>user!=null),
       switchMap(user=>this.userMongoServiceService.logOutUser(user)),
-      tap(()=>this.userDataSubject.next({userId:'logout',role:'',_id:''})),
+      tap(()=>this.userDataSubject.next({userId:'logout',role:'none',_id:''})),
       switchMap(logOut => this.appStorage.clearStorageData('jwtInfo').pipe(map(()=> {return logOut}))),
     )
   }

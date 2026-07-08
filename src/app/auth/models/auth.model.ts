@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb"
 import { TResultType } from "../../shared/types/shared-models"
-export const AcRoles = ['user','admin'] as const
+export const AcRoles = ['user','admin','none'] as const
 export type TAcRole = (typeof AcRoles)[number]
 export interface IUser {
   _id:ObjectId,
@@ -17,7 +17,7 @@ export interface IJWT {
   refreshToken:string,
 }
 export interface IJWTInfo {
-  role:string,
+  role:TAcRole,
   userId:string,
   _id:string
 }

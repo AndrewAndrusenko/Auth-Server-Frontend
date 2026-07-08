@@ -88,3 +88,9 @@ AuthServer - Front - SS18
 AuthServer-Front
 1. Base url routing based: register ot app list based on logging status. Refactor
 2. Postbuild script - local paths have been updated
+
+AuthServer-Front 2
+1. Postbuild script local paths are fixed
+2. AuthService has been refactored in order to encapsulate userDataSubject by setting it as private.
+User data, its stream and changing it have become available by method and getter.
+3. Created guard function to protect admin and app routes. guard function verifies user role to provide access
