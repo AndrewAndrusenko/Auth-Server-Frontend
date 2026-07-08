@@ -48,7 +48,6 @@ export class AdminUsersListComponent {
       this.usersTableRef?.tableReloaded.subscribe(data=>this.snacksService.openSnack(`Reloaded with ${data.rowCount} rows`,'Ok','success-snackBar','top',2000)));
   }
   formActionHandle(data:{action:TFormAction, data?:IUser}) {
-    console.log('', data)
     switch (data.action) {
       case 'Canceled':
         this.userFormRef?.close()

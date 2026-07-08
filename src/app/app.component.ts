@@ -1,6 +1,6 @@
-import { Component, VERSION } from '@angular/core';
+import { Component, inject, VERSION } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AppStorage, StorageService, StorageType } from './shared/services/storage.service';
 import { CommonModule } from '@angular/common';
 import { filter, Observable, Subscription, tap } from 'rxjs';
@@ -16,26 +16,28 @@ import { AuthService } from './auth/services/auth.service';
     styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'RTQ-NgRx ss';
-  public myVer = VERSION.full;
-  public user : {userId:string|null, role:string|null} = {userId:null,role:null} 
-  public user$ : Observable<IJWTInfo> 
-  private appStorage:AppStorage;
-  private subscriptions = new Subscription()
-  constructor(
-    private authService:AuthService,
-    private storageService:StorageService
-  ) {
-    this.user$ = this.authService.userDataSubject.asObservable()
-    this.appStorage = this.storageService.initStorageObj(StorageType.IndexDB)
-  }
+    private authService = inject(AuthService)
+    private storageService = inject(StorageService)
+    private router = inject(Router)
+    public myVer = VERSION.full;
+    public user : {userId:string|null, role:string|null} = {userId:null,role:null} 
+    public user$ : Observable<IJWTInfo> = this.authService.userDataSubject.asObservable()
+    private appStorage:AppStorage = this.storageService.initStorageObj(StorageType.IndexDB)
+    private subscriptions = new Subscription()
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe()   
   }
   ngOnInit(): void {
     this.subscriptions.add(
       this.appStorage.getStorageData('jwtInfo')
-      .subscribe(jwtInfo=>jwtInfo? this.authService.userDataSubject.next((jwtInfo as {data:IJWTInfo}).data):null)
+      .subscribe(jwtInfo=>{
+        if (jwtInfo) {
+            this.authService.userDataSubject.next((jwtInfo as {data:IJWTInfo}).data)
+            this.router.navigate(['quotes'])
+        } else {
+            this.router.navigate(['register'])
+        }
+      })
     )
   }
 }

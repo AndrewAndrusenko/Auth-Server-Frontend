@@ -83,3 +83,8 @@ AuthServer - Front - SS18
 2. implementing strict property initialization policy
 3. UI updated. Added menu base panel to navigate to the main features. Design slightly updated
 4. refactor builing scripts + config update
+
+08/07/26
+AuthServer-Front
+1. Base url routing based: register ot app list based on logging status. Refactor
+2. Postbuild script - local paths have been updated
