@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "standalone-signals": {
+    "auth-server-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/standalone-signals",
+            "outputPath": "dist",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "deployUrl": "./",
@@ -66,10 +66,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "standalone-signals:build:production"
+              "buildTarget": "auth-server-frontend:build:production"
             },
             "development": {
-              "buildTarget": "standalone-signals:build:development"
+              "buildTarget": "auth-server-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
