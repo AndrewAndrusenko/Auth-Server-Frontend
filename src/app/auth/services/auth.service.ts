@@ -21,8 +21,8 @@ export class AuthService {
     this.appStorage = this.storageService.initStorageObj(StorageType.IndexDB);
     this.timer$ = of(0)
   }
-  public get userDataStream$():Observable<IJWTInfo> {return this.userDataSubject.asObservable()}
-  public get userData():IJWTInfo {return this.userDataSubject.value} 
+  get userDataStream$():Observable<IJWTInfo> {return this.userDataSubject.asObservable()}
+  get userData():IJWTInfo {return this.userDataSubject.value} 
   public setUserData(newUserData:IJWTInfo) {
     this.userDataSubject.next(newUserData)
   } 
