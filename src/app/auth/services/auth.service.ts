@@ -18,7 +18,7 @@ export class AuthService {
     private userMongoServiceService:UserMongoServiceService,
     private storageService:StorageService
   ) {
-    this.appStorage = this.storageService.initStorageObj(StorageType.IndexDB);
+    this.appStorage = this.storageService.storage(StorageType.IndexDB);
     this.timer$ = of(0)
   }
   get userDataStream$():Observable<IJWTInfo> {return this.userDataSubject.asObservable()}
@@ -40,7 +40,7 @@ export class AuthService {
       filter(user=>user!=null),
       switchMap(user=>this.userMongoServiceService.logOutUser(user)),
       tap(()=>this.userDataSubject.next({userId:'logout',role:'none',_id:''})),
-      switchMap(logOut => this.appStorage.clearStorageData('jwtInfo').pipe(map(()=> {return logOut}))),
+      switchMap(logOut => this.appStorage.deleteStorageData('jwtInfo').pipe(map(()=> {return logOut}))),
     )
   }
   singUpUser(userData:IUser):Observable<ISignUpResult> {

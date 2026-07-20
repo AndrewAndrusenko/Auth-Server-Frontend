@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start ver18": "ng serve --port 4209",
+    "start AuthFront": "ng serve --port 4209",
     "build": "ng build --base-href='/apps/ssngrx/'",
     "postbuild": "postbuild.cmd",
     "watch": "ng build --watch --configuration development",

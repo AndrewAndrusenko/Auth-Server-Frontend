@@ -20,7 +20,7 @@ export class AppComponent {
     private router = inject(Router)
     public myVer = VERSION.full;
     public user$ : Observable<IJWTInfo> = this.authService.userDataStream$
-    private appStorage:AppStorage = this.storageService.initStorageObj(StorageType.IndexDB)
+    private appStorage:AppStorage = this.storageService.storage(StorageType.IndexDB)
     private subscriptions = new Subscription()
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe()   

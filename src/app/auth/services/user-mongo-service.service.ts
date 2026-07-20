@@ -3,21 +3,16 @@ import { InsertOneResult, MongoServerError, UpdateResult} from 'mongodb'
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IConfirmMail, ICustomLoginError,  IJWTInfoToken, ILogOut, IUser, SentMessageInfo, TMailTypes } from '../models/auth.model';
-import { AppStorage, StorageService,StorageType } from '../../shared/services/storage.service';
 import { ConfigService } from '../../shared/services/config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserMongoServiceService {
-  private appStorage:AppStorage;
   private REST_ENDPOINT = inject(ConfigService).config?.REST_ENDPOINT
   constructor(
     private http:HttpClient,
-    private storageService:StorageService
-  ) { 
-    this.appStorage = storageService.initStorageObj(StorageType.Seesiion)
-  }
+  ) {}
   setUser (user:IUser):Observable<InsertOneResult|MongoServerError> {
     return this.http.post<InsertOneResult>(this.REST_ENDPOINT+'users',user)
   }
