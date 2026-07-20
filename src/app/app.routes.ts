@@ -6,8 +6,8 @@ export const appRoutes: Routes = [] = [
     loadChildren: ()=>import('./auth/auth.routes').then(m=>m.registerRoutes) //Lazy loading
   },
   {
-    path:'quotes',
-    loadChildren: ()=>import('./quotes-table/quotes.routes').then(m=>m.quotesTableRouter) //Lazy loading
+    path:'apps',
+    loadComponent: ()=>import('./apps-list/apps-list.component.').then(m=>m.AppsListComponent) //Lazy loading
   },
   {
     path:'admin',

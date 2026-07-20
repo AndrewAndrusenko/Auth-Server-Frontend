@@ -1,23 +1,18 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { QuotesService } from '../../services/quotes.service';
 import { Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
-import { ConfigService } from '../../../shared/services/config.service';
+import { ConfigService } from '@shared/services/config.service';
 @Component({
     selector: 'app-quotes-table',
     imports: [RouterModule, MatButtonModule],
-    templateUrl: './quotes-table.component.html',
-    styleUrl: './quotes-table.component.scss'
+    templateUrl: './apps-list.component.html',
+    styleUrl: './apps-list.component.scss'
 })
-export class QuotesTableComponent {
+export class AppsListComponent {
   public result:{data:string}|null = null;
   private subscripitons = new Subscription;
-  private quotesService = inject(QuotesService)
   private configService = inject(ConfigService)
-  ngOnInit(): void {
-    this.subscripitons.add(this.quotesService.getQuotes().subscribe(res=>this.result=res));
-  }
   ngOnDestroy(): void {
     this.subscripitons.unsubscribe();
   }

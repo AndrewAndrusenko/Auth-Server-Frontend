@@ -139,7 +139,7 @@ export class RegisterComponent {
         } else {
           this.signUpResult = {type:'success', msg: 'Ok'} 
           this.snacksService.openSnack('You have been logged in','Okay','success-snackBar');
-          this.router.navigate(['quotes'])
+          this.router.navigate(['apps'])
         }
       })
     )

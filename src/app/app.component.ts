@@ -31,7 +31,7 @@ export class AppComponent {
       .subscribe(jwtInfo=>{
         if (jwtInfo) {
             this.authService.setUserData((jwtInfo as {data:IJWTInfo}).data)
-            this.router.navigate(['quotes'])
+            this.router.navigate(['apps'])
         } else {
             this.router.navigate(['register'])
         }
