@@ -1,4 +1,4 @@
-@use '../app/styles/mixins_media.scss' as *;
+@use '../styles/mixins/media.mixin.scss' as *;
 .header {
   display: flex;
   justify-content: space-between;
@@ -6,29 +6,53 @@
   padding-left: 1%;
   padding-top: 0px;
   min-height: 4vh;
+  @include mobile {
+    padding-top: 12px;
+    padding-right: 0px;
+  }
   &__app_name {
     margin: 0; 
     padding-left: 8px;
-    color: aliceblue;
+    color: black;
     @include mobile {
       display: none;
     }
-
-    &-mobile {
-      color: aliceblue;
-      display: none;
-      @include mobile {
-        display: unset;
-      }
-    }
   }
-
+ .menu-panel {
+    display: flex;
+    flex-direction: row;
+    margin-left: 12px;
+    gap:20px;
+    @include mobile {
+      margin-left: 0px;
+      gap: 6px;
+    }
+ }
   &__logging_links{
-    color: aliceblue;
+    color: black;
     display: flex;
     gap:1vw;
+    @include mobile {
+      margin-left: 6px;
+      margin-right: 8px;
+    }
+    & > button {
+      width: 100px !important;
+      min-width: unset !important;
+    }
     a {
       margin-top: 1.5%;
+    }
+    &_desktop {
+      @include mobile {
+        display: none;
+      }
+    }
+    &_mobile {
+      display: none;
+      @include mobile {
+        display: inline;
+      }
     }
 }
 .common-action-button {
@@ -37,21 +61,17 @@
     font-size: medium !important;
     @include mobile {
         min-height: unset;
-        font-size: smaller !important;
+        font-size: 14px !important;
         margin-left: 1%;
         margin-bottom: 0.5vh;
         padding-left: 10%;
         padding-right: 10%;
         min-width: 30vw;
+        height: 44px;
     }
     }
  }
  .cs-menu {
     min-width: 220px
  }
- .menu-panel {
-    display: flex;
-    flex-direction: row;
-    margin-left: 12px;
-    gap:20px;
- }
+

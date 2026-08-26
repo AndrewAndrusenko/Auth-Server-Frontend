@@ -18,7 +18,6 @@ import { catchError, EMPTY } from 'rxjs';
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatButtonModule,
     MatInputModule,
     MatTooltipModule,
     MatSelectModule,

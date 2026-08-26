@@ -1,164 +1,225 @@
-<form  class="registerForm" [formGroup]="registerForm"
+<form
+  class="registerForm"
+  [formGroup]="registerForm"
   #myForm="ngForm"
-  (keydown.enter)="$event.preventDefault()">
+  (keydown.enter)="$event.preventDefault()"
+>
   <div class="registerForm__header">
-    <mat-label class="registerFormregisterForm__header-title">{{formProcess==='logIn'? 'Log In':'Sign Up'}} Form</mat-label>
-    <a (click)="formProcess==='logIn'? setSignUpFormProcess() : setLogInProcess()" [routerLink]="[]" >{{formProcess==='logIn'? 'Sign Up': 'Log In'}} </a>
+    <mat-label class="registerFormregisterForm__header-title"
+      >{{ formProcess === "logIn" ? "Log In" : "Sign Up" }} Form</mat-label
+    >
+    <a
+      (click)="
+        formProcess === 'logIn' ? setSignUpFormProcess() : setLogInProcess()
+      "
+      [routerLink]="[]"
+      >{{ formProcess === "logIn" ? "Sign Up" : "Log In" }}
+    </a>
   </div>
   @if (processState) {
     <div class="registerForm__process-state">
-      <label >{{processState}}</label>
+      <label>{{ processState }}</label>
       <mat-progress-bar mode="query"></mat-progress-bar>
     </div>
   }
-  <mat-form-field  class="custom-background">
+  <mat-form-field class="registerForm_field">
     <mat-label>UserName</mat-label>
-    <input  matInput  type="text"
+    <input
+      matInput
+      type="text"
       formControlName="userId"
-      (keyup.enter)="passwordHTML.focus()">
-      <button mat-icon-button matPrefix color="primary">
-        <mat-icon fontIcon="perm_identity">close</mat-icon>
+      (keyup.enter)="passwordHTML.focus()"
+    />
+    <button mat-icon-button matPrefix color="primary">
+      <mat-icon fontIcon="perm_identity">close</mat-icon>
+    </button>
+    @if (userId?.value) {
+      <button
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="userId?.setValue(null)"
+      >
+        <mat-icon fontIcon="close">close</mat-icon>
       </button>
-      @if (userId?.value) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="userId?.setValue(null)">
-          <mat-icon fontIcon="close">close</mat-icon>
-        </button>
-      }
-      @if (userId?.errors?.['userIdTaken']) {
-        <mat-error >
-          UserName isn't unique
-        </mat-error>
-      }
-      @if (userId?.errors?.['minlength']) {
-        <mat-error >
-          Minimum length is 4 characters
-        </mat-error>
-      }
-      @if (userId?.errors?.['required']) {
-        <mat-error >
-          The field is required
-        </mat-error>
-      }
-    </mat-form-field>
-    <mat-form-field >
-      <mat-label>Password</mat-label>
-      <button  mat-icon-button color="primary" matPrefix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-      <input #passwordHTML matInput
-        formControlName="password"
+    }
+    @if (userId?.errors?.["userIdTaken"]) {
+      <mat-error> UserName isn't unique </mat-error>
+    }
+    @if (userId?.errors?.["minlength"]) {
+      <mat-error> Minimum length is 4 characters </mat-error>
+    }
+    @if (userId?.errors?.["required"]) {
+      <mat-error> The field is required </mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field class="registerForm_field">
+    <mat-label>Password</mat-label>
+    <button
+      mat-icon-button
+      color="primary"
+      matPrefix
+      (click)="hide = !hide"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide"
+    >
+      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+    <input
+      #passwordHTML
+      matInput
+      formControlName="password"
       (keyup.enter)="
         passwordHTML.blur();
-        formProcess==='logIn'? goToSubmitButton():emailHTML?.nativeElement.focus()"
-        [type]="hide ? 'password' : 'text'"
+        formProcess === 'logIn'
+          ? goToSubmitButton()
+          : emailHTML?.nativeElement.focus()
+      "
+      [type]="hide ? 'password' : 'text'"
+    />
+    @if (passwordCreate?.value) {
+      <button
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="passwordCreate?.patchValue(null)"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+    @if (passwordCreate?.errors?.["required"]) {
+      <mat-error> The field is required </mat-error>
+    }
+    @if (passwordCreate?.errors?.["strong"]) {
+      <mat-error class="resetPassword-error-strong">
+        Not safe. Check requirements
+        <mat-icon
+          class="icon-error-details"
+          (click)="showPasswordTip()"
+          matTooltip="Password requirements"
+          >more</mat-icon
+        >
+      </mat-error>
+    }
+  </mat-form-field>
+  @if (formProcess === "logIn") {
+    <a routerLink="/register/restore/" class="registerForm__link-restore"
+      >Restore password</a
+    >
+  }
+  @if (formProcess === "signUp") {
+    <mat-form-field class="registerForm_field">
+      <mat-label>Email</mat-label>
+      <input
+        #emailHTML
+        matInput
+        formControlName="email"
+        (keyup.enter)="goToSubmitButton()"
+      />
+      @if (email?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="email?.patchValue(null)"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+      @if (email?.errors?.["required"]) {
+        <mat-error> The field is required </mat-error>
+      }
+      @if (email?.errors?.["email"]) {
+        <mat-error> Incorrect email </mat-error>
+      }
+      @if (email?.errors?.["emailTaken"]) {
+        <mat-error> This email is being used </mat-error>
+      }
+    </mat-form-field>
+  }
+  <button
+    class="common-action-button registerForm__button"
+    #buttomSubmit
+    mat-raised-button
+    type="submit"
+    [disabled]="(formInvalid() && registerForm.invalid) || registerForm.disabled"
+    (keyup.enter)="
+      formProcess === 'logIn' ? logInUser() : signUpNewUser(myForm)
+    "
+    (click)="formProcess === 'logIn' ? logInUser() : signUpNewUser(myForm)"
+  >
+    {{ formProcess === "logIn" ? "Log In" : "Sign Up" }}
+  </button>
+  @if (formProcess === "logIn") {
+    <span>Registred user for demo or you can register by yourself</span>
+    <div class="log-hint">
+      <span>login: {{ "testUser" }} </span>
+      <span>password: testPassword1$ </span>
+    </div>
+  }
+</form>
+@if (signUpResult.type !== "null") {
+  <section class="registerResultMessage">
+    @if (signUpResult.type === "error") {
+      <label class="registerResultMessage__text">
+        @if (signUpResult.userSigned !== undefined) {
+          <p>
+            {{
+              signUpResult.userSigned === false
+                ? "User has not been signed up"
+                : "Error - Email confimation letter has not been sent.\n User has been signed up"
+            }}
+            <br />
+          </p>
+        }
+        Details: {{ signUpResult.msg }}
+      </label>
+    }
+    @if (signUpResult.type === "error") {
+      <button
+        class="registerResultMessage__button"
+        mat-raised-button
+        (click)="signUpResult.type = 'null'"
+      >
+        Okay
+      </button>
+    }
+  </section>
+}
+@if (emailErrUserData) {
+  <section class="resendEmail">
+    <form
+      class="resendEmail registerForm"
+      [formGroup]="registerForm"
+      #myForm="ngForm"
+    >
+      <mat-form-field class="registerForm_field">
+        <mat-label>Email</mat-label>
+        <input
+          #emailHTMLResend
+          (keyup.enter)="goToResendButton()"
+          matInput
+          formControlName="email"
         />
-        @if (passwordCreate?.value) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="passwordCreate?.patchValue(null)">
-            <mat-icon>close</mat-icon>
-          </button>
+        @if (email?.errors?.["required"]) {
+          <mat-error> The field is required </mat-error>
         }
-        @if (passwordCreate?.errors?.['required']) {
-          <mat-error >
-            The field is required
-          </mat-error>
+        @if (email?.errors?.["email"]) {
+          <mat-error> Incorrect email </mat-error>
         }
-        @if (passwordCreate?.errors?.['strong']) {
-          <mat-error  class="resetPassword-error-strong" >
-            Not safe. Check requirements
-            <mat-icon class="icon-error-details"(click)="showPasswordTip()" matTooltip="Password requirements" >more</mat-icon>
-          </mat-error>
+        @if (email?.errors?.["emailTaken"]) {
+          <mat-error> This email is being used </mat-error>
         }
       </mat-form-field>
-      @if (formProcess==='logIn') {
-        <a routerLink="/register/restore/"
-          class="registerForm__link-restore"
-        >Restore password</a>
-      }
-      @if (formProcess==='signUp') {
-        <mat-form-field>
-          <mat-label>Email</mat-label>
-          <input  #emailHTML matInput
-            formControlName="email"
-            (keyup.enter)="goToSubmitButton()">
-            @if (email?.value) {
-              <button matSuffix mat-icon-button aria-label="Clear" (click)="email?.patchValue(null)">
-                <mat-icon>close</mat-icon>
-              </button>
-            }
-            @if (email?.errors?.['required']) {
-              <mat-error >
-                The field is required
-              </mat-error>
-            }
-            @if (email?.errors?.['email']) {
-              <mat-error >
-                Incorrect email
-              </mat-error>
-            }
-            @if (email?.errors?.['emailTaken']) {
-              <mat-error >
-                This email is being used
-              </mat-error>
-            }
-          </mat-form-field>
-        }
-        <button class="common-action-button"
-          #buttomSubmit
-          mat-raised-button type="submit"
-          [disabled]="registerForm.invalid||registerForm.disabled"
-          (keyup.enter)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)"
-          (click)="formProcess==='logIn'? logInUser():signUpNewUser(myForm)">
-          {{formProcess==='logIn'? 'Log In':'Sign Up'}}
-        </button>
-      </form>
-      @if (signUpResult.type!=='null') {
-        <section class="registerResultMessage">
-          @if (signUpResult.type==='error') {
-            <label class="registerResultMessage__text">
-              @if (signUpResult.userSigned!==undefined) {
-                <p>
-                  {{signUpResult.userSigned===false? 'User has not been signed up':'Error - Email confimation letter has not been sent.\n User has been signed up'}} <br>
-                </p>
-              }
-              Details: {{signUpResult.msg}}
-            </label>
-          }
-          @if (signUpResult.type==='error') {
-            <button class="registerResultMessage__button" mat-raised-button (click)="signUpResult.type='null'" >Okay</button>
-          }
-        </section>
-      }
-      @if (emailErrUserData) {
-        <section class="resendEmail">
-          <form  class="resendEmail registerForm" [formGroup]="registerForm" #myForm="ngForm">
-            <mat-form-field>
-              <mat-label>Email</mat-label>
-              <input
-                #emailHTMLResend
-                (keyup.enter)="goToResendButton()"
-                matInput formControlName="email">
-                @if (email?.errors?.['required']) {
-                  <mat-error >
-                    The field is required
-                  </mat-error>
-                }
-                @if (email?.errors?.['email']) {
-                  <mat-error >
-                    Incorrect email
-                  </mat-error>
-                }
-                @if (email?.errors?.['emailTaken']) {
-                  <mat-error >
-                    This email is being used
-                  </mat-error>
-                }
-              </mat-form-field>
-              <button mat-raised-button #buttonResend
-                class="common-action-button"
-                [disabled]="email?.invalid||registerForm.disabled"
-                (click)="resendEmail()"
-                >Resend confirmation
-              </button>
-            </form>
-          </section>
-        }
+      <button
+        mat-raised-button
+        #buttonResend
+        class="common-action-button"
+        [disabled]="email?.invalid || registerForm.disabled"
+        (click)="resendEmail()"
+      >
+        Resend confirmation
+      </button>
+    </form>
+  </section>
+}

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, inject, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, inject, signal, ViewChild } from "@angular/core";
 
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, FormGroupDirective, ValidatorFn, Validators } from "@angular/forms";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -32,6 +32,7 @@ export class RegisterComponent {
   @ViewChild('buttonResend',{read: ElementRef, static: false}) buttomResendHTML: ElementRef | undefined = undefined
   private subscriptions = new Subscription;
   public registerForm:FormGroup;
+  public formInvalid = signal<boolean>(false)
   public formProcess:'logIn'|'signUp' = 'logIn'
   public processState:processType = null;
   public signUpResult:ISignUpResult = {type:'null',msg:'',userSigned:false};
@@ -52,8 +53,8 @@ export class RegisterComponent {
     private changeDetector : ChangeDetectorRef
   ) {   
     this.registerForm = this.fb.group ({
-      userId: ['', {validators: [Validators.required],  updateOn:'blur'}],
-      password: ['', {validators: [Validators.required], updateOn:'blur'}],
+      userId: ['', {validators: [Validators.required]}],
+      password: ['', {validators: [Validators.required]}],
       email:['',{updateOn:'blur'}],
       role:'user'
     });
@@ -121,6 +122,10 @@ export class RegisterComponent {
     )
   }
   logInUser() {
+    if (this.registerForm.invalid) {
+      this.formInvalid.set(true)
+      return
+    }
     this.startProcess('Logging');
     this.subscriptions.add(
       this.authService.loginUser(this.registerForm.value)

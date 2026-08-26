@@ -1,25 +1,33 @@
-@use '../../../styles/mixins_media.scss' as *;
-.filter-mobile {
-  display: none;
+@use '../../../../styles/mixins/media.mixin.scss' as *;
+@use '../../../../styles/mixins/mat-fields.scss' as formsmixins;
+@include formsmixins.ng-deep-form-field-styles;
+.filter-field {
+  border: unset !important;
+  background-color: unset !important;
+  width: 350px;
+  margin-left: 12px;
   @include mobile {
-    display: unset;
-    min-width: 50vw;
-    margin-bottom: 0.5vh;
-    min-height: 5vh;
-    margin-left: 1%;
+    width: 70vw;
+    margin-left: 6px;
+    height: 66px;
+    margin-top: -10px;
   }
-  @at-root {
-    .mat-mdc-form-field {
-      margin-left: 1vw;
-      border-width: unset;
-      border-radius: 0;
-      padding: 0%;
-      background-color: var(--background-color) !important;
-      @include mobile {
-        font-size: smaller !important;
-        padding: 0;
-        display: none;
-      }
+}
+.reload-button {
+  @include mobile {
+    margin-bottom: 20px !important;
+    height: 40px !important;
+    max-height: unset !important;
+    margin-left: 12px !important;
+  }
+  & > mat-icon {
+    margin: unset !important;
+    transform: scale(1.2);
+  }
+  &_label {
+    @include mobile {
+      display: none !important;
+
     }
   }
 }
@@ -46,6 +54,12 @@
     min-height: unset;
     font-size: smaller !important;
     margin-left: unset;
+  }
+  .table_header {
+    @include mobile {
+      visibility: collapse !important;
+    }
+
   }
   @at-root {
     td {

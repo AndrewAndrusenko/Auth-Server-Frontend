@@ -1,4 +1,3 @@
-<input class="filter-mobile" matInput  placeholder="Search..." [formControl]="filterControl" type="search" >
 <mat-form-field  class = "filter-field"  title="Filter All columns">
   <mat-label>Type to search...</mat-label>
   <input matInput  matTooltip="Use context menu to add filter"  [formControl]="filterControl" />
@@ -13,9 +12,11 @@
   <mat-icon matSuffix >save_alt</mat-icon>
 </button>
 <button mat-raised-button title="Reload Table"
-  class="common-action-button"
+  class="common-action-button reload-button"
   (click)="reloadTable()">
-  Reload
+  <span class="reload-button_label">
+    Reload
+  </span>
   <mat-icon matSuffix >refresh</mat-icon>
 </button>
 @if (actionsForTable.includes('Create')) {
@@ -128,7 +129,7 @@
         </td>
       </ng-container>
     }
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay" class="table_header"></tr>
     <tr mat-row  *matRowDef="let element; columns: columnsToDisplay; let dataindex=dataIndex;"  tabindex=0></tr>
   </table>
   <mat-paginator></mat-paginator>

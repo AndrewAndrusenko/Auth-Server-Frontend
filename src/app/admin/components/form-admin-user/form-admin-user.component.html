@@ -2,12 +2,12 @@
 <div class="form__container">
   <div class="form__container__fields_block">
     <form [formGroup]="formUser">
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label">Record ID</label>
-        <input matInput placeholder="label"  formControlName="_id" readonly="true" matTooltip="ReadOnly">
+      <mat-form-field class="form__container__fields_block_item">
+        <mat-label >Record ID</mat-label>
+        <input matInput placeholder="mat-label"  formControlName="_id" readonly="true" matTooltip="ReadOnly">
       </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label">User ID</label>
+      <mat-form-field class="form__container__fields_block_item">
+        <mat-label >User ID</mat-label>
         <input matInput placeholder="userId"  formControlName="userId">
         @if (userId?.errors?.['required']) {
           <mat-error>
@@ -15,8 +15,8 @@
           </mat-error>
         }
       </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label">Role</label>
+      <mat-form-field class="form__container__fields_block_item">
+        <mat-label >Role</mat-label>
         <mat-select placeholder="role" class="form__container__fields_block__select" formControlName="role">
           @for (role of roles; track role) {
             <mat-option [value]="role">
@@ -25,48 +25,36 @@
           }
         </mat-select>
       </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label">Email</label>
+      <mat-form-field class="form__container__fields_block_item">
+        <mat-label >Email</mat-label>
         <input matInput placeholder="email"  formControlName="email">
       </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label">Email Confirmed</label>
+      <mat-form-field class="form__container__fields_block_item">
+        <mat-label >Email Confirmed</mat-label>
         <mat-select placeholder="Confirmed" class="form__container__fields_block__select" formControlName="emailConfirmed">
           <mat-option [value]="true">true</mat-option>
           <mat-option [value]="false">false</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label" >Email Token</label>
+      <mat-form-field class="form__container__fields_block_item">
+        <mat-label  >Email Token</mat-label>
         <input matInput placeholder="token" formControlName="token">
       </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label">Password Token</label>
-        <input matInput placeholder="passwordToken"  formControlName="passwordToken">
-      </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label">Password Token</label>
-        <input matInput placeholder="passwordToken"  formControlName="passwordToken">
-      </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label" >Password Token</label>
-        <input matInput placeholder="passwordToken"  formControlName="passwordToken">
-      </mat-form-field>
-      <mat-form-field>
-        <label class="form__container__fields_block__field_label" >Password Token</label>
+      <mat-form-field class="form__container__fields_block_item">
+        <mat-label >Password Token</mat-label>
         <input matInput placeholder="passwordToken"  formControlName="passwordToken">
       </mat-form-field>
     </form>
     <div class="form__container__footer"></div>
   </div>
   <div class="form__container__buttons_block">
-    <button mat-button mat-raised-button matTooltip="Save"
-      class="common-action-button"
+    <button matTooltip="Save"
+      class="button-icon accent-button size-xxl"
       (click)="sumbitForm()"
     >Submit</button>
-    <button mat-button mat-raised-button matTooltip="Cancel"
+    <button  matTooltip="Cancel"
       cdkFocusInitial
-      class="common-action-button cancel"
+      class="button-icon secondary-button size-xxl"
       (click)="cancelAction()"
     >Cancel</button>
   </div>

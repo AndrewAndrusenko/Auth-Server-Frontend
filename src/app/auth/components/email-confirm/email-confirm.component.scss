@@ -1,4 +1,6 @@
-@use '../../../styles/mixins_media.scss' as *;
+@use '../../../../styles/mixins/media.mixin.scss' as *;
+@use '../../../../styles/mixins/mat-fields.scss' as formsmixins;
+@include formsmixins.ng-deep-form-field-styles;
 .process-state {
   margin-left: 1vw;
   margin-right: 1vw;

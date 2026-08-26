@@ -1,40 +1,55 @@
-  <div class="header-admin">
-    <p class="header__app_name">Auth server angular ver {{myVer}}</p>
-    <p class="header__app_name-mobile">auth server<br/></p>
-  </div>
+@let userData = user$ | async;
+<div class="header-admin">
+  <p class="header__app_name">Auth server angular ver {{ myVer }}</p>
+</div>
 <header class="header">
-      <div class="menu-panel">
-        <button class="common-action-button cs-menu"  mat-raised-button 
-                routerLink="/quotes"
-                [disabled]="(user$ | async)?.userId===('logout')">
-            <mat-icon  fontIcon="apps">close</mat-icon>
-            App list
-        </button>
-        <button class="common-action-button cs-menu"  mat-raised-button 
-                routerLink="/admin" 
-                [disabled]="(user$ | async)?.role!=='admin'">
-            <mat-icon  fontIcon="security">close</mat-icon>
-            Admin panel
-        </button>
-    </div>
+  <div class="menu-panel">
+    <button
+      class="common-action-button cs-menu"
+      mat-raised-button
+      routerLink="/apps"
+      [disabled]="userData?.userId === 'logout'"
+    >
+      <mat-icon fontIcon="apps"></mat-icon>
+      App list
+    </button>
+    <button
+      class="common-action-button cs-menu"
+      mat-raised-button
+      routerLink="/admin"
+      [disabled]="userData?.role !== 'admin'"
+    >
+      <mat-icon fontIcon="security"></mat-icon>
+      Admin panel
+    </button>
+  </div>
   <div class="header__logging_links">
-    @if ((user$ | async)?.userId==='logout'||'') {
-      <a routerLink="/register" >LogIn/SignUp</a>
+    @if (userData?.userId === "logout" || "") {
+      <a routerLink="/register">LogIn/SignUp</a>
     }
-    @if ((user$ | async)?.userId!=='logout'||'') {
-      <button class="common-action-button"
+    @if (userData?.userId !== "logout" || "") {
+      <button
+        class="common-action-button"
         [matMenuTriggerFor]="menu"
-        mat-raised-button >
-        <mat-icon  fontIcon="perm_identity">close</mat-icon>
-        {{(user$ | async)?.userId|titlecase}}
-        <mat-icon iconPositionEnd  fontIcon="more_vert" prefix >more_vert</mat-icon>
+        mat-raised-button
+      >
+        <mat-icon fontIcon="perm_identity">close</mat-icon>
+        <span class="header__logging_links_desktop">
+          {{ userData?.userId | titlecase }}
+        </span>
+        <span class="header__logging_links_mobile">
+          User
+        </span>
+        <mat-icon iconPositionEnd fontIcon="more_vert" prefix
+          >more_vert</mat-icon
+        >
       </button>
     }
   </div>
 </header>
 
 <mat-menu #menu="matMenu">
-  @if ((user$ | async)?.role==='admin') {
+  @if (userData?.role === "admin") {
     <button mat-menu-item routerLink="/admin">
       <mat-icon>security</mat-icon>
       <span>Admin Panel</span>

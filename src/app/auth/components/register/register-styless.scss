@@ -1,4 +1,7 @@
-@use '../../../styles/mixins_media.scss' as *;
+@use '../../../../styles/mixins/media.mixin.scss' as *;
+@use '../../../../styles/mixins/mat-fields.scss' as formsmixins;
+@use '../../../../styles/variables.scss' as vars;
+@include formsmixins.ng-deep-form-field-styles;
 .registerForm {
   margin-top: 10vh;
   display: grid;
@@ -9,15 +12,26 @@
   width: 100%;
 
   @include mobile {
-    margin-left: 0;
+    margin-left: 12px;
+    margin-right: 12px;
     margin-top: 2vh;
+    width: auto;
   }
-
+  
   &__header {
     font-size: large;
     display: flex;
     justify-content: space-between;
   }
+  &_field {
+    font-size: vars.$heading---m !important;
+    width: 350px !important ;
+    height: 88px !important;
+    @include mobile {
+      width: 92vw !important;
+    }
+  }
+
   .resetPassword-error-strong {
     display: flex;
     align-items: center; 
@@ -32,6 +46,12 @@
   &__link-restore {
     width: fit-content;
     padding-left: 2%;
+  }
+  &__button {
+    width: 350px ;
+    @include mobile {
+      width: 92vw !important;
+    }
   }
   
 }
@@ -70,13 +90,12 @@
     margin-top: 1vh;
   }
 }
-.mat-mdc-form-field {
-  border-width: 1px;
-  border-radius: 2%/15%;
-  width: 30vw;
-  padding: 2%;
-  
-  @include mobile {
-    width: 86vw;
-  }
+.log-hint {
+  margin-left: 20px;
+  margin-top: -14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  color: vars.$base---accent;
 }

@@ -105,3 +105,14 @@ User data, its stream and changing it have become available by method and getter
 20/07/26
 App list fixed and refactored
 Changed component naming, folders, routes and deleted unnecessary backend request
+
+26/08/26
+feat(styles): global styles update. new design system applied. mixins added
+fix(styles): styles fixed for mobile layout.
+fix(app init): app list component is a root component. component redirect to login when there is no user data in indexDB.
+TODO: verify token via backend before landing user on the app list
+feat(login button): login button is enabled by default to make it available on autocompleting by browser. 
+validations are applied after first submit by user and then button disabled/enabled state depends on the form valid prop  
+
+TODO: 
+verify token via backend before landing user on the app list
