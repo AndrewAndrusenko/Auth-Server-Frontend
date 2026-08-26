@@ -37,8 +37,10 @@
       margin-right: 8px;
     }
     & > button {
-      width: 100px !important;
-      min-width: unset !important;
+      @include mobile {
+        width: 100px !important;
+        min-width: unset !important;
+      }
     }
     a {
       margin-top: 1.5%;
