@@ -17,14 +17,15 @@
 }
 .form__container {
   @include mobile {
-    height: 98vh;
+    height: 85vh;
+   overflow: auto;
   }
 
   &__fields_block {
     @include mobile {
       flex-direction: column;
-      min-width: 96vw;
-      height: 86vh;
+      //min-width: 96vw;
+     // height: 86vh;
     }
     &_item {
       width: 45%;
