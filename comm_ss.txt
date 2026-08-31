@@ -114,5 +114,15 @@ TODO: verify token via backend before landing user on the app list
 feat(login button): login button is enabled by default to make it available on autocompleting by browser. 
 validations are applied after first submit by user and then button disabled/enabled state depends on the form valid prop  
 
+31/08/26
+refactor(password restore):
+  * subscription.add anti-pattern replaced with takeUntilDestroyed operator
+  * the typing has been added to the form
+  * added support for url query params
+  * template updated according with form typing
+test(removed unused tests) 
 TODO: 
 verify token via backend before landing user on the app list
+refactor 
+    importProvidersFrom(NgxIndexedDBModule.forRoot(IndexDBConfig)),
+    provideZoneChangeDetection({ eventCoalescing: true }),
