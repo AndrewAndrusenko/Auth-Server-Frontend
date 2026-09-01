@@ -121,6 +121,15 @@ refactor(password restore):
   * added support for url query params
   * template updated according with form typing
 test(removed unused tests) 
+
+refactor(auth): migrate to functional interceptors and fix token refresh stream crash
+
+- Refactored legacy class-based HttpInterceptors to Angular 20 functional APIs.
+- Separated concerns into two interceptors based on SOLID principles: `withCredentialsInterceptor` for cross-origin transport and `httpErrorsHandlerInterceptor` for global error mapping.
+- Fixed `JwtHandlerService` refresh stream by encapsulation of `catchError` inside the `exhaustMap` scope, preventing the outer `refreshTokenSub` subscription from breaking on API failures.
+- Streamlined queueing logic to pass atomic success/error signals to concurrent waiting requests, resolving admin revocation freeze bugs in a cookie-driven architecture.
+
+
 TODO: 
 verify token via backend before landing user on the app list
 refactor 
