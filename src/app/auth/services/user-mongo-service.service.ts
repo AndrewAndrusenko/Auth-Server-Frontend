@@ -8,7 +8,7 @@ import { ConfigService } from '../../shared/services/config.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UserMongoServiceService {
+export class UserMongoService {
   private REST_ENDPOINT = inject(ConfigService).config?.REST_ENDPOINT
   constructor(
     private http:HttpClient,

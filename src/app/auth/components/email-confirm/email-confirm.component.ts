@@ -1,44 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { UserMongoServiceService } from '../../services/user-mongo-service.service';
 import { IConfirmMail } from '../../models/auth.model';
 import { CommonModule } from '@angular/common';
-import { catchError, EMPTY, Subscription} from 'rxjs';
+import { catchError, EMPTY } from 'rxjs';
 import { TResultType } from '../../../shared/types/shared-models';
-import { MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { UserMongoService } from '../../services/user-mongo-service.service';
+import { SnacksService } from '@shared/services/snacks.service';
 @Component({
-    selector: 'app-email-confirm',
-    imports: [MatButtonModule, CommonModule, MatProgressBarModule, RouterLink
-    ],
-    templateUrl: './email-confirm.component.html',
-    styleUrl: './email-confirm.component.scss'
+  selector: 'app-email-confirm',
+  imports: [MatButtonModule, CommonModule, MatProgressBarModule, RouterLink],
+  templateUrl: './email-confirm.component.html',
+  styleUrl: './email-confirm.component.scss',
 })
 export class EmailConfirmComponent {
-  public result:TResultType = 'null';
-  public processState:|'Email confirmation..'|null=null;
-  private subscripitons = new Subscription
-  constructor(
-    private route: ActivatedRoute,
-    private userMongoServiceService: UserMongoServiceService
-  ) {
-  }
+  public result: TResultType = 'null';
+  public processState: 'Email confirmation..' | null = null;
+  private route = inject(ActivatedRoute);
+  private userMongoService = inject(UserMongoService);
+  private snacksService = inject(SnacksService);
+  private destroyRef = inject(DestroyRef);
   ngOnInit(): void {
-    this.processState='Email confirmation..'
-    this.subscripitons.add(
-      this.userMongoServiceService.confirmEmail(this.route.snapshot.params as IConfirmMail)
-      .pipe (
-        catchError(err=>{
+    this.processState = 'Email confirmation..';
+    const id = this.route.snapshot.paramMap.get('id') || this.route.snapshot.queryParamMap.get('id') || '';
+    const token = this.route.snapshot.paramMap.get('token') || this.route.snapshot.queryParamMap.get('token') || '';
+    if (!id || !token ) {
+      this.snacksService.openSnack(
+        'Incorrect data provided. Email cannot be confirmed',
+        'Okay',
+        'error-snackBar',
+      );
+      return;
+    }
+    const confirmData: IConfirmMail = { id: id, token: token };
+    this.userMongoService
+      .confirmEmail(confirmData)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
           this.processState = null;
           return EMPTY;
-        })
+        }),
       )
-      .subscribe(res=> {
+      .subscribe((res) => {
         this.processState = null;
-        this.result=res? 'success':'error'
-      }));
-  }
-  ngOnDestroy(): void {
-    this.subscripitons.unsubscribe()
+        this.result = res ? 'success' : 'error';
+      });
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { map, Observable, of } from 'rxjs';
-import { UserMongoServiceService } from './user-mongo-service.service';
+import { UserMongoService } from './user-mongo-service.service';
 const passwordValidators = {
   'minLength':{ reg: /^.{1,150}$/, hint:'minimum length'},
   'hasNumber':{ reg: /\d/, hint:'one number'},
@@ -14,21 +14,21 @@ export type TPasswordValidators = keyof typeof passwordValidators
   providedIn: 'root'
 })
 export class AuthValidatorService {
-  constructor(private userMongoServiceService:UserMongoServiceService) { }
+  constructor(private userMongoService:UserMongoService) { }
   validateUserId ():AsyncValidatorFn {
     return (control:AbstractControl):Observable<ValidationErrors|null> => {
-      return this.userMongoServiceService.checkUser(control.getRawValue()).pipe(map(taken=>taken? {userIdTaken:taken}:null))
+      return this.userMongoService.checkUser(control.getRawValue()).pipe(map(taken=>taken? {userIdTaken:taken}:null))
     }
   }
   validateEmail (exceptCurrent:string=''):AsyncValidatorFn {
     return (control:AbstractControl):Observable<ValidationErrors|null> => {
       if (exceptCurrent===control.getRawValue()||control.getRawValue()=='') {return of(null)}
-      return this.userMongoServiceService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(taken=>taken? {emailTaken:taken}:null))
+      return this.userMongoService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(taken=>taken? {emailTaken:taken}:null))
     }
   }
   validateEmailExist (exceptCurrent:string=''):AsyncValidatorFn {
     return (control:AbstractControl):Observable<ValidationErrors|null> => {
-      return this.userMongoServiceService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(exist=>exist? null:{emailNotExists:!exist}))
+      return this.userMongoService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(exist=>exist? null:{emailNotExists:!exist}))
     }
   }
   strongPasswordValidation(minLength:number = 1, validators:TPasswordValidators[]): ValidatorFn {

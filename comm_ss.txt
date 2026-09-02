@@ -129,9 +129,18 @@ refactor(auth): migrate to functional interceptors and fix token refresh stream 
 - Fixed `JwtHandlerService` refresh stream by encapsulation of `catchError` inside the `exhaustMap` scope, preventing the outer `refreshTokenSub` subscription from breaking on API failures.
 - Streamlined queueing logic to pass atomic success/error signals to concurrent waiting requests, resolving admin revocation freeze bugs in a cookie-driven architecture.
 
+fix(auth): refactor email confirmation flow and fix validation logic
+
+- Replace subscription.add anti-pattern with takeUntilDestroyed and explicitly passing `DestroyRef` inside `ngOnInit` to prevent runtime context crash.
+- Enhanced route safety by falling back to `queryParamMap` if snapshot path parameters are missing.
+- Enforced guard clause for id and token before requesting backend.
+
+refactor(user): remove redundant Service suffix from UserMongoServiceService
+
+test(removed unused tests) 
 
 TODO: 
 verify token via backend before landing user on the app list
 refactor 
     importProvidersFrom(NgxIndexedDBModule.forRoot(IndexDBConfig)),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZoneChangeDetection({ eventCoalescing: true })

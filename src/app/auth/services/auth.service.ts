@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, filter, map, Observable, of, scan, switchMap, takeWhile, tap, throwError, timer } from 'rxjs';
-import { UserMongoServiceService } from './user-mongo-service.service';
 import { ICustomLoginError, IJWTInfo, IJWTInfoToken, ILogOut, ISignUpResult, IUser, SentMessageInfo, TMailTypes } from '../models/auth.model';
 import { InsertOneResult, ObjectId } from 'mongodb';
 import { AppStorage, StorageService, StorageType } from '../../shared/services/storage.service';
 import { IErrorUI } from '../../shared/types/errors-model';
 import { ConfigService } from '../../shared/services/config.service';
+import { UserMongoService } from './user-mongo-service.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +15,7 @@ export class AuthService {
   private userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'logout',role:'none',_id:''})
   private RESET_PASSWORD_TIMEOUT = inject(ConfigService).config?.RESET_PASSWORD_TIMEOUT || 10
   constructor(
-    private userMongoServiceService:UserMongoServiceService,
+    private userMongoService:UserMongoService,
     private storageService:StorageService
   ) {
     this.appStorage = this.storageService.storage(StorageType.IndexDB);
@@ -27,7 +27,7 @@ export class AuthService {
     this.userDataSubject.next(newUserData)
   } 
   public loginUser (user:IUser):Observable<ICustomLoginError|IJWTInfoToken|Error> {
-    return this.userMongoServiceService.loginUser (user).pipe(
+    return this.userMongoService.loginUser (user).pipe(
       tap(jwtInfoToken=>(jwtInfoToken as IJWTInfoToken)?.jwtInfo? this.userDataSubject.next((jwtInfoToken as IJWTInfoToken)?.jwtInfo):null),
       switchMap(data => (data as IJWTInfoToken)?.jwtInfo? 
       this.appStorage.setStorageData('jwtInfo',{code:'jwtInfo', data:((data as IJWTInfoToken)?.jwtInfo)}).pipe(map(()=> {return data as IJWTInfoToken}))
@@ -38,7 +38,7 @@ export class AuthService {
     return of(user).pipe(
       switchMap(user=>user? of(user):this.appStorage.getStorageData('jwtInfo').pipe(map(res=>(res as {data:IUser})?.data||null))),
       filter(user=>user!=null),
-      switchMap(user=>this.userMongoServiceService.logOutUser(user)),
+      switchMap(user=>this.userMongoService.logOutUser(user)),
       tap(()=>this.userDataSubject.next({userId:'logout',role:'none',_id:''})),
       switchMap(logOut => this.appStorage.deleteStorageData('jwtInfo').pipe(map(()=> {return logOut}))),
     )
@@ -46,7 +46,7 @@ export class AuthService {
   singUpUser(userData:IUser):Observable<ISignUpResult> {
     let result:ISignUpResult
     let token=crypto.randomUUID()
-    return this.userMongoServiceService.setUser ({...userData,token:token}).pipe(
+    return this.userMongoService.setUser ({...userData,token:token}).pipe(
       switchMap(res=>this.prepareAndSendEmail((res as InsertOneResult).insertedId,token,userData.email,'confirm-email/','emailConfirmationMail')),
       switchMap(()=>of(result = {
         type:'success', 
@@ -61,7 +61,7 @@ export class AuthService {
   }
   prepareAndSendEmail(id:ObjectId, token:string,email:string, route:string, typeMsg:TMailTypes):Observable<SentMessageInfo|ICustomLoginError>{
     let confirmLink =`${window.location.href}/${route}${id}/${token}`
-    return this.userMongoServiceService.sendEmailConfirmation(email,confirmLink,typeMsg).pipe(
+    return this.userMongoService.sendEmailConfirmation(email,confirmLink,typeMsg).pipe(
       catchError(err =>{
         console.log('error',err);
         err.cause = 'sendEmail'
@@ -69,17 +69,17 @@ export class AuthService {
       }))
   }
   reSendEmailConfirmation(data:IUser):Observable<SentMessageInfo|ICustomLoginError> {
-    return this.userMongoServiceService.updateUser(data)
+    return this.userMongoService.updateUser(data)
       .pipe(switchMap(()=>this.prepareAndSendEmail(data._id,data.token as string,data.email,'confirm-email/','emailConfirmationMail')))
   }
   resetPasswordEmail(email:string):Observable<SentMessageInfo|ICustomLoginError> {
-    return this.userMongoServiceService.setResetPasswordToken(email,crypto.randomUUID()).pipe(
+    return this.userMongoService.setResetPasswordToken(email,crypto.randomUUID()).pipe(
       switchMap((user)=>this.prepareAndSendEmail(user._id, user.passwordToken, user.email,'','PasswordRestMail').pipe(switchMap(()=>of(user)))),
       switchMap(()=> this.appStorage.setStorageData('',{code:'emailSent', data: Number(new Date())})),
     )
   }
   resetPasswordExecute(id:string,token:string,password:string):Observable<any> {
-    return this.userMongoServiceService.setResetPasswordExecute(id,token,password)
+    return this.userMongoService.setResetPasswordExecute(id,token,password)
     .pipe(
       catchError(err=>{
         console.log('error',err )
