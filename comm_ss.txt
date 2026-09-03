@@ -147,6 +147,15 @@ refactor: modernize component architecture with Angular modern functional APIs
 - Transitioned component lifecycle from constructor-based dependency injection to functional `inject()` API tokens.
 - Eliminated `ngAfterViewInit` lifecycle hooks by refactoring input-driven stream subscriptions into declarative constructor `effect()` blocks with explicit `onCleanup` registration.
 
+
+refactor: reorganize codebase into Feature-driven Vertical Slices
+
+- Migrated auth views (`PasswordRestore`, `EmailConfirm`,'`Login/SignUp`) into standalone feature directories inside `features/auth`.
+- Migrated admin dashboard into standalone feature directory inside `features/admin-dashboard` with its components.
+- Segregated structural boundaries by isolating infrastructure tokens and functional interceptors within the global `core/` layer.
+- Relocated reusable dumb UI artifacts (e.g., custom data tables) into the application-wide `shared/` components directory.
+
+
 TODO: 
 verify token via backend before landing user on the app list
 refactor 

@@ -8,14 +8,14 @@ export const appRoutes: Routes = [
   },
   {
     path:'apps',
-    loadComponent: ()=>import('./apps-list/apps-list.component.').then(m=>m.AppsListComponent) //Lazy loading
+    loadComponent: ()=>import('./features/links-apps/apps-list.component.').then(m=>m.AppsListComponent) //Lazy loading
   },
   {
     path:'register',
-    loadChildren: ()=>import('./auth/auth.routes').then(m=>m.registerRoutes) //Lazy loading
+    loadChildren: ()=>import('./features/auth/auth.routes').then(m=>m.registerRoutes) //Lazy loading
   },
   {
     path:'admin',
-    loadChildren: ()=>import('./admin/admin.routes').then(m=>m.adminRouter)
+    loadChildren: ()=>import('./features/admin-dashboard/admin.routes').then(m=>m.adminRouter)
   }
 ];

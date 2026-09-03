@@ -1,0 +1,9 @@
+<app-a-table
+  class="custom-table"
+  [tableName]="'userData'"
+  [data]="adminData | async"
+  [actionsForTable]="actionsForTable"
+  [columnsWithHeaders]="tableHeaders"
+  [reloadServiceToken]="'adminDataService'"
+  [deleteConfirmMsg]="'Delete user'"
+></app-a-table>

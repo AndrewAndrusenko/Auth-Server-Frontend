@@ -1,0 +1,9 @@
+  <app-a-table
+    class="custom-table"
+    [tableName]="'tokenData'"
+    [data]="adminData | async"
+    [actionsForTable]="actionsForTable"
+    [columnsWithHeaders]="tableHeaders"
+    [reloadServiceToken]="'adminDataService'"
+    [deleteConfirmMsg]="'Delete token for user'"
+  ></app-a-table>

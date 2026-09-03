@@ -23,7 +23,7 @@ import {
   SERVICES_TO_USE,
   TserviceToken,
   TTableActions,
-} from '../../types/shared-models';
+} from '../../shared-models';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -31,8 +31,8 @@ import { ConfirmBsComponent } from '../confirm-bs/confirm-bs.component';
 import {
   AdminDataService,
   TTablesNames,
-} from '../../../admin/services/admin-data.service';
-import { AuthService } from '../../../auth/services/auth.service';
+} from '../../../features/admin-dashboard/services/admin-data.service';
+import { AuthService } from '../../../features/auth/services/auth.service';
 import * as XLSX from 'xlsx';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
@@ -108,7 +108,7 @@ export class ATableComponent {
       ? this.confirm_BS
           .open(ConfirmBsComponent, {
             data: {
-              actionToConfirm: `Please confirm:\n${this.deleteConfirmMsg} ${data.userId}`,
+              actionToConfirm: `Please confirm:\n${this.deleteConfirmMsg()} ${data.userId}`,
             },
           })
           .afterDismissed()
@@ -205,7 +205,7 @@ export class ATableComponent {
         return el;
       });
     }
-    const fileName = this.tableName + '.xlsx';
+    const fileName = this.tableName() + '.xlsx';
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, this.tableName());

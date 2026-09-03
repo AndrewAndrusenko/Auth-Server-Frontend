@@ -9,10 +9,10 @@ import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
-import { IndexDBConfig } from './shared/types/index-db-conffig';
-import { ConfigService } from './shared/services/config.service';
-import { httpErrorsHandlerInterceptor } from '@shared/iterceptors/http-errors-handler.interceptor';
-import { withCredentialsInterceptor } from '@shared/iterceptors/with-credentials-http.interceptor';
+import { IndexDBConfig } from './core/models/index-db-conffig';
+import { ConfigService } from './core/services/config.service';
+import { httpErrorsHandlerInterceptor } from '@core/iterceptors/http-errors-handler.interceptor';
+import { withCredentialsInterceptor } from '@core/iterceptors/with-credentials-http.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
