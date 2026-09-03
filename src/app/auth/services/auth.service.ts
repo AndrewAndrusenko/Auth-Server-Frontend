@@ -14,10 +14,9 @@ export class AuthService {
   public timer$: Observable<number>;
   private userDataSubject = new BehaviorSubject<IJWTInfo>({userId:'logout',role:'none',_id:''})
   private RESET_PASSWORD_TIMEOUT = inject(ConfigService).config?.RESET_PASSWORD_TIMEOUT || 10
-  constructor(
-    private userMongoService:UserMongoService,
-    private storageService:StorageService
-  ) {
+  private userMongoService = inject(UserMongoService);
+  private storageService=inject(StorageService);
+  constructor() {
     this.appStorage = this.storageService.storage(StorageType.IndexDB);
     this.timer$ = of(0)
   }

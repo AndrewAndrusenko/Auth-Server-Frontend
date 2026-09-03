@@ -11,9 +11,6 @@
   align-items: center;
   background-color: var(--background-color);
   cursor:grab;
-  @include mobile {
-    //display: none;
-  }
 }
 .form__container {
   @include mobile {
@@ -24,8 +21,6 @@
   &__fields_block {
     @include mobile {
       flex-direction: column;
-      //min-width: 96vw;
-     // height: 86vh;
     }
     &_item {
       width: 45%;
@@ -54,5 +49,4 @@
     margin-left: 20px;
     margin-bottom: 20px;
   }
-
 }

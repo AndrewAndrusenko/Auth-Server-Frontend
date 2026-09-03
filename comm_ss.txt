@@ -139,8 +139,22 @@ refactor(user): remove redundant Service suffix from UserMongoServiceService
 
 test(removed unused tests) 
 
+refactor: modernize component architecture with Angular modern functional APIs
+
+- Replaced legacy `this.subscriptions.add` pattern with declarative `takeUntilDestroyed` and explicit `DestroyRef` injection.
+- Migrated decorator-based `@Input()` and `@Output()` properties to modern signal-based `input()` and `output()` functions.
+- Converted class-level `@ViewChild` decorators to functional `viewChild()` queries.
+- Transitioned component lifecycle from constructor-based dependency injection to functional `inject()` API tokens.
+- Eliminated `ngAfterViewInit` lifecycle hooks by refactoring input-driven stream subscriptions into declarative constructor `effect()` blocks with explicit `onCleanup` registration.
+
 TODO: 
 verify token via backend before landing user on the app list
 refactor 
     importProvidersFrom(NgxIndexedDBModule.forRoot(IndexDBConfig)),
     provideZoneChangeDetection({ eventCoalescing: true })
+
+Engineered a production-ready cookie-driven authentication layer in Angular Standalone, leveraging RxJS exhaustMap to synchronize parallel token-refresh operations and eliminate microsecond race conditions without procedural state locks.(Проектировал готовый к продакшену слой авторизации на куках в Angular Standalone, используя RxJS exhaustMap для синхронизации параллельных запросов обновления токенов, что устранило состояние гонки на микросекундном уровне без процедурных флагов блокировки).
+
+Designed an XSS-resilient frontend security layer utilizing Cookie-Encapsulated JWTs (HttpOnly/SameSite=Lax), separating cross-origin transport and global error-handling into decoupled functional interceptors based on SOLID principles
+
+Implemented polymorphic, memory-leak-safe components for account recovery and email verification by migrating manual subscriptions to declarative lifecycles via takeUntilDestroyed and embedding defensive route parameter mapping.(Реализовал полиморфные, безопасные от утечек памяти компоненты для восстановления аккаунта и верификации email, переведя ручные подписки на декларативный жизненный цикл через takeUntilDestroyed и внедрив защитное маппирование параметров роутинга).

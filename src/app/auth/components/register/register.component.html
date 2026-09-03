@@ -73,7 +73,7 @@
         passwordHTML.blur();
         formProcess === 'logIn'
           ? goToSubmitButton()
-          : emailHTML?.nativeElement.focus()
+          : emailHTML()?.nativeElement.focus()
       "
       [type]="hide ? 'password' : 'text'"
     />

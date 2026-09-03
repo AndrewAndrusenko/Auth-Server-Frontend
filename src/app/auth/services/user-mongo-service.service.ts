@@ -4,15 +4,12 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IConfirmMail, ICustomLoginError,  IJWTInfoToken, ILogOut, IUser, SentMessageInfo, TMailTypes } from '../models/auth.model';
 import { ConfigService } from '../../shared/services/config.service';
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserMongoService {
   private REST_ENDPOINT = inject(ConfigService).config?.REST_ENDPOINT
-  constructor(
-    private http:HttpClient,
-  ) {}
+  private http = inject(HttpClient);
   setUser (user:IUser):Observable<InsertOneResult|MongoServerError> {
     return this.http.post<InsertOneResult>(this.REST_ENDPOINT+'users',user)
   }
@@ -44,5 +41,4 @@ export class UserMongoService {
   confirmEmail(params:IConfirmMail):Observable<boolean> {
     return this.http.post<boolean>(this.REST_ENDPOINT+'users/email/confirm',params)
   }
-
 }

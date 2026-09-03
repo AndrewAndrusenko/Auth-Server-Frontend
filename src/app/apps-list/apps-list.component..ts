@@ -21,8 +21,7 @@ export class AppsListComponent {
   private configService = inject(ConfigService);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private appStorage: AppStorage = inject(StorageService).storage(
-    StorageType.IndexDB,
+  private appStorage: AppStorage = inject(StorageService).storage( StorageType.IndexDB,
   );
   ngOnInit(): void {
     this.appStorage

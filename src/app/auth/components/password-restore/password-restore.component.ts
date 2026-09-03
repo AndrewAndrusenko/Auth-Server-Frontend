@@ -4,6 +4,7 @@ import {
   DestroyRef,
   ElementRef,
   inject,
+  viewChild,
   ViewChild,
 } from '@angular/core';
 import {
@@ -47,12 +48,10 @@ import { ConfigService } from '../../../shared/services/config.service';
   styleUrl: './password-restore.component.scss',
 })
 export class PasswordRestoreComponent {
-  @ViewChild('submitButtonHTML', { read: ElementRef, static: false }) 
-  submitButtonHTML: ElementRef | undefined = undefined;
-  @ViewChild('submitButtonSaveNewPasswordHTML', {read: ElementRef, static: false })
-  submitNewPasswordHTML: ElementRef | undefined = undefined;
-  @ViewChild('passwordConfirmHTML', { read: ElementRef, static: false })
-  passwordConfirmHTML: ElementRef | undefined = undefined;
+ 
+  private submitButtonHTML = viewChild<ElementRef>('submitButtonHTML');
+  private submitNewPasswordHTML = viewChild<ElementRef>('submitButtonSaveNewPasswordHTML');
+  public passwordConfirmHTML = viewChild<ElementRef>('passwordConfirmHTML');
   public emailForRestore: FormGroup;
   public processState: 'Sending reseting email' | 'Saving new password' | null =  null;
   private msgSentEmail = 'Email has been sent to reset your password.\n Please create a new password by using a link in the message sent to you';
@@ -64,8 +63,7 @@ export class PasswordRestoreComponent {
   };
   private passwordCreateValidators: ValidatorFn[];
   private passwordConfirmValidators: ValidatorFn[];
-  private RESET_PASSWORD_TIMEOUT =
-    inject(ConfigService).config?.RESET_PASSWORD_TIMEOUT || 10;
+  private RESET_PASSWORD_TIMEOUT =  inject(ConfigService).config?.RESET_PASSWORD_TIMEOUT || 10;
   private fb = inject(FormBuilder);
   private authValidatorService = inject(AuthValidatorService);
   public authService = inject(AuthService);
@@ -102,20 +100,20 @@ export class PasswordRestoreComponent {
   ngOnInit(): void {
     this.passwordCreate?.valueChanges
       .pipe(
-        takeUntilDestroyed(),
+        takeUntilDestroyed(this.destroyRef),
         tap(() => this.passwordConfirm?.updateValueAndValidity()),
       )
       .subscribe();
     this.emailForRestore.statusChanges
       .pipe(
-        takeUntilDestroyed(),
+        takeUntilDestroyed(this.destroyRef),
         filter((status) => status === 'VALID'),
       )
       .subscribe(() =>
         setTimeout(() => {
           this.formProcess === 'SendEmail'
-            ? this.submitButtonHTML?.nativeElement.focus()
-            : this.submitNewPasswordHTML?.nativeElement.focus();
+            ? this.submitButtonHTML()?.nativeElement.focus()
+            : this.submitNewPasswordHTML()?.nativeElement.focus();
         }, 100),
       );
     this.formInit(); // Form initialization

@@ -19,7 +19,7 @@
   </span>
   <mat-icon matSuffix >refresh</mat-icon>
 </button>
-@if (actionsForTable.includes('Create')) {
+@if (actionsForTable().includes('Create')) {
   <button  mat-raised-button matTooltip="Create"
     class="common-action-button"
     (click)="initAction('Create',null)"
@@ -57,28 +57,28 @@
               @case (['action'].includes(column)) {
                 <p >
                   <span class="table-container__mobile-column-name">actions :</span>
-                  @if (disabledControlElements&&actionsForTable.includes('View')) {
+                  @if (disabledControlElements&&actionsForTable().includes('View')) {
                     <button  mat-icon-button class="desktop-buttons"
                       matTooltip="View"    (click)="initAction('View', element)"          >
                       <mat-icon >pageview</mat-icon>
                     </button>
                   }
                   @if (!disabledControlElements) {
-                    @if (actionsForTable.includes('Edit')) {
+                    @if (actionsForTable().includes('Edit')) {
                       <button mat-icon-button matTooltip="Edit"
                         class="desktop-buttons"
                         (click)="initAction('Edit',element)">
                         <mat-icon>edit</mat-icon>
                       </button>
                     }
-                    @if (actionsForTable.includes('Create_Example')) {
+                    @if (actionsForTable().includes('Create_Example')) {
                       <button mat-icon-button matTooltip="Copy"
                         class="desktop-buttons"
                         (click)="initAction('Create_Example',element)">
                         <mat-icon>file_copy</mat-icon>
                       </button>
                     }
-                    @if (actionsForTable.includes('Delete')) {
+                    @if (actionsForTable().includes('Delete')) {
                       <button  mat-icon-button matTooltip="Delete"
                         class="desktop-buttons"
                         (click)="initAction('Delete',element)">
@@ -99,7 +99,7 @@
                 Add to filter
               </button>
               @if (!disabledControlElements) {
-                @if (actionsForTable.includes('Edit')) {
+                @if (actionsForTable().includes('Edit')) {
                   <button cdkMenuItem
                     class="menu-context-item"
                     (click)="initAction('Edit',element)">
@@ -107,7 +107,7 @@
                     Edit
                   </button>
                 }
-                @if (actionsForTable.includes('Create_Example')) {
+                @if (actionsForTable().includes('Create_Example')) {
                   <button cdkMenuItem
                     class="menu-context-item"
                     (click)="initAction('Create_Example',element)">
@@ -115,7 +115,7 @@
                     Copy
                   </button>
                 }
-                @if (actionsForTable.includes('Delete')) {
+                @if (actionsForTable().includes('Delete')) {
                   <button cdkMenuItem
                     class="menu-context-item"
                     (click)="initAction('Delete',element)">

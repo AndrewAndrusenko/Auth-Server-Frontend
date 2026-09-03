@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, ElementRef, inject, signal, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, inject, signal, viewChild } from "@angular/core";
 
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, FormGroupDirective, ValidatorFn, Validators } from "@angular/forms";
+import { AsyncValidatorFn, FormBuilder, FormGroup, FormGroupDirective, ValidatorFn, Validators } from "@angular/forms";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule} from '@angular/material/form-field'
 import { MatIconModule} from '@angular/material/icon';
@@ -25,11 +25,11 @@ type processType ='Logging'|'Signing up'|'Resending email'|null
     providers: [FormGroupDirective]
 })
 export class RegisterComponent {
-  @ViewChild('passwordHTML',{read: ElementRef, static: true}) passwordHTML: ElementRef | undefined = undefined
-  @ViewChild('emailHTML',{read: ElementRef, static: false }) emailHTML: ElementRef | undefined = undefined
-  @ViewChild('emailHTMLResend',{read: ElementRef, static: false }) emailHTMLResend: ElementRef | undefined = undefined
-  @ViewChild('buttomSubmit',{read: ElementRef, static: true}) buttomSubmitHTML: ElementRef | undefined = undefined
-  @ViewChild('buttonResend',{read: ElementRef, static: false}) buttomResendHTML: ElementRef | undefined = undefined
+  passwordHTML = viewChild<ElementRef>('passwordHTML')
+  emailHTML= viewChild<ElementRef>('emailHTML')
+  emailHTMLResend= viewChild<ElementRef>('emailHTMLResend')
+  buttomSubmitHTML= viewChild<ElementRef>('buttomSubmitHTML')
+  buttomResendHTML= viewChild<ElementRef>('buttomResendHTML')
   private subscriptions = new Subscription;
   public registerForm:FormGroup;
   public formInvalid = signal<boolean>(false)
@@ -74,7 +74,6 @@ export class RegisterComponent {
       })) : null;
     this.subscriptions.add(
       this.registerForm.statusChanges.pipe(filter(data=>data==='VALID')).subscribe(data=>{
-        //enter pressing on email field workaround. we need to focus on submit button but it's not possible until async email validation is complited
         this.emailErrUserData? this.goToResendButton(): this.goToSubmitButton() 
       }));
   }
@@ -191,15 +190,15 @@ export class RegisterComponent {
     if (!this.emailHTML) {
         return
     }
-    this.formProcess==='signUp' && this.email?.invalid ? this.emailHTML.nativeElement.blur():null
-    setTimeout(() => {this.registerForm.valid && this.buttomSubmitHTML? this.buttomSubmitHTML.nativeElement.focus():null;}, 100);
+    this.formProcess==='signUp' && this.email?.invalid ? this.emailHTML()?.nativeElement.blur():null
+    setTimeout(() => {this.registerForm.valid && this.buttomSubmitHTML? this.buttomSubmitHTML()?.nativeElement.focus():null;}, 100);
   }
   goToResendButton () {
     if (!this.emailHTMLResend) {
         return
     }
-    this.email?.invalid? this.emailHTMLResend.nativeElement.blur():null
-    setTimeout(() => {this.registerForm.valid && this.buttomResendHTML? this.buttomResendHTML.nativeElement.focus():null;}, 100);
+    this.email?.invalid? this.emailHTMLResend()?.nativeElement.blur():null
+    setTimeout(() => {this.registerForm.valid && this.buttomResendHTML? this.buttomResendHTML()?.nativeElement.focus():null;}, 100);
   }
   
   get userId() {return this.registerForm.get('userId') } 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { map, Observable, of } from 'rxjs';
 import { UserMongoService } from './user-mongo-service.service';
@@ -14,7 +14,8 @@ export type TPasswordValidators = keyof typeof passwordValidators
   providedIn: 'root'
 })
 export class AuthValidatorService {
-  constructor(private userMongoService:UserMongoService) { }
+  private userMongoService = inject(UserMongoService);
+  constructor() { }
   validateUserId ():AsyncValidatorFn {
     return (control:AbstractControl):Observable<ValidationErrors|null> => {
       return this.userMongoService.checkUser(control.getRawValue()).pipe(map(taken=>taken? {userIdTaken:taken}:null))

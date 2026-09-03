@@ -3,14 +3,15 @@
     <app-admin-users-list></app-admin-users-list>
   </mat-tab>
   <mat-tab label="JWT">
-    <br>
-    <app-a-table class="custom-table"
-    [tableName]="'tokenData'"
-    [data]=" adminData | async"
-    [actionsForTable]="actionsForTable"
-    [columnsWithHeaders]="tableHeaders"
-    [reloadServiceToken]="'adminDataService'"
-    [deleteConfirmMsg]="'Delete token for user'"
+    <br />
+    <app-a-table
+      class="custom-table"
+      [tableName]="'tokenData'"
+      [data]="adminData | async"
+      [actionsForTable]="actionsForTable"
+      [columnsWithHeaders]="tableHeaders"
+      [reloadServiceToken]="'adminDataService'"
+      [deleteConfirmMsg]="'Delete token for user'"
     ></app-a-table>
   </mat-tab>
 </mat-tab-group>
