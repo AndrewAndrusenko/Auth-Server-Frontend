@@ -7,7 +7,6 @@ import {
   Observable,
   of,
   Subject,
-  throwError,
 } from 'rxjs';
 import { ConfigService } from './config.service';
 
@@ -20,23 +19,17 @@ export class JwtHandlerService {
   private configService = inject(ConfigService);
   private http = inject(HttpClient);
   constructor() {
-    this.refreshTokenSub
-      .pipe(
-        exhaustMap(() => this.refreshToken()),
-        catchError((err: HttpErrorResponse) => of(err)),
-      )
-      .subscribe(() => this.refreshTokenReady.next(true));
+    this.refreshTokenSub 
+    .pipe(exhaustMap(() => this.refreshToken()))
+    .subscribe((result) => this.refreshTokenReady.next(result));
   }
 
-  refreshToken(): Observable<boolean | Error> {
+  refreshToken(): Observable<boolean | HttpErrorResponse> {
     return this.http
       .get<boolean>(this.configService.config?.REST_ENDPOINT + 'users/refresh')
       .pipe(
         map(() => true),
-        catchError((err) => {
-          console.log('catchError refreshToken', err);
-          return throwError(() => err);
-        }),
+        catchError((err) => of(err)),
       );
   }
 }
