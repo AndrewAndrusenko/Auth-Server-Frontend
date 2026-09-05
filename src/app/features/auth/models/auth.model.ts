@@ -1,17 +1,6 @@
-import { ObjectId } from "mongodb"
-import { TResultType } from "../../../shared/shared-models"
-export const AcRoles = ['user','admin','none'] as const
-export type TAcRole = (typeof AcRoles)[number]
-export interface IUser {
-  _id:ObjectId,
-  userId:string,
-  password:string
-  email:string,
-  token?:string,
-  passwordToken?:string,
-  regDate:string,
-  role:TAcRole
-}
+import { TAcRole } from "@core/models/user.models"
+
+export type TResultType = 'success'|'error'|'null'
 export interface IJWT {
   jwt:string,
   refreshToken:string,

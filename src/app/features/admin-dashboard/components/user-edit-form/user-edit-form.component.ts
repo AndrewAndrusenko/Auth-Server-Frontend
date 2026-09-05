@@ -1,6 +1,5 @@
 import { Component, effect, inject, output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import { IUser } from '../../../auth/models/auth.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -11,6 +10,7 @@ import { TFormAction } from '../../../../shared/shared-models';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { catchError, EMPTY } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IUser } from '@core/models/user.models';
 @Component({
   selector: 'app-user-edit-form',
   imports: [

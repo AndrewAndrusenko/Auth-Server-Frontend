@@ -8,7 +8,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSelectModule} from '@angular/material/select'
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ICustomLoginError, ISignUpResult, IUser } from "../models/auth.model";
+import { ICustomLoginError, ISignUpResult } from "../models/auth.model";
 import { catchError, EMPTY, filter, Subscription } from "rxjs";
 import { AuthService } from "../services/auth.service";
 import { AuthValidatorService } from "../services/auth-validator.service";
@@ -16,6 +16,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { SnacksService } from "../../../shared/snacks.service";
 import { ConfigService } from "../../../core/services/config.service";
 import { PASSWORD_REQUIREMENTS } from "../models/password-requirements";
+import { IUser } from "@core/models/user.models";
 type processType ='Logging'|'Signing up'|'Resending email'|null
 @Component ( {
     selector: 'rt-register',

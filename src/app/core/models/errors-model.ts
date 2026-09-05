@@ -1,4 +1,5 @@
-import { TAPIServices, TButtonName } from "../../shared/shared-models";
+import { TButtonName } from "../../shared/shared-models";
+type TAPIServices = 'MongoService'|'MailService'|'PasswordService'
 export interface IErrorUI extends Error {
   msg:string
   ml:TAPIServices

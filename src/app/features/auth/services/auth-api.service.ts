@@ -2,19 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { InsertOneResult, MongoServerError, UpdateResult} from 'mongodb'
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IConfirmMail, ICustomLoginError,  IJWTInfoToken, ILogOut, IUser, SentMessageInfo, TMailTypes } from '../models/auth.model';
+import { IConfirmMail, ICustomLoginError,  IJWTInfoToken, ILogOut, SentMessageInfo, TMailTypes } from '../models/auth.model';
 import { ConfigService } from '../../../core/services/config.service';
+import { IUser } from '@core/models/user.models';
 @Injectable({
   providedIn: 'root'
 })
-export class UserMongoService {
+export class AuthApiService {
   private REST_ENDPOINT = inject(ConfigService).config?.REST_ENDPOINT
   private http = inject(HttpClient);
   setUser (user:IUser):Observable<InsertOneResult|MongoServerError> {
     return this.http.post<InsertOneResult>(this.REST_ENDPOINT+'users',user)
-  }
-  updateUser (user:IUser):Observable<UpdateResult|MongoServerError> {
-    return this.http.post<UpdateResult>(this.REST_ENDPOINT+'users/update',user)
   }
   setResetPasswordToken (email:string,passwordToken:string):Observable<IUser|MongoServerError> {
     return this.http.post<IUser>(this.REST_ENDPOINT+'users/set_password_token',{email:email,passwordToken:passwordToken})

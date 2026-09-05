@@ -6,9 +6,8 @@ import { catchError, EMPTY } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SnacksService } from '@shared/snacks.service';
-import { TResultType } from '@shared/shared-models';
-import { UserMongoService } from '../services/user-mongo-service.service';
-import { IConfirmMail } from '../models/auth.model';
+import { TResultType, IConfirmMail } from '../models/auth.model';
+import { AuthApiService } from '../services/auth-api.service';
 @Component({
   selector: 'app-email-confirm',
   imports: [MatButtonModule, CommonModule, MatProgressBarModule, RouterLink],
@@ -19,7 +18,7 @@ export class EmailConfirmComponent {
   public result: TResultType = 'null';
   public processState: 'Email confirmation..' | null = null;
   private route = inject(ActivatedRoute);
-  private userMongoService = inject(UserMongoService);
+  private authApiService = inject(AuthApiService);
   private snacksService = inject(SnacksService);
   private destroyRef = inject(DestroyRef);
   ngOnInit(): void {
@@ -35,7 +34,7 @@ export class EmailConfirmComponent {
       return;
     }
     const confirmData: IConfirmMail = { id: id, token: token };
-    this.userMongoService
+    this.authApiService
       .confirmEmail(confirmData)
       .pipe(
         takeUntilDestroyed(this.destroyRef),

@@ -1,8 +1,6 @@
 import { AdminDataService } from "../features/admin-dashboard/services/admin-data.service"
 import { AuthService } from "../features/auth/services/auth.service"
-export type TAPIServices = 'MongoService'|'MailService'|'PasswordService'
-export type TResultType = 'success'|'error'|'null'
-export type TRequestStatus = TResultType & 'loading'
+
 export type TPanelClass = 'success-snackBar'|'error-snackBar'
 export type TButtonName = 'Okay'|'Ok'|'Back'|'Go to login'|'Delete'
 export type TTableActions = 'Create'|'Create_Example'|'Edit'|'Delete'|'View'

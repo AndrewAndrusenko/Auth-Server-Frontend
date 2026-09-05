@@ -1,28 +1,28 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { map, Observable, of } from 'rxjs';
-import { UserMongoService } from './user-mongo-service.service';
 import {passwordValidators,TPasswordValidators} from '../models/password-requirements'
+import { AuthApiService } from './auth-api.service';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthValidatorService {
-  private userMongoService = inject(UserMongoService);
+  private authApiService = inject(AuthApiService);
   constructor() { }
   validateUserId ():AsyncValidatorFn {
     return (control:AbstractControl):Observable<ValidationErrors|null> => {
-      return this.userMongoService.checkUser(control.getRawValue()).pipe(map(taken=>taken? {userIdTaken:taken}:null))
+      return this.authApiService.checkUser(control.getRawValue()).pipe(map(taken=>taken? {userIdTaken:taken}:null))
     }
   }
   validateEmail (exceptCurrent:string=''):AsyncValidatorFn {
     return (control:AbstractControl):Observable<ValidationErrors|null> => {
       if (exceptCurrent===control.getRawValue()||control.getRawValue()=='') {return of(null)}
-      return this.userMongoService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(taken=>taken? {emailTaken:taken}:null))
+      return this.authApiService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(taken=>taken? {emailTaken:taken}:null))
     }
   }
   validateEmailExist (exceptCurrent:string=''):AsyncValidatorFn {
     return (control:AbstractControl):Observable<ValidationErrors|null> => {
-      return this.userMongoService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(exist=>exist? null:{emailNotExists:!exist}))
+      return this.authApiService.checkEmail(control.getRawValue(),exceptCurrent).pipe(map(exist=>exist? null:{emailNotExists:!exist}))
     }
   }
   strongPasswordValidation(minLength:number = 1, validators:TPasswordValidators[]): ValidatorFn {

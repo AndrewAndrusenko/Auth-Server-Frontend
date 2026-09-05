@@ -17,10 +17,10 @@ import {
 } from '../../../../shared/shared-models';
 import { SnacksService } from '../../../../shared/snacks.service';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { IUser } from '../../../auth/models/auth.model';
 import { UserEditFormComponent } from '../user-edit-form/user-edit-form.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { outputToObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { IUser } from '@core/models/user.models';
 
 @Component({
   selector: 'app-users-table',

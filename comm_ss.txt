@@ -156,7 +156,20 @@ refactor: reorganize codebase into Feature-driven Vertical Slices
 - Relocated reusable dumb UI artifacts (e.g., custom data tables) into the application-wide `shared/` components directory.
 
 
-TODO: 
+refactor(core): abstract shared user mutations to `UserCoreApiService`
+
+- Extracted the `updateUser` HTTP endpoint from `AuthApiService` into a global `UserCoreApiService` inside the `core/` boundary.
+- Eliminated illegal cross-slice dependencies between `admin-dashboard` and `auth` domains.
+- Refactored `AdminService` and `AuthService` to leverage the centralized core infrastructure for identity persistence.
+- Relocated shared entity interfaces (`IUser`, `IConfirmMail`, `IJWTInfoToken`) from `features/auth` to `core/models/user.model.ts`.
+- Updated all domain boundaries, components, and api services to reference the absolute single source of truth for types.
+- Eliminated cross-slice type references between administrative dashboard and authentication layouts.
+
+
+
+
+TODO:
+fix role guard and verify it against Vertical Slices structure 
 verify token via backend before landing user on the app list
 refactor 
     importProvidersFrom(NgxIndexedDBModule.forRoot(IndexDBConfig)),

@@ -1,9 +1,9 @@
 import { CanActivateFn, Router } from "@angular/router"
-import { TAcRole } from "../../features/auth/models/auth.model"
 import { inject } from "@angular/core"
 import { AuthService } from "../../features/auth/services/auth.service"
 import { SnacksService } from "@shared/snacks.service"
 import { catchError, of, switchMap } from "rxjs"
+import { TAcRole } from "@core/models/user.models"
 
 export const roleGuard = (role:TAcRole[]):CanActivateFn => {
     return () => {
