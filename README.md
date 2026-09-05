@@ -6,22 +6,21 @@ This subsystem handles user onboarding, secure route protection, administrative 
 
 ## 🏗️ Core Architectural Components
 
-The module is engineered entirely using modern Angular Standalone design patterns, functional paradigms, and the Signals reactivity ecosystem. Code artifacts are consolidated within the `features/auth` and `core/auth` structure to enforce a clean separation of concerns:
+The module is engineered entirely using modern Angular Standalone design patterns, functional paradigms, and the Signals reactivity ecosystem. The application strictly implements a modern **Feature-driven Vertical Slice Architecture** coupled with isolated `core` and `shared` layers to enforce low coupling and a clean separation of concerns:
 
-### 1. `JwtHandlerService` (Session Synchronization Engine)
-Orchestrates the active state of the client session. It manages account profiles via Angular Signals, provides infrastructure cleanup routines (`purgeAuthSession`), and houses the highly synchronized, loop-free token refresh pipeline driven by RxJS.
+### 1. `httpErrorsHandlerInterceptor` (`HttpInterceptorFn`)
+The core orchestrator of the active client session lifecycle. It acts as a global gateway guarding outbound and inbound traffic:
+*   **Session Orchestration:** Traps `JWT_EXPIRED` (401) responses to halt the request pipeline, initiates the background synchronization sequence, and manages the queue of parallel in-flight requests.
+*   **Terminal Exception Mapping:** Intercepts critical infrastructure faults (e.g., `ACCESS_FORBIDDEN`, `SERVICE_UNAVAILABLE`, `AUTHENTICATION_FAILED`) to break recursive loops, trigger profile cleanups, and dispatch toast notifications via `SnacksService`.
 
-### 2. `withCredentialsInterceptor` (`HttpInterceptorFn`)
-A transparent transport-level modifier registered at the very top of the HTTP pipeline. Adhering to the **Single Responsibility Principle (SRP)**, its sole purpose is to clone outbound API traffic to explicitly append `{ withCredentials: true }`. This signals the browser engine to attach local authentication cookies to cross-origin requests natively.
+### 2. `JwtHandlerService` (Reactive Token Refresh Engine)
+A decoupled, atomic service dedicated strictly to token-refresh execution and identity profile persistence. Adhering to the **Single Responsibility Principle (SRP)**, it houses the loop-free RxJS `exhaustMap` semaphore pipeline. It triggers the background `/refresh` API endpoint, securely broadcasts completion/error signals back to the orchestrating interceptor.
 
-### 3. `httpErrorsHandlerInterceptor` (`HttpInterceptorFn`)
-A global functional interceptor dedicated to trapping, mapping, and reacting to HTTP network footprints and server errors:
-*   **Token Refresh Trigger:** Intercepts `JWT_EXPIRED` (401) responses, pauses downstream traffic, and waits for background session verification.
-*   **Terminal Exception Mapping:** Catches system faults (e.g., `ACCESS_FORBIDDEN`, `SERVICE_UNAVAILABLE`, `AUTHENTICATION_FAILED`) and forwards visual feedback toast notifications via the `SnacksService`.
+### 3. `withCredentialsInterceptor` (`HttpInterceptorFn`)
+A transparent transport-level modifier registered at the absolute top of the HTTP pipeline. Its sole purpose is to clone outbound API traffic to explicitly append `{ withCredentials: true }`. This signals the browser engine to attach local authentication cookies to cross-origin requests natively, isolating transport configurations from business-level error interception.
 
 ### 4. Route Guards (`CanActivateFn`)
-*   **`AuthGuard`:** Evaluates local session signals to secure protected client layouts (e.g., `/dashboard`). Evicts unauthenticated users directly to `/login`.
-*   **`AdminGuard`:** Safeguards administrative route configurations by ensuring the active user identity payload contains required `'ADMIN'` clearance roles.
+*   **`roleGuard`:** Safeguards administrative route configurations by ensuring the active user identity payload contains required `'ADMIN'` clearance roles.
 
 ---
 
@@ -37,7 +36,7 @@ To achieve maximum protection against Cross-Site Scripting (XSS) token theft vul
 
 ## ⚙️ Reactive Token Synchronization (`exhaustMap` Pattern)
 
-Simultaneous layout rendering often causes a cascade of parallel API requests to fail with a `JWT_EXPIRED` footprint at the exact same millisecond. To resolve this without spawning procedural, error-prone lock variables (like `isRefreshing = true/false`) in the interceptor, the application leverages an elegant **RxJS `exhaustMap` Semaphore Pattern** inside the `JwtHandlerService`.
+Simultaneous layout rendering often causes a cascade of parallel API requests to fail with a `JWT_EXPIRED` footprint at the exact same millisecond. To resolve this without spawning procedural, error-prone lock variables (like `isRefreshing = true/false`) in the interceptor, the application leverages an **RxJS `exhaustMap` Semaphore Pattern** inside the `JwtHandlerService`.
 
 ### 🔄 The Synchronization Pipeline
 
@@ -57,12 +56,12 @@ Simultaneous layout rendering often causes a cascade of parallel API requests to
 [ All In-Flight Requests Subscribe to: refreshTokenReady.pipe(take(1)) ]
     │
     ├──► If Success (true) ─────────► Safely re-fire original next(req) with new cookies
-    └──► If Admin Revocation (401) ─► Dispatches purgeAuthSession() & Forces redirect to /login
+    └──► If Admin Revocation (401) ─► Forces redirect to /login
 ```
 
 #### Detailed Lifecycle Breakdown:
 1. **The Catch:** Multiple concurrent requests get knocked back by the backend due to an expired Access Cookie (`401 JWT_EXPIRED`).
-2. **The Signal:** Every chattering request catches the status code and pushes a notification payload to `jwtHandlerService.refreshTokenSub.next(true)`.
+2. **The Signal:** Every request catches the status code and pushes a notification payload to `jwtHandlerService.refreshTokenSub.next(true)`.
 3. **The Lockless Filter:** 
    * The primary signal enters the `exhaustMap` pipeline within the service constructor, launching a single active network request to `GET /users/refresh`.
    * While this network call is in-flight, the `exhaustMap` **drops all sibling incoming signals**, neutralizing token refresh spam and network flooding.
@@ -114,24 +113,3 @@ The application completely moves away from legacy, object-oriented framework boi
 > 💡 **Architectural Note for Reviewers:** 
 > Interceptors must be injected inside the standalone bootstrap structure in the correct linear order. 
 > Transport filters (`withCredentialsInterceptor`) must run *before* the error mapping chains (`httpErrorsHandlerInterceptor`) to ensure that any recursively re-fired requests (`next(req)`) after a successful cookie refresh still go through the complete interceptor lifecycle. Reversing this order will bypass transport configurations on retries, creating unauthorized infinite loops.
-
-```typescript
-// src/app/app.config.ts
-import { ApplicationConfig } from '@angular/core';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
-import { withCredentialsInterceptor } from './core/interceptors/with-credentials.interceptor';
-import { httpErrorsHandlerInterceptor } from './core/interceptors/http-errors.interceptor';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([
-        withCredentialsInterceptor,     // 1. Injects cross-origin cookies first (Transport Level)
-        httpErrorsHandlerInterceptor    // 2. Evaluates global API error responses second (Business/Error Level)
-      ])
-    )
-  ]
-};`
