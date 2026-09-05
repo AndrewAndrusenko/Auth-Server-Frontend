@@ -21,40 +21,25 @@ export const httpErrorsHandlerInterceptor: HttpInterceptorFn = (
   const snacksService = inject(SnacksService);
   const location = inject(Location);
   const jwtHandlerService = inject(JwtHandlerService);
-  const showError = (code: Error_Code, msg: string | null = '') => {
+
+  const showError = (code: Error_Code, msg: string | null = ''):Observable<never> => {
     let errorOptions = SERVER_ERRORS.get(code);
-    snacksService
-      .openSnackObserve(
-        errorOptions?.message + '\n ' + msg,
-        errorOptions?.buttonName || 'Ok',
-        'error-snackBar',
-      )
+    return snacksService
+      .openSnackObserve( errorOptions?.message + '\n ' + msg,  errorOptions?.buttonName || 'Ok',    'error-snackBar')
       .pipe(
-        tap(() =>
-          errorOptions?.redirect
-            ? router.navigate([errorOptions?.route])
-            : null,
-        ),
-        tap(() =>
-          errorOptions?.redirect === false && errorOptions.route === 'back'
-            ? location.back()
-            : null,
-        ),
+        tap(() => errorOptions?.redirect? router.navigate([errorOptions?.route]) : null),
+        tap(() => errorOptions?.redirect === false && errorOptions.route === 'back' ? location.back() : null),
+        switchMap(() => throwError(() => new Error(`Error ${code}) has been handled`))),
       )
-      .subscribe();
   };
-  const handleErrorCode = (error: HttpErrorResponse): number => {
+  const handleErrorCode = (error: HttpErrorResponse): Observable<never> => {
     switch (error.status) {
       case SERVER_ERRORS.get('AUTHENTICATION_FAILED')!.code:
-        showError('AUTHENTICATION_FAILED', error?.error);
-        // this.authService.logOutUser().subscribe() //remove??
-        break;
+        return showError('AUTHENTICATION_FAILED', error?.error);
       case SERVER_ERRORS.get('ACCESS_FORBIDEN')!.code:
-        showError('ACCESS_FORBIDEN');
-        break;
+        return showError('ACCESS_FORBIDEN');
       case 0:
-        showError('SERVICE_UNAVAILABLE');
-        break;
+        return showError('SERVICE_UNAVAILABLE');
       default:
         console.log('intercept: unrecognized error code: ', error);
         snacksService.openSnack(
@@ -62,9 +47,8 @@ export const httpErrorsHandlerInterceptor: HttpInterceptorFn = (
           'Okay',
           'error-snackBar',
         );
-        break;
+        return throwError(() => error);
     }
-    return error.status || 0;
   };
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -72,18 +56,10 @@ export const httpErrorsHandlerInterceptor: HttpInterceptorFn = (
         jwtHandlerService.refreshTokenSub.next(true);
         return jwtHandlerService.refreshTokenReady.asObservable().pipe(
           take(1),
-          switchMap((status) => {
-            if (status === true) {
-              return next(req);
-            } else {
-              handleErrorCode(status as HttpErrorResponse);
-              return throwError(() => status);
-            }
-          }),
+          switchMap((status) => status === true? next(req) : handleErrorCode(status as HttpErrorResponse)),
         );
       } else {
-        handleErrorCode(error);
-        return throwError(() => error);
+        return handleErrorCode(error);
       }
     }),
   );

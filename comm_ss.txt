@@ -166,6 +166,11 @@ refactor(core): abstract shared user mutations to `UserCoreApiService`
 - Eliminated cross-slice type references between administrative dashboard and authentication layouts.
 
 
+refactor(auth): unify interceptor error handling into a single observable chain
+
+- Removed anti-pattern manual `.subscribe()` invocation from `showError` method to eliminate potential memory leaks.
+- Refactored `showError` and `handleErrorCode` to return unified `Observable<never>` streams.
+- Chained UI toast interactions (`openSnackObserve`), router navigation side-effects, and terminal `throwError` sequences using RxJS `switchMap`.
 
 
 TODO:
