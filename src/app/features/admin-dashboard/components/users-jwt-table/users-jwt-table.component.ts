@@ -1,5 +1,5 @@
 import {Component, DestroyRef, effect,inject, viewChild,} from '@angular/core';
-import { AdminDataService } from '../../services/admin-data.service';
+import { AdminDataService } from '../../data-access/admin-data.service';
 import { Observable } from 'rxjs';
 import { TRefreshTokenTable } from '../../models/admin-models';
 import { ATableComponent } from '../../../../shared/components/a-table/a-table.component';

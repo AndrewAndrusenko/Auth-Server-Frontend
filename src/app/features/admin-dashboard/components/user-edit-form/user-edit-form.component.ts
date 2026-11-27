@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
-import { AdminDataService } from '../../services/admin-data.service';
+import { AdminDataService } from '../../data-access/admin-data.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TFormAction } from '../../../../shared/shared-models';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';

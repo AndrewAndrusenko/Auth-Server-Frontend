@@ -1,5 +1,5 @@
-import { AdminDataService } from "../features/admin-dashboard/services/admin-data.service"
-import { AuthService } from "../features/auth/services/auth.service"
+import { AdminDataService } from "../features/admin-dashboard/data-access/admin-data.service"
+import { AuthService } from "../features/auth/data-access/auth.service"
 
 export type TPanelClass = 'success-snackBar'|'error-snackBar'
 export type TButtonName = 'Okay'|'Ok'|'Back'|'Go to login'|'Delete'

@@ -180,6 +180,10 @@ refactor(auth): isolate token refresh errors to secure outer subscription lifecy
 - Eliminated infinite loop risks and request-freezing race conditions during administrative session revocations.
 
 
+27/11/26
+fix(rest-api-url): fixing url getter in services
+  * switch to the correct getter usage instead of cached const
+
 TODO:
 Enforce Encapsulation Pattern for core service. first of all for jwt service 
 fix role guard and verify it against Vertical Slices structure 

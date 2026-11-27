@@ -1,6 +1,6 @@
-@use '../../../../styles/mixins/media.mixin.scss' as *;
-@use '../../../../styles/mixins/mat-fields.scss' as formsmixins;
-@use '../../../../styles/variables.scss' as vars;
+@use '../../../../../styles/mixins/media.mixin.scss' as *;
+@use '../../../../../styles/mixins/mat-fields.scss' as formsmixins;
+@use '../../../../../styles/variables.scss' as vars;
 @include formsmixins.ng-deep-form-field-styles;
 .registerForm {
   margin-top: 10vh;

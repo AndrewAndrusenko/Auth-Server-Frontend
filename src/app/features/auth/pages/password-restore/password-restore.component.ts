@@ -23,13 +23,13 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, EMPTY, filter, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AuthValidatorService } from '../services/auth-validator.service';
-import { AuthService } from '../services/auth.service';
+import { AuthValidatorService } from '../../data-access/auth-validator.service';
+import { AuthService } from '../../data-access/auth.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { SnacksService } from '../../../shared/snacks.service';
+import { SnacksService } from '../../../../shared/snacks.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ConfigService } from '../../../core/services/config.service';
-import { PASSWORD_REQUIREMENTS } from '../models/password-requirements';
+import { ConfigService } from '../../../../core/services/config.service';
+import { PASSWORD_REQUIREMENTS } from '../../models/password-requirements';
 @Component({
   selector: 'app-password-restore',
   imports: [

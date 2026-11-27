@@ -31,8 +31,8 @@ import { ConfirmBsComponent } from '../confirm-bs/confirm-bs.component';
 import {
   AdminDataService,
   TTablesNames,
-} from '../../../features/admin-dashboard/services/admin-data.service';
-import { AuthService } from '../../../features/auth/services/auth.service';
+} from '../../../features/admin-dashboard/data-access/admin-data.service';
+import { AuthService } from '../../../features/auth/data-access/auth.service';
 import * as XLSX from 'xlsx';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({

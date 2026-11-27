@@ -6,8 +6,8 @@ import { catchError, EMPTY } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SnacksService } from '@shared/snacks.service';
-import { TResultType, IConfirmMail } from '../models/auth.model';
-import { AuthApiService } from '../services/auth-api.service';
+import { TResultType, IConfirmMail } from '../../models/auth.model';
+import { AuthApiService } from '../../data-access/auth-api.service';
 @Component({
   selector: 'app-email-confirm',
   imports: [MatButtonModule, CommonModule, MatProgressBarModule, RouterLink],

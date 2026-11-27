@@ -8,7 +8,7 @@ import {
   StorageService,
   StorageType,
 } from '@core/services/storage.service';
-import { AuthService } from '../auth/services/auth.service';
+import { AuthService } from '../auth/data-access/auth.service';
 import { IJWTInfo } from '../auth/models/auth.model';
 @Component({
   selector: 'app-quotes-table',

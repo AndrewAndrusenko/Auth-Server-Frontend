@@ -5,7 +5,7 @@ import {
   viewChild,
   DestroyRef,
 } from '@angular/core';
-import { AdminDataService } from '../../services/admin-data.service';
+import { AdminDataService } from '../../data-access/admin-data.service';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { Observable, switchMap } from 'rxjs';

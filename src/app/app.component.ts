@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { IJWTInfo } from './features/auth/models/auth.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule} from '@angular/material/menu'
-import { AuthService } from './features/auth/services/auth.service';
+import { AuthService } from './features/auth/data-access/auth.service';
 @Component({
     selector: 'app-root',
     imports: [RouterOutlet, RouterLink, MatIconModule, CommonModule, MatButtonModule, MatMenuModule],

@@ -1,7 +1,7 @@
 import { Route } from "@angular/router";
-import { RegisterComponent } from "./login-signup/register.component";
-import { PasswordRestoreComponent } from "./password-restore/password-restore.component";
-import { EmailConfirmComponent } from "./email-confirm/email-confirm.component";
+import { RegisterComponent } from "./pages/login-signup/register.component";
+import { PasswordRestoreComponent } from "./pages/password-restore/password-restore.component";
+import { EmailConfirmComponent } from "./pages/email-confirm/email-confirm.component";
 
 
 export const registerRoutes:Route[] = [

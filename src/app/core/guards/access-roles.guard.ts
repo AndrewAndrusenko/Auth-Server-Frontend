@@ -1,6 +1,6 @@
 import { CanActivateFn, Router } from "@angular/router"
 import { inject } from "@angular/core"
-import { AuthService } from "../../features/auth/services/auth.service"
+import { AuthService } from "../../features/auth/data-access/auth.service"
 import { SnacksService } from "@shared/snacks.service"
 import { catchError, of, switchMap } from "rxjs"
 import { TAcRole } from "@core/models/user.models"
