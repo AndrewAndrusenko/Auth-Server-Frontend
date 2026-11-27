@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule} from '@angular/material/menu'
-import { AuthService } from '../../features/auth/data-access/auth.service';
 import { IJWTInfo } from '../../features/auth/models/auth.model';
 import { UserCoreService } from '@core/services/user-core.service';
 @Component({
