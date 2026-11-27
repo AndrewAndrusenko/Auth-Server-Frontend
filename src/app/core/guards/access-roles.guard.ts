@@ -1,16 +1,16 @@
 import { CanActivateFn, Router } from "@angular/router"
 import { inject } from "@angular/core"
-import { AuthService } from "../../features/auth/data-access/auth.service"
 import { SnacksService } from "@shared/snacks.service"
 import { catchError, of, switchMap } from "rxjs"
 import { TAcRole } from "@core/models/user.models"
+import { UserCoreService } from "@core/services/user-core.service"
 
 export const roleGuard = (role:TAcRole[]):CanActivateFn => {
     return () => {
-        const authService = inject(AuthService)
+        const userCoreService = inject(UserCoreService)
         const router = inject(Router)
         const snackService = inject(SnacksService)
-        if (role.includes(authService.userData.role)) {
+        if (role.includes(userCoreService.userData.role)) {
             return true
         } else {
             return snackService.openSnackObserve('You do not have the required access role','Okay','error-snackBar')

@@ -11,12 +11,13 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ICustomLoginError, ISignUpResult } from "../../models/auth.model";
 import { catchError, EMPTY, filter, Subscription } from "rxjs";
 import { AuthValidatorService } from "../../data-access/auth-validator.service";
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule} from '@angular/material/progress-bar';
 import { SnacksService } from "../../../../shared/snacks.service";
 import { ConfigService } from "../../../../core/services/config.service";
 import { PASSWORD_REQUIREMENTS } from "../../models/password-requirements";
 import { IUser } from "@core/models/user.models";
 import { AuthService } from "../../data-access/auth.service";
+import { UserCoreService } from "@core/services/user-core.service";
 type processType ='Logging'|'Signing up'|'Resending email'|null
 @Component ( {
     selector: 'rt-register',
@@ -26,6 +27,14 @@ type processType ='Logging'|'Signing up'|'Resending email'|null
     providers: [FormGroupDirective]
 })
 export class RegisterComponent {
+  private fb = inject(FormBuilder) 
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+  private userCoreService = inject(UserCoreService)
+  private authService = inject(AuthService)
+  private authValidatorService = inject(AuthValidatorService)
+  private snacksService = inject(SnacksService)
+  private changeDetector = inject(ChangeDetectorRef)
   passwordHTML = viewChild<ElementRef>('passwordHTML')
   emailHTML= viewChild<ElementRef>('emailHTML')
   emailHTMLResend= viewChild<ElementRef>('emailHTMLResend')
@@ -44,15 +53,7 @@ export class RegisterComponent {
   private passwordStrongValidator: ValidatorFn
   private msgSentEmail ='Email has been sent to confirm your email address.\n Please active your account by using a link in the message sent to you'
   SUCCESS_TIME_OUT = inject(ConfigService).config?.SUCCESS_TIME_OUT || 3000
-  constructor(
-    private fb:FormBuilder, 
-    private router:Router,
-    private route:ActivatedRoute,
-    private authService:AuthService,
-    private authValidatorService:AuthValidatorService,
-    private snacksService:SnacksService,
-    private changeDetector : ChangeDetectorRef
-  ) {   
+  constructor() {   
     this.registerForm = this.fb.group ({
       userId: ['', {validators: [Validators.required]}],
       password: ['', {validators: [Validators.required]}],
@@ -69,7 +70,7 @@ export class RegisterComponent {
   ngOnInit(): void {
     this.route.snapshot.params?.['logout']? 
     this.subscriptions.add(
-      this.authService.logOutUser().subscribe(()=>{
+      this.userCoreService.logOutUser().subscribe(()=>{
         this.snacksService.openSnack('You have been logged out','Okay','success-snackBar');
         this.router.navigate(['register'])
       })) : null;
@@ -128,7 +129,7 @@ export class RegisterComponent {
     }
     this.startProcess('Logging');
     this.subscriptions.add(
-      this.authService.loginUser(this.registerForm.value)
+      this.userCoreService.loginUser(this.registerForm.value)
       .pipe(catchError(e=>{
         this.stopProcess();
         console.log('loging err',e )

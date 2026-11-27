@@ -20,12 +20,7 @@ export class AuthApiService {
   setResetPasswordExecute (id:string,passwordToken:string,password:string):Observable<IUser|MongoServerError> {
     return this.http.post<IUser>(this.configService.config?.REST_ENDPOINT+'users/set_new_password',{id:id,token:passwordToken,password:password})
   }
-  logOutUser (user:IUser):Observable<ILogOut> {
-    return this.http.post<ILogOut>(this.configService.config?.REST_ENDPOINT+'users/logout',user)
-  }
-  loginUser (user:IUser):Observable<ICustomLoginError|IJWTInfoToken|Error> {
-    return this.http.post<ICustomLoginError|IJWTInfoToken>(this.configService.config?.REST_ENDPOINT+'users/login',user)
-  }
+
   checkUser (userId:string):Observable<boolean> {
     return this.http.get<boolean>(this.configService.config?.REST_ENDPOINT+'users/checkId',{params:{userId:userId}})
   }

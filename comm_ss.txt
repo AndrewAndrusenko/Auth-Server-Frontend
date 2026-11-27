@@ -191,6 +191,10 @@ refactor(layout):moved to the separate component in core
 refactor(routes):routes has been updated according to a new layout component
   * routes has been updated according to a new layout component
   * routes has been restructured to separate role based routes/features
+refactor(core-auth):auth service segregated
+  * auth service splitted in user core service and auth feature service. 
+  * user core service encapsulates login and logout methods and user authentication state which depends on them
+fix(router - guards): fixed role based router guards
 
 TODO:
 Enforce Encapsulation Pattern for core service. first of all for jwt service 

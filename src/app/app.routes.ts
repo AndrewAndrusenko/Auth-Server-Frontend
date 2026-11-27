@@ -10,13 +10,14 @@ export const appRoutes: Routes = [
   {
     path:'',
     component:LayoutComponent,
-    canActivate:[roleGuard],
     children: [
       {
+        canActivate:[roleGuard(['user','admin'])],
         path:'apps',
         loadComponent: ()=>import('./features/links-apps/apps-list.component.').then(m=>m.AppsListComponent) //Lazy loading
       },
       {
+        canActivate:[roleGuard(['admin'])],
         path:'admin',
         loadChildren: ()=>import('./features/admin-dashboard/admin.routes').then(m=>m.adminRouter)
       }
