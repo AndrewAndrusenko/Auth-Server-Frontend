@@ -12,7 +12,7 @@ export type TTablesNames = 'tokenData'|'userData'
   providedIn: 'root'
 })
 export class AdminDataService {
-    private REST_ENDPOINT = inject(ConfigService).config?.REST_ENDPOINT
+    private configService = inject(ConfigService)
     private http = inject(HttpClient)
     private userCoreAPIService = inject(UserCoreAPIService)
   reloadTable(table:TTablesNames):Observable<TRefreshTokenTable[]|IUser[]> {
@@ -22,20 +22,20 @@ export class AdminDataService {
     }
   }
   getAllUsersData():Observable<IUser[]> {
-    return this.http.get<IUser[]>(this.REST_ENDPOINT+'admin/all')
+    return this.http.get<IUser[]>(this.configService.config?.REST_ENDPOINT+'admin/all')
   }
   adminUpdateUser(data:IUser):Observable<UpdateResult | MongoServerError> {
     return this.userCoreAPIService.updateUser(data)
   }
   deleteUser(userId:string):Observable<DeleteResult> {
-    return this.http.post<DeleteResult>(this.REST_ENDPOINT+'admin/user-del',{userId:userId})
+    return this.http.post<DeleteResult>(this.configService.config?.REST_ENDPOINT+'admin/user-del',{userId:userId})
   }
   getAdminPage():Observable<TRefreshTokenTable[]> {
-    return this.http.get<{userId:string,data:IJWTInfoToken}[]>(this.REST_ENDPOINT+'admin/getAllTokens').pipe(
+    return this.http.get<{userId:string,data:IJWTInfoToken}[]>(this.configService.config?.REST_ENDPOINT+'admin/getAllTokens').pipe(
       map(data=>data.map(el=>{return {...el, ...el.data.jwtInfo, ...el.data,refreshToken:el.data.refreshToken.split('.')[2], action:0} }))
     )
   }
   deleteRefreshToken(data:TRefreshTokenTable):Observable<ITokenDeleted> {
-    return this.http.post<ITokenDeleted>(this.REST_ENDPOINT+'admin/delToken',{userId:data.userId})
+    return this.http.post<ITokenDeleted>(this.configService.config?.REST_ENDPOINT+'admin/delToken',{userId:data.userId})
   }
 }

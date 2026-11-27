@@ -8,9 +8,9 @@ import { IUser } from '../models/user.models';
   providedIn: 'root'
 })
 export class UserCoreAPIService {
-  private REST_ENDPOINT = inject(ConfigService).config?.REST_ENDPOINT
+  private configService = inject(ConfigService)
   private http = inject(HttpClient);
   updateUser (user:IUser):Observable<UpdateResult|MongoServerError> {
-    return this.http.post<UpdateResult>(this.REST_ENDPOINT+'users/update',user)
+    return this.http.post<UpdateResult>(this.configService.config?.REST_ENDPOINT+'users/update',user)
   }
 }
