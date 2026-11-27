@@ -183,6 +183,14 @@ refactor(auth): isolate token refresh errors to secure outer subscription lifecy
 27/11/26
 fix(rest-api-url): fixing url getter in services
   * switch to the correct getter usage instead of cached const
+refactor(features): pages & data-access
+  * services moved to data-access
+  * auth feature: sub-features moved to the pages
+refactor(layout):moved to the separate component in core
+  * layout has been moved from app component to the separate folder/component inside core folder
+refactor(routes):routes has been updated according to a new layout component
+  * routes has been updated according to a new layout component
+  * routes has been restructured to separate role based routes/features
 
 TODO:
 Enforce Encapsulation Pattern for core service. first of all for jwt service 

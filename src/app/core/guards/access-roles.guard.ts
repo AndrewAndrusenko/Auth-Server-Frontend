@@ -15,7 +15,7 @@ export const roleGuard = (role:TAcRole[]):CanActivateFn => {
         } else {
             return snackService.openSnackObserve('You do not have the required access role','Okay','error-snackBar')
             .pipe(
-                switchMap(()=>(router.navigate(['/']))),
+                switchMap(()=>(router.navigate(['/register']))),
                 catchError(() => of(false)) 
             )
         }
