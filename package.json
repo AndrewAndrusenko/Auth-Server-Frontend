@@ -26,7 +26,7 @@
     "@ngrx/store-devtools": "^20.1.0",
     "mongodb": "^6.12.0",
     "ngx-cookie-service": "^20.1.1",
-    "ngx-indexed-db": "^18.0.0",
+    "ngx-indexed-db": "^21.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "xlsx": "^0.18.5",
