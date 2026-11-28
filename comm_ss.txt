@@ -196,6 +196,17 @@ refactor(core-auth):auth service segregated
   * user core service encapsulates login and logout methods and user authentication state which depends on them
 fix(router - guards): fixed role based router guards
 
+28/11/26
+refactor(userData state mngt): state mngt migrated to ngrx
+  * add ngrx core actions: retrieving user data from index DB on app initialization => success or failure
+  * add relevant feature with reducer and effects to handle new actions
+
+refactor rolGuard & app initializer & app config
+refactor(roleGuard): roleGuard userData state mngt migrated to ngrx
+refactor(app initializer): app initializer refactored to combine loading runtime config and read userData from indexDB using ngrx store
+refactor(app config): app config implemented ngrx and indexDB migrated to functional api
+
+refactor(layout): userData state mngt migrated to ngrx
 TODO:
 Enforce Encapsulation Pattern for core service. first of all for jwt service 
 fix role guard and verify it against Vertical Slices structure 
